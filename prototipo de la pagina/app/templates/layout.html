@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArteSENA - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            /* CORRECCIÓN: Se eliminó el .png extra para que coincida con tu archivo fondopng.gif */
+            background: url("{{ url_for('static', filename='img/fondopng.gif') }}") no-repeat center center fixed !important;
+            background-size: cover !important;
+            /* Color de respaldo por si el GIF tarda en cargar */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden; /* Evita barras de desplazamiento innecesarias */
+        }
+
+        /* Capa opcional para que el texto se lea mejor sobre el GIF */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1); /* Un toque de luz */
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,182 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container" id="container">
+    
+    <div class="form-container sign-up-container">
+        <form action="#">
+            <h1 style="color: #4a3728; margin-bottom: 15px;">Crear Cuenta</h1>
+            <input type="text" placeholder="Nombre" />
+            <input type="email" placeholder="Correo" />
+            <input type="password" placeholder="Contraseña" />
+            <button class="btn-main">Registrarse</button>
+        </form>
+    </div>
+
+    <div class="form-container sign-in-container">
+        <form action="#">
+            <h1 style="color: #4a3728; margin-bottom: 15px;">Bienvenido</h1>
+            <input type="text" placeholder="Usuario" />
+            <div style="position: relative; width: 100%;">
+                <input type="password" id="password" placeholder="Contraseña" />
+                <div id="togglePassword" class="password-eye">
+                    <div class="eye-ball"><div class="eye-iris"></div></div>
+                    <div class="eye-slash"></div>
+                </div>
+            </div>
+            <button class="btn-main">Entrar</button>
+        </form>
+    </div>
+
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>¡Qué bueno verte!</h1>
+                <p>Inicia sesión para continuar</p>
+                <button class="ghost" id="signIn">Ir al Login</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>¡Hola, Artista!</h1>
+                <p>Regístrate y comienza tu viaje</p>
+                <button class="ghost" id="signUp">Registrarse</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* --- BASE --- */
+    .container {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 25px;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25);
+        position: relative;
+        overflow: hidden;
+        width: 768px;
+        max-width: 100%;
+        min-height: 480px;
+        border: 4px solid #4a3728;
+    }
+
+    .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.6s ease-in-out;
+    }
+
+    /* Login arriba por defecto */
+    .sign-in-container {
+        left: 0;
+        width: 50%;
+        z-index: 2;
+    }
+
+    /* Registro oculto por defecto */
+    .sign-up-container {
+        left: 0;
+        width: 50%;
+        opacity: 0;
+        z-index: 1;
+    }
+
+    /* --- EL ARREGLO ESTÁ AQUÍ --- */
+    /* Cuando se mueve a la derecha, el Registro toma prioridad */
+    .container.right-panel-active .sign-in-container {
+        transform: translateX(100%);
+        opacity: 0; /* Lo ocultamos para que no se vea encima */
+    }
+
+    .container.right-panel-active .sign-up-container {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5; /* Lo subimos al frente de todo */
+    }
+
+    /* Movimiento del panel café */
+    .overlay-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: transform 0.6s ease-in-out;
+        z-index: 100;
+    }
+
+    .container.right-panel-active .overlay-container {
+        transform: translateX(-100%);
+    }
+
+    .overlay {
+        background: #4a3728;
+        color: #FFFFFF;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+    }
+
+    .container.right-panel-active .overlay {
+        transform: translateX(50%);
+    }
+
+    /* Estilos de paneles internos */
+    .overlay-panel {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 40px;
+        text-align: center;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        transition: transform 0.6s ease-in-out;
+    }
+
+    .overlay-left { transform: translateX(-20%); }
+    .container.right-panel-active .overlay-left { transform: translateX(0); }
+    .overlay-right { right: 0; transform: translateX(0); }
+    .container.right-panel-active .overlay-right { transform: translateX(20%); }
+
+    /* Estilos generales */
+    form { display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 0 50px; height: 100%; }
+    input { background-color: #f9f9f9; border: 1.5px solid #4a3728; padding: 12px 15px; margin: 8px 0; width: 100%; border-radius: 10px; outline: none; }
+    .btn-main, .ghost { border-radius: 20px; border: 1px solid #4a3728; background-color: #4a3728; color: #FFFFFF; font-size: 12px; font-weight: bold; padding: 12px 45px; cursor: pointer; margin-top: 10px; }
+    .ghost { background-color: transparent; border-color: #FFFFFF; }
+
+    /* Ojo de contraseña */
+    .password-eye { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .eye-ball { width: 20px; height: 12px; background: white; border: 2px solid #4a3728; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .eye-iris { width: 6px; height: 6px; background: #4a3728; border-radius: 50%; }
+    .eye-slash { position: absolute; width: 2px; height: 22px; background: #4a3728; transform: rotate(45deg); transition: 0.3s; }
+    .is-visible .eye-slash { opacity: 0; }
+</style>
+
+<script>
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
+
+    signUpButton.addEventListener('click', () => {
+        container.classList.add("right-panel-active");
+    });
+
+    signInButton.addEventListener('click', () => {
+        container.classList.remove("right-panel-active");
+    });
+
+    const toggleBtn = document.querySelector('#togglePassword');
+    const passwordField = document.querySelector('#password');
+    toggleBtn.addEventListener('click', () => {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        toggleBtn.classList.toggle('is-visible');
+    });
+</script>
+{% endblock %}
