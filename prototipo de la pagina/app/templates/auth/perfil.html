@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Mi Perfil - Art Platform{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Mi Perfil</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        {% if current_user.foto_perfil %}
+                        <img src="{{ current_user.foto_perfil }}" class="img-fluid rounded-circle mb-3" alt="Foto de perfil">
+                        {% else %}
+                        <div class="bg-secondary rounded-circle d-inline-block" style="width: 150px; height: 150px;">
+                            <div class="d-flex align-items-center justify-content-center h-100 text-white">
+                                <i class="fas fa-user fa-3x"></i>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{ current_user.nombre }}</h4>
+                        <p class="text-muted">@{{ current_user.username }}</p>
+                        <p><strong>Email:</strong> {{ current_user.email }}</p>
+                        <p><strong>Rol:</strong> 
+                            {% if current_user.is_admin() %}
+                            <span class="badge bg-danger">Administrador</span>
+                            {% elif current_user.is_artista() %}
+                            <span class="badge bg-primary">Artista</span>
+                            {% else %}
+                            <span class="badge bg-info">Cliente</span>
+                            {% endif %}
+                        </p>
+                        {% if current_user.biografia %}
+                        <p><strong>Biografía:</strong></p>
+                        <p>{{ current_user.biografia }}</p>
+                        {% endif %}
+                        <p><strong>Fecha de registro:</strong> {{ current_user.fecha_registro.strftime('%d/%m/%Y') }}</p>
+                        <p><strong>Estado:</strong> 
+                            {% if current_user.is_active() %}
+                            <span class="badge bg-success">Activo</span>
+                            {% else %}
+                            <span class="badge bg-danger">Bloqueado</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ url_for('auth.editar_perfil') }}" class="btn btn-primary">Editar Perfil</a>
+                    <a href="{{ url_for('auth.cambiar_password') }}" class="btn btn-secondary">Cambiar Contraseña</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Acciones Rápidas</h5>
+            </div>
+            <div class="card-body">
+                {% if current_user.is_artista() %}
+                <a href="{{ url_for('artista.dashboard') }}" class="btn btn-outline-primary btn-sm d-block mb-2">Mi Dashboard de Artista</a>
+                <a href="{{ url_for('artista.obras') }}" class="btn btn-outline-primary btn-sm d-block mb-2">Mis Obras</a>
+                <a href="{{ url_for('artista.productos') }}" class="btn btn-outline-primary btn-sm d-block mb-2">Mis Productos</a>
+                {% elif current_user.is_cliente() %}
+                <a href="{{ url_for('cliente.dashboard') }}" class="btn btn-outline-info btn-sm d-block mb-2">Mi Dashboard de Cliente</a>
+                <a href="{{ url_for('cliente.obras_favoritas') }}" class="btn btn-outline-info btn-sm d-block mb-2">Mis Favoritos</a>
+                <a href="{{ url_for('cliente.artistas_siguiendo') }}" class="btn btn-outline-info btn-sm d-block mb-2">Artistas que Sigo</a>
+                {% elif current_user.is_admin() %}
+                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-danger btn-sm d-block mb-2">Panel de Administración</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

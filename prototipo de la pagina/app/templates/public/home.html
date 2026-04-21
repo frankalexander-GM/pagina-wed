@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Art Platform{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+    <div class="container">
+        <h1 class="display-4">Bienvenido a Art Platform</h1>
+        <p class="lead">La plataforma donde artistas y amantes del arte se conectan. Descubre obras únicas, sigue a tus artistas favoritos y compra arte directamente de los creadores.</p>
+        <hr class="my-4">
+        <p>Únete a nuestra comunidad de artistas y coleccionistas</p>
+        {% if not current_user.is_authenticated %}
+        <a class="btn btn-light btn-lg" href="{{ url_for('auth.register') }}" role="button">Comienza Ahora</a>
+        {% else %}
+        <a class="btn btn-light btn-lg" href="{{ url_for('public.explorar') }}" role="button">Explorar Obras</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Para Artistas</h5>
+                <p class="card-text">Exhibe tu obra, vende tus productos y conecta con coleccionistas de todo el mundo.</p>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">Únete como Artista</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Para Clientes</h5>
+                <p class="card-text">Descubre artistas únicos, crea moodboards y compra arte original directamente.</p>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">Únete como Cliente</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Explorar</h5>
+                <p class="card-text">Navega por nuestra galería, descubre nuevos artistas y encuentra obras que te inspiren.</p>
+                <a href="{{ url_for('public.explorar') }}" class="btn btn-outline-primary">Explorar Ahora</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if obras_recientes %}
+<section class="mb-5">
+    <h2 class="mb-4">Obras Recientes</h2>
+    <div class="row">
+        {% for obra in obras_recientes %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ obra.imagen or 'https://via.placeholder.com/300x200' }}" class="card-img-top" alt="{{ obra.titulo }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ obra.titulo }}</h5>
+                    <p class="card-text">{{ obra.descripcion[:100] }}{% if obra.descripcion|length > 100 %}...{% endif %}</p>
+                    <p class="card-text">
+                        <small class="text-muted">Por {{ obra.artista.nombre }}</small>
+                    </p>
+                    <a href="{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}" class="btn btn-sm btn-outline-primary">Ver Detalle</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center">
+        <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">Ver Más Obras</a>
+    </div>
+</section>
+{% endif %}
+
+{% if categorias_populares %}
+<section class="mb-5">
+    <h2 class="mb-4">Categorías Populares</h2>
+    <div class="row">
+        {% for categoria, count in categorias_populares %}
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ categoria.nombre }}</h5>
+                    <p class="card-text">{{ count }} obras</p>
+                    <a href="{{ url_for('public.obras_categoria', categoria_id=categoria.id_categoria) }}" class="btn btn-sm btn-outline-primary">Explorar</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center">
+        <a href="{{ url_for('public.categorias') }}" class="btn btn-primary">Ver Todas las Categorías</a>
+    </div>
+</section>
+{% endif %}
+
+{% if artistas_destacados %}
+<section class="mb-5">
+    <h2 class="mb-4">Artistas Destacados</h2>
+    <div class="row">
+        {% for artista in artistas_destacados %}
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ artista.nombre }}</h5>
+                    <p class="card-text">{{ artista.get_obras_count() }} obras</p>
+                    <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" class="btn btn-sm btn-outline-primary">Ver Perfil</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center">
+        <a href="{{ url_for('public.artistas') }}" class="btn btn-primary">Ver Todos los Artistas</a>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
