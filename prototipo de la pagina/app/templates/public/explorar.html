@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Explorar Obras - Art Platform{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Explorar Obras</h1>
+    <div>
+        <button class="btn btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#filtros">
+            Filtros
+        </button>
+    </div>
+</div>
+
+<div class="collapse mb-4" id="filtros">
+    <div class="card">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <label for="q" class="form-label">Buscar</label>
+                    <input type="text" class="form-control" id="q" name="q" value="{{ termino_busqueda }}" placeholder="Buscar obras...">
+                </div>
+                <div class="col-md-4">
+                    <label for="categoria" class="form-label">Categoría</label>
+                    <select class="form-select" id="categoria" name="categoria">
+                        <option value="">Todas las categorías</option>
+                        {% for categoria in categorias %}
+                        <option value="{{ categoria.id_categoria }}" {% if categoria_actual == categoria.id_categoria %}selected{% endif %}>
+                            {{ categoria.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">Buscar</button>
+                    <a href="{{ url_for('public.explorar') }}" class="btn btn-outline-secondary">Limpiar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if obras %}
+<div class="row">
+    {% for obra in obras %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <img src="{{ obra.imagen or 'https://via.placeholder.com/300x200' }}" class="card-img-top" alt="{{ obra.titulo }}">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ obra.titulo }}</h5>
+                <p class="card-text">{{ obra.descripcion[:100] }}{% if obra.descripcion|length > 100 %}...{% endif %}</p>
+                
+                <div class="mt-auto">
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Por <a href="{{ url_for('public.perfil_artista', artista_id=obra.artista.id_usuario) }}">{{ obra.artista.nombre }}</a>
+                        </small>
+                    </p>
+                    {% if obra.categoria %}
+                    <p class="card-text">
+                        <span class="badge bg-secondary">{{ obra.categoria.nombre }}</span>
+                    </p>
+                    {% endif %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}" class="btn btn-sm btn-outline-primary">Ver Detalle</a>
+                        {% if current_user.is_authenticated %}
+                        <button class="btn btn-sm btn-outline-danger" onclick="toggleFavorito('{{ obra.id_obra }}')">
+                            <span id="fav-{{ obra.id_obra }}">Agregar a Favoritos</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<nav aria-label="Paginación de obras">
+    <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+    </ul>
+</nav>
+
+{% else %}
+<div class="text-center py-5">
+    <h3>No se encontraron obras</h3>
+    <p>Intenta con otros términos de búsqueda o categorías.</p>
+    <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">Ver Todas las Obras</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if current_user.is_authenticated %}
+<script>
+function toggleFavorito(obraId) {
+    fetch('/api/favorito-obra', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            obra_id: obraId,
+            accion: 'agregar'  // Esto debería ser dinámico
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.exitoso) {
+            alert(data.mensaje);
+            location.reload();
+        } else {
+            alert(data.mensaje);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    });
+}
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Registrarse - Art Platform{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Crear Cuenta</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre Completo</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                                <div class="form-text">Mínimo 3 caracteres, solo letras, números, guiones y guiones bajos</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="form-text">Mínimo 6 caracteres</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="confirm_password" class="form-label">Confirmar Contraseña</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="rol" class="form-label">Tipo de Cuenta</label>
+                        <select class="form-select" id="rol" name="rol" required>
+                            <option value="">Selecciona tu rol</option>
+                            <option value="cliente">Cliente - Quiero comprar y seguir artistas</option>
+                            <option value="artista">Artista - Quiero vender y exhibir mi obra</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="biografia" class="form-label">Biografía (Opcional)</label>
+                        <textarea class="form-control" id="biografia" name="biografia" rows="3" placeholder="Cuéntanos sobre ti..."></textarea>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}">Inicia sesión aquí</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const confirm_password = document.getElementById('confirm_password').value;
+    
+    if (password !== confirm_password) {
+        e.preventDefault();
+        alert('Las contraseñas no coinciden');
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Artistas - Art Platform{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Artistas</h1>
+    <div>
+        <form method="GET" class="d-flex">
+            <input type="text" class="form-control me-2" name="q" value="{{ termino_busqueda }}" placeholder="Buscar artistas...">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            {% if termino_busqueda %}
+            <a href="{{ url_for('public.artistas') }}" class="btn btn-outline-secondary ms-2">Limpiar</a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+{% if artistas %}
+<div class="row">
+    {% for artista in artistas %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                {% if artista.foto_perfil %}
+                <img src="{{ artista.foto_perfil }}" class="img-fluid rounded-circle mb-3" alt="{{ artista.nombre }}" style="width: 100px; height: 100px; object-fit: cover;">
+                {% else %}
+                <div class="bg-secondary rounded-circle d-inline-block mb-3" style="width: 100px; height: 100px;">
+                    <div class="d-flex align-items-center justify-content-center h-100 text-white">
+                        <i class="fas fa-user fa-2x"></i>
+                    </div>
+                </div>
+                {% endif %}
+                <h5 class="card-title">{{ artista.nombre }}</h5>
+                <p class="card-text text-muted">@{{ artista.username }}</p>
+                {% if artista.biografia %}
+                <p class="card-text">{{ artista.biografia[:100] }}{% if artista.biografia|length > 100 %}...{% endif %}</p>
+                {% endif %}
+                <p class="card-text">
+                    <small class="text-muted">
+                        {{ artista.get_obras_count() }} obras | 
+                        {{ artista.get_seguidores_count() }} seguidores
+                    </small>
+                </p>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" class="btn btn-primary">Ver Perfil</a>
+                    {% if current_user.is_authenticated and current_user.is_cliente() %}
+                    <button class="btn btn-outline-success" onclick="toggleSeguir('{{ artista.id_usuario }}')">
+                        <span id="seguir-{{ artista.id_usuario }}">Seguir</span>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<nav aria-label="Paginación de artistas">
+    <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+    </ul>
+</nav>
+
+{% else %}
+<div class="text-center py-5">
+    <h3>No se encontraron artistas</h3>
+    <p>Intenta con otros términos de búsqueda.</p>
+    <a href="{{ url_for('public.artistas') }}" class="btn btn-primary">Ver Todos los Artistas</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if current_user.is_authenticated and current_user.is_cliente() %}
+<script>
+function toggleSeguir(artistaId) {
+    fetch('/api/seguir-artista', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            artista_id: artistaId,
+            accion: 'seguir'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.exitoso) {
+            alert(data.mensaje);
+            location.reload();
+        } else {
+            alert(data.mensaje);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    });
+}
+</script>
+{% endif %}
+{% endblock %}
