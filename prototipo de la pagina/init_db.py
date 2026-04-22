@@ -5,7 +5,7 @@ Crea todas las tablas necesarias para la plataforma de arte
 """
 
 import os
-from app.factories.app_factory import create_app
+from app.factories.app_factory import create_app, db
 from app.factories.db_factory import DatabaseFactory
 
 def init_database():
@@ -21,7 +21,7 @@ def init_database():
         db_factory = DatabaseFactory()
         
         # Obtener engine y session
-        engine = db_factory.get_engine()
+        engine = db_factory.create_engine()
         session = db_factory.get_session()
         
         try:
@@ -34,7 +34,6 @@ def init_database():
             )
             
             # Crear todas las tablas
-            from app.models import db
             db.create_all()
             
             print("¡Base de datos inicializada exitosamente!")
