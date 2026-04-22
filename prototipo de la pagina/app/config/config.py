@@ -8,8 +8,9 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-key-change-in-production'
     
     # Configuración de base de datos
+    basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'mysql+pymysql://user:password@localhost/art_platform'
+        'sqlite:///' + os.path.join(basedir, 'art_platform.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
     
@@ -42,8 +43,9 @@ class DevelopmentConfig(Config):
     """Configuración para desarrollo"""
     DEBUG = True
     SQLALCHEMY_ECHO = True
+    basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'mysql+pymysql://root:password@localhost/art_platform'
+        'sqlite:///' + os.path.join(basedir, 'art_platform_dev.db')
 
 class TestingConfig(Config):
     """Configuración para pruebas"""
@@ -56,6 +58,9 @@ class ProductionConfig(Config):
     """Configuración para producción"""
     DEBUG = False
     SESSION_COOKIE_SECURE = True
+    basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'art_platform_prod.db')
     
     @classmethod
     def init_app(cls, app):
