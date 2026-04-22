@@ -1,119 +1,319 @@
 {% extends "base.html" %}
 
-{% block title %}Inicio - Art Platform{% endblock %}
+{% block title %}WindMills Art - El viento que impulsa tu arte{% endblock %}
 
 {% block content %}
-<div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+<!-- Hero Section estilo Behance -->
+<section class="section" style="background: linear-gradient(135deg, var(--azul-cielo), var(--azul-cielo-claro)); color: white; text-align: center; padding: 6rem 0;">
     <div class="container">
-        <h1 class="display-4">Bienvenido a Art Platform</h1>
-        <p class="lead">La plataforma donde artistas y amantes del arte se conectan. Descubre obras únicas, sigue a tus artistas favoritos y compra arte directamente de los creadores.</p>
-        <hr class="my-4">
-        <p>Únete a nuestra comunidad de artistas y coleccionistas</p>
-        {% if not current_user.is_authenticated %}
-        <a class="btn btn-light btn-lg" href="{{ url_for('auth.register') }}" role="button">Comienza Ahora</a>
-        {% else %}
-        <a class="btn btn-light btn-lg" href="{{ url_for('public.explorar') }}" role="button">Explorar Obras</a>
-        {% endif %}
+        <div class="mb-4">
+            <div class="logo" style="color: white; font-size: 3rem; margin-bottom: 1rem;">
+                <div class="logo-icon" style="width: 60px; height: 60px; font-size: 30px;">
+                    <i class="fas fa-fan"></i>
+                </div>
+                WindMills Art
+            </div>
+        </div>
+        
+        <h1 style="font-size: 3.5rem; font-weight: 700; margin-bottom: 1.5rem;">
+            El viento que impulsa tu arte
+        </h1>
+        
+        <p style="font-size: 1.5rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
+            Descubre obras increíbles, conecta con artistas talentosos y transforma tu creatividad en oportunidad. 
+            Donde el talento encuentra su viento.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register') }}" class="btn" style="background: white; color: var(--primary); font-size: 1.1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-rocket"></i>
+                    Comienza Ahora
+                </a>
+                <a href="{{ url_for('public.explorar') }}" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-compass"></i>
+                    Explorar Obras
+                </a>
+            {% else %}
+                <a href="{{ url_for('public.explorar') }}" class="btn" style="background: white; color: var(--primary); font-size: 1.1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-compass"></i>
+                    Explorar Obras
+                </a>
+                {% if current_user.is_artista() %}
+                    <a href="{{ url_for('artista.dashboard') }}" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                        <i class="fas fa-plus"></i>
+                        Nueva Obra
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
-</div>
+</section>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-body text-center">
-                <h5 class="card-title">Para Artistas</h5>
-                <p class="card-text">Exhibe tu obra, vende tus productos y conecta con coleccionistas de todo el mundo.</p>
-                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">Únete como Artista</a>
+<!-- Sección de características -->
+<section class="section">
+    <div class="container">
+        <div class="row" style="gap: 2rem;">
+            <div class="col-4 card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3>Para Artistas</h3>
+                <p style="color: var(--text-secondary);">
+                    Exhibe tu obra, vende tus productos y conecta con coleccionistas de todo el mundo. 
+                    Deja que el viento impulse tu carrera.
+                </p>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i>
+                    Únete como Artista
+                </a>
+            </div>
+            
+            <div class="col-4 card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Para Clientes</h3>
+                <p style="color: var(--text-secondary);">
+                    Descubre artistas únicos, crea moodboards y compra arte original directamente. 
+                    Encuentra piezas que te inspiren.
+                </p>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i>
+                    Únete como Cliente
+                </a>
+            </div>
+            
+            <div class="col-4 card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h3>Explorar</h3>
+                <p style="color: var(--text-secondary);">
+                    Navega por nuestra galería, descubre nuevos artistas y encuentra obras que te inspiren. 
+                    El arte está a un clic de distancia.
+                </p>
+                <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i>
+                    Explorar Ahora
+                </a>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-body text-center">
-                <h5 class="card-title">Para Clientes</h5>
-                <p class="card-text">Descubre artistas únicos, crea moodboards y compra arte original directamente.</p>
-                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">Únete como Cliente</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-body text-center">
-                <h5 class="card-title">Explorar</h5>
-                <p class="card-text">Navega por nuestra galería, descubre nuevos artistas y encuentra obras que te inspiren.</p>
-                <a href="{{ url_for('public.explorar') }}" class="btn btn-outline-primary">Explorar Ahora</a>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 
+<!-- Filtros estilo Behance -->
 {% if obras_recientes %}
-<section class="mb-5">
-    <h2 class="mb-4">Obras Recientes</h2>
-    <div class="row">
-        {% for obra in obras_recientes %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="{{ obra.imagen or 'https://via.placeholder.com/300x200' }}" class="card-img-top" alt="{{ obra.titulo }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ obra.titulo }}</h5>
-                    <p class="card-text">{{ obra.descripcion[:100] }}{% if obra.descripcion|length > 100 %}...{% endif %}</p>
-                    <p class="card-text">
-                        <small class="text-muted">Por {{ obra.artista.nombre }}</small>
+<section class="filters-section">
+    <div class="container">
+        <div class="filters-container">
+            <div class="filter-group">
+                <span class="filter-label">Tipo:</span>
+                <select class="filter-select">
+                    <option>Todos</option>
+                    <option>Pintura</option>
+                    <option>Escultura</option>
+                    <option>Fotografía</option>
+                    <option>Digital</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Categoría:</span>
+                <select class="filter-select">
+                    <option>Todas</option>
+                    {% for categoria, count in categorias_populares[:5] %}
+                    <option>{{ categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filter-tags">
+                <span class="tag active">Destacado</span>
+                <span class="tag">Reciente</span>
+                <span class="tag">Popular</span>
+                <span class="tag">Emergente</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Grid de obras estilo Behance -->
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Obras Destacadas</h2>
+        
+        <div class="projects-grid">
+            {% for obra in obras_recientes %}
+            <div class="project-card" onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}'">
+                <div class="project-image" style="background: url('{{ obra.imagen or 'https://picsum.photos/seed/windmills{{ obra.id_obra }}/400/300.jpg' }}') center/cover;">
+                    <!-- Overlay para efectos hover -->
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);"></div>
+                </div>
+                
+                <div class="project-content">
+                    <h3 class="project-title">{{ obra.titulo }}</h3>
+                    
+                    <div class="project-author">
+                        <div class="author-avatar">
+                            {{ obra.artista.nombre[0]|upper }}
+                        </div>
+                        <span class="author-name">{{ obra.artista.nombre }}</span>
+                    </div>
+                    
+                    {% if obra.descripcion %}
+                    <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.4; margin-bottom: 1rem;">
+                        {{ obra.descripcion[:80] }}{% if obra.descripcion|length > 80 %}...{% endif %}
                     </p>
-                    <a href="{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}" class="btn btn-sm btn-outline-primary">Ver Detalle</a>
+                    {% endif %}
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-heart"></i>
+                            <span>{{ obra.get_favoritos_count() or 0 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>{{ obra.get_views_count() or 0 }}</span>
+                        </div>
+                        {% if obra.categoria %}
+                        <div class="stat-item">
+                            <span class="badge secondary">{{ obra.categoria.nombre }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-    <div class="text-center">
-        <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">Ver Más Obras</a>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('public.explorar') }}" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                <i class="fas fa-th"></i>
+                Ver Más Obras
+            </a>
+        </div>
     </div>
 </section>
 {% endif %}
 
+<!-- Categorías Populares -->
 {% if categorias_populares %}
-<section class="mb-5">
-    <h2 class="mb-4">Categorías Populares</h2>
-    <div class="row">
-        {% for categoria, count in categorias_populares %}
-        <div class="col-md-3 mb-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">{{ categoria.nombre }}</h5>
-                    <p class="card-text">{{ count }} obras</p>
-                    <a href="{{ url_for('public.obras_categoria', categoria_id=categoria.id_categoria) }}" class="btn btn-sm btn-outline-primary">Explorar</a>
+<section class="section" style="background: var(--gris-claro);">
+    <div class="container">
+        <h2 class="section-title">Categorías Populares</h2>
+        
+        <div class="row" style="gap: 1.5rem;">
+            {% for categoria, count in categorias_populares[:6] %}
+            <div class="col-4 card" style="text-align: center; padding: 2rem; cursor: pointer;" 
+                 onclick="window.location.href='{{ url_for('public.obras_categoria', categoria_id=categoria.id_categoria) }}'">
+                <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <h4>{{ categoria.nombre }}</h4>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">
+                    {{ count }} obras
+                </p>
+                <div style="color: var(--primary); font-weight: 500;">
+                    Explorar <i class="fas fa-arrow-right"></i>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-    <div class="text-center">
-        <a href="{{ url_for('public.categorias') }}" class="btn btn-primary">Ver Todas las Categorías</a>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('public.categorias') }}" class="btn btn-secondary">
+                <i class="fas fa-th-large"></i>
+                Ver Todas las Categorías
+            </a>
+        </div>
     </div>
 </section>
 {% endif %}
 
+<!-- Artistas Destacados -->
 {% if artistas_destacados %}
-<section class="mb-5">
-    <h2 class="mb-4">Artistas Destacados</h2>
-    <div class="row">
-        {% for artista in artistas_destacados %}
-        <div class="col-md-3 mb-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">{{ artista.nombre }}</h5>
-                    <p class="card-text">{{ artista.get_obras_count() }} obras</p>
-                    <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" class="btn btn-sm btn-outline-primary">Ver Perfil</a>
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Artistas Destacados</h2>
+        
+        <div class="projects-grid">
+            {% for artista in artistas_destacados %}
+            <div class="card" style="text-align: center; padding: 2rem; cursor: pointer;" 
+                 onclick="window.location.href='{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}'">
+                <div class="avatar" style="width: 80px; height: 80px; margin: 0 auto 1rem; font-size: 2rem;">
+                    {{ artista.nombre[0]|upper }}
+                </div>
+                
+                <h4>{{ artista.nombre }}</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    @{{ artista.username }}
+                </p>
+                
+                <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--primary);">
+                            {{ artista.get_obras_count() or 0 }}
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                            Obras
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--secondary);">
+                            {{ artista.get_seguidores_count() or 0 }}
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                            Seguidores
+                        </div>
+                    </div>
+                </div>
+                
+                {% if artista.biografia %}
+                <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.4;">
+                    {{ artista.biografia[:100] }}{% if artista.biografia|length > 100 %}...{% endif %}
+                </p>
+                {% endif %}
+                
+                <div style="margin-top: 1rem;">
+                    <span class="badge primary">Artista</span>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-    <div class="text-center">
-        <a href="{{ url_for('public.artistas') }}" class="btn btn-primary">Ver Todos los Artistas</a>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('public.artistas') }}" class="btn btn-primary">
+                <i class="fas fa-users"></i>
+                Ver Todos los Artistas
+            </a>
+        </div>
     </div>
 </section>
 {% endif %}
+
+<!-- CTA Final -->
+<section class="section" style="background: linear-gradient(135deg, var(--verde-prado), var(--verde-prado-oscuro)); color: white; text-align: center;">
+    <div class="container">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">
+            ¿Listo para dejar que el viento impulse tu arte?
+        </h2>
+        
+        <p style="font-size: 1.25rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Únete a la comunidad de artistas y amantes del arte más inspiradora. 
+            Tu próximo gran proyecto está a un paso de distancia.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="{{ url_for('auth.register') }}" class="btn" style="background: white; color: var(--secondary); font-size: 1.1rem; padding: 1rem 2rem;">
+                <i class="fas fa-rocket"></i>
+                Comienza Ahora
+            </a>
+            <a href="{{ url_for('public.explorar') }}" class="btn btn-secondary" style="background: transparent; border: 2px solid white; color: white; font-size: 1.1rem; padding: 1rem 2rem;">
+                <i class="fas fa-compass"></i>
+                Explorar Obras
+            </a>
+        </div>
+    </div>
+</section>
 {% endblock %}
