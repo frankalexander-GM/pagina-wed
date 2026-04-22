@@ -7,16 +7,14 @@ Flask-Migrate==4.0.5
 Flask-WTF==1.1.1
 WTForms==3.0.1
 
-# Base de datos MySQL
-PyMySQL==1.1.0
-mysqlclient==2.2.0
+# Base de datos SQLite (incluido en Python, pero SQLAlchemy lo necesita)
+# No se necesita driver adicional para SQLite
 
 # Validación y seguridad
 email-validator==2.0.0
 Werkzeug==2.3.7
 
 # Manejo de archivos y uploads
-python-magic==0.4.27
 Pillow==10.0.1
 
 # Utilidades de desarrollo
@@ -28,26 +26,14 @@ pytest==7.4.2
 pytest-flask==1.2.0
 pytest-cov==4.1.0
 
-# Documentación (opcional)
-Sphinx==7.1.2
-
 # Monitoreo y logging
 blinker==1.6.3
-
-# Cache (opcional, para producción)
-Flask-Caching==2.1.0
 
 # CORS si se necesita API frontend
 Flask-CORS==4.0.0
 
 # Manejo de fechas y horas
 python-dateutil==2.8.2
-
-# Serialización JSON
-marshmallow==3.20.1
-
-# Background tasks (opcional)
-celery==5.3.2
 
 # Email (para newsletters)
 Flask-Mail==0.9.1
