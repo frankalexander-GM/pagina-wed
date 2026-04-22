@@ -98,7 +98,7 @@ def detalle_usuario(usuario_id):
     
     return render_template('admin/detalle_usuario.html', usuario=usuario)
 
-@admin_bp.route('/usuarios/<int:usuario_id)/toggle-estado', methods=['POST'])
+@admin_bp.route('/usuarios/<int:usuario_id>/toggle-estado', methods=['POST'])
 @login_required
 @requiere_admin
 def toggle_estado_usuario(usuario_id):
@@ -165,7 +165,7 @@ def detalle_obra(obra_id):
     
     return render_template('admin/detalle_obra.html', obra=obra)
 
-@admin_bp.route('/obras/<int:obra_id)/toggle-visibilidad', methods=['POST'])
+@admin_bp.route('/obras/<int:obra_id>/toggle-visibilidad', methods=['POST'])
 @login_required
 @requiere_admin
 def toggle_visibilidad_obra(obra_id):

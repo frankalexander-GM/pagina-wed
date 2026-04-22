@@ -18,9 +18,7 @@ class Producto(db.Model):
     imagen = db.Column(db.String(255))
     
     # Estado calculado automáticamente desde stock
-    estado = db.Column(db.String(20), server_default=text(
-        "(CASE WHEN stock > 0 THEN 'disponible' ELSE 'agotado' END)"
-    ))
+    estado = db.Column(db.String(20), default='disponible')
     
     # Relaciones
     orden_items = db.relationship('OrdenItem', backref='producto', lazy='dynamic',

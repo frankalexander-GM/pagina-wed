@@ -2,6 +2,26 @@ from datetime import datetime
 from flask_login import UserMixin
 from app.factories.app_factory import db
 
+# Tablas de asociación
+favoritos_obras = db.Table('favoritos_obras',
+    db.Column('id_usuario', db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True),
+    db.Column('id_obra', db.Integer, db.ForeignKey('obras.id_obra'), primary_key=True),
+    db.Column('fecha_agregado', db.DateTime, default=datetime.utcnow)
+)
+
+favoritos_artistas = db.Table('favoritos_artistas',
+    db.Column('id_usuario', db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True),
+    db.Column('id_artista', db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True),
+    db.Column('fecha_seguimiento', db.DateTime, default=datetime.utcnow)
+)
+
+bandeja_newsletter = db.Table('bandeja_newsletter',
+    db.Column('id_usuario', db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True),
+    db.Column('id_newsletter', db.Integer, db.ForeignKey('newsletters.id_newsletter'), primary_key=True),
+    db.Column('fecha_envio', db.DateTime, default=datetime.utcnow),
+    db.Column('leido', db.Boolean, default=False)
+)
+
 class Usuario(UserMixin, db.Model):
     """
     Modelo de Usuario basado en el script de base de datos
@@ -111,21 +131,3 @@ class Usuario(UserMixin, db.Model):
         """Obtener cantidad de artistas que sigue"""
         return len(self.artistas_seguidos)
 
-# Tablas de relación para muchos-a-muchos
-favoritos_obras = db.Table('favoritos_obras',
-    db.Column('id_usuario', db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True),
-    db.Column('id_obra', db.Integer, db.ForeignKey('obras.id_obra'), primary_key=True),
-    db.Column('fecha', db.DateTime, default=datetime.utcnow)
-)
-
-favoritos_artistas = db.Table('favoritos_artistas',
-    db.Column('id_usuario', db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True),
-    db.Column('id_artista', db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True),
-    db.Column('fecha', db.DateTime, default=datetime.utcnow)
-)
-
-bandeja_newsletter = db.Table('bandeja_newsletter',
-    db.Column('id_usuario', db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True),
-    db.Column('id_newsletter', db.Integer, db.ForeignKey('newsletters.id_newsletter'), primary_key=True),
-    db.Column('leido', db.Boolean, default=False)
-)
