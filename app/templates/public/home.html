@@ -3,34 +3,73 @@
 {% block title %}WindMills Art - El viento que impulsa tu arte{% endblock %}
 
 {% block content %}
-<!-- Hero Section estilo Behance -->
-<section class="section" style="background: linear-gradient(135deg, var(--azul-cielo), var(--azul-cielo-claro)); color: white; text-align: center; padding: 6rem 0;">
-    <div class="container">
+<!-- Hero Section con Molino Holandés Animado -->
+<section class="section hero-section" style="background: linear-gradient(135deg, var(--azul-cielo), var(--azul-cielo-claro)); color: white; text-align: center; padding: 6rem 0; position: relative; overflow: hidden;">
+    <!-- Fondo animado de tulipanes -->
+    <div class="tulip-field" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+        <div class="tulip" style="position: absolute; width: 15px; height: 40px; background: linear-gradient(to top, #FFB6C1, #FF69B4); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite;">
+            <div class="tulip-petals" style="position: absolute; top: -20px; left: -8px;">
+                <div class="petal" style="position: absolute; width: 12px; height: 8px; background: #FFB6C1; border-radius: 50% 0; transform-origin: bottom center; animation: petal-wave 2s ease-in-out infinite;"></div>
+                <div class="petal" style="position: absolute; top: -20px; left: 0px; width: 12px; height: 8px; background: #FF69B4; border-radius: 0 50%; transform-origin: bottom center; animation: petal-wave 2s ease-in-out infinite 0.3s;"></div>
+                <div class="petal" style="position: absolute; top: -20px; left: 8px; width: 12px; height: 8px; background: #FFB6C1; border-radius: 50% 0 0 50%; transform-origin: bottom center; animation: petal-wave 2s ease-in-out infinite 0.6s;"></div>
+            </div>
+        </div>
+        
+        <!-- Múltiples tulipanes -->
+        <div class="tulip" style="position: absolute; bottom: 0; left: 15%; width: 12px; height: 35px; background: linear-gradient(to top, #FFD700, #FFA500); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 0.5s;"></div>
+        <div class="tulip" style="position: absolute; bottom: 0; left: 25%; width: 10px; height: 30px; background: linear-gradient(to top, #FF6B6B, #FF1744); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 1s;"></div>
+        <div class="tulip" style="position: absolute; bottom: 0; left: 35%; width: 13px; height: 38px; background: linear-gradient(to top, #4ECDC4, #8B4513); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 1.5s;"></div>
+        <div class="tulip" style="position: absolute; bottom: 0; left: 45%; width: 11px; height: 33px; background: linear-gradient(to top, #87CEEB, #4682B4); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 2s;"></div>
+        <div class="tulip" style="position: absolute; bottom: 0; left: 55%; width: 14px; height: 42px; background: linear-gradient(to top, #98FB98, #22C55E); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 2.5s;"></div>
+        <div class="tulip" style="position: absolute; bottom: 0; left: 65%; width: 9px; height: 28px; background: linear-gradient(to top, #F7DC6F, #F59E0B); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 3s;"></div>
+        <div class="tulip" style="position: absolute; bottom: 0; left: 75%; width: 16px; height: 45px; background: linear-gradient(to top, #E91E63, #C2185B); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 3.5s;"></div>
+        <div class="tulip" style="position: absolute; bottom: 0; left: 85%; width: 12px; height: 36px; background: linear-gradient(to top, #9C27B0, #6A1B9A); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 4s;"></div>
+    </div>
+    
+    <!-- Molino de viento animado -->
+    <div class="windmill-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+        <div class="windmill" style="width: 120px; height: 120px; position: relative; animation: float-windmill 8s ease-in-out infinite;">
+            <!-- Base del molino -->
+            <div class="windmill-base" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 20px; height: 40px; background: linear-gradient(to bottom, #8B4513, #654321); border-radius: 2px;"></div>
+            
+            <!-- Torres del molino -->
+            <div class="windmill-tower" style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 8px; height: 60px; background: linear-gradient(to bottom, #654321, #4A4A4A);"></div>
+            
+            <!-- Aspas del molino -->
+            <div class="windmill-blades" style="position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 100px; height: 100px; animation: rotate-blades 2s linear infinite;">
+                <div class="blade" style="position: absolute; top: 50%; left: 0; width: 45px; height: 8px; background: linear-gradient(to right, #FFFFFF, #E0E0E0); transform-origin: right center; border-radius: 4px;"></div>
+                <div class="blade" style="position: absolute; top: 50%; left: 50%; transform: translateX(-50%) rotate(120deg); width: 45px; height: 8px; background: linear-gradient(to right, #FFFFFF, #E0E0E0); transform-origin: right center; border-radius: 4px;"></div>
+                <div class="blade" style="position: absolute; top: 50%; left: 50%; transform: translateX(-50%) rotate(240deg); width: 45px; height: 8px; background: linear-gradient(to right, #FFFFFF, #E0E0E0); transform-origin: right center; border-radius: 4px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container" style="position: relative; z-index: 20;">
         <div class="mb-4">
-            <div class="logo" style="color: white; font-size: 3rem; margin-bottom: 1rem;">
-                <div class="logo-icon" style="width: 60px; height: 60px; font-size: 30px;">
+            <div class="logo" style="color: white; font-size: 3rem; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                <div class="logo-icon" style="width: 60px; height: 60px; font-size: 30px; display: inline-block; animation: pulse 2s ease-in-out infinite;">
                     <i class="fas fa-fan"></i>
                 </div>
                 WindMills Art
             </div>
         </div>
         
-        <h1 style="font-size: 3.5rem; font-weight: 700; margin-bottom: 1.5rem;">
+        <h1 style="font-size: 3.5rem; font-weight: 700; margin-bottom: 1.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
             El viento que impulsa tu arte
         </h1>
         
-        <p style="font-size: 1.5rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
-            Descubre obras increíbles, conecta con artistas talentosos y transforma tu creatividad en oportunidad. 
-            Donde el talento encuentra su viento.
+        <p style="font-size: 1.5rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+            Donde el talento holandés encuentra su viento. 
+            Descubre obras inspiradoras, conecta con artistas talentosos y transforma tu creatividad en oportunidad.
         </p>
         
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
             {% if not current_user.is_authenticated %}
-                <a href="{{ url_for('auth.register') }}" class="btn" style="background: white; color: var(--primary); font-size: 1.1rem; padding: 1rem 2rem;">
+                <a href="{{ url_for('auth.register') }}" class="btn" style="background: white; color: var(--primary); font-size: 1.1rem; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(0,0,0,0.2); transition: all 0.3s ease;">
                     <i class="fas fa-rocket"></i>
                     Comienza Ahora
                 </a>
-                <a href="{{ url_for('public.explorar') }}" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                <a href="{{ url_for('public.explorar') }}" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem; border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s ease;">
                     <i class="fas fa-compass"></i>
                     Explorar Obras
                 </a>
