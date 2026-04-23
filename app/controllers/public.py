@@ -10,18 +10,14 @@ def home():
     """
     Página de inicio pública
     """
-    # service_factory = get_service_factory()
-    # obra_service = service_factory.get_obra_service()
-    # categoria_service = service_factory.get_categoria_service()
+    service_factory = get_service_factory()
+    obra_service = service_factory.get_obra_service()
+    categoria_service = service_factory.get_categoria_service()
     
     # Obtener datos para la página de inicio
-    # obras_recientes = obra_service.get_obras_recientes(limit=6)
-    # categorias_populares = categoria_service.get_populares(limit=6)
-    # artistas_destacados = obra_service.get_artistas_con_obras(limit=6)
-    
-    obras_recientes = []
-    categorias_populares = []
-    artistas_destacados = []
+    obras_recientes = obra_service.get_obras_recientes(limit=6)
+    categorias_populares = categoria_service.get_populares(limit=6)
+    artistas_destacados = obra_service.get_artistas_con_obras(limit=6)
 
     return render_template('public/home.html', 
                          obras_recientes=obras_recientes,
@@ -261,3 +257,17 @@ def api_buscar():
     return jsonify({
         'resultados': resultados
     })
+
+@public_bp.route('/categorias')
+def categorias():
+    """
+    Página de todas las categorías
+    """
+    service_factory = get_service_factory()
+    categoria_service = service_factory.get_categoria_service()
+    
+    # Obtener todas las categorías con conteo de obras
+    categorias_con_obras = categoria_service.get_all_with_obras_count()
+    
+    return render_template('public/categorias.html',
+                         categorias=categorias_con_obras)
