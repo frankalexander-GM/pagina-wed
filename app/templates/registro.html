@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Arte</title>
+    <link rel="stylesheet" href="../static/css/estilos.css">
+</head>
+<body>
+    <form action="/registro" method="POST">
+        <h2>Únete a la Galería</h2>
+        <input type="email" name="email" placeholder="Correo electrónico" required>
+        <input type="password" name="password" placeholder="Contraseña (mín. 8 caracteres)" minlength="8" required>
+        <select name="rol">
+            <option value="artista">Artista</option>
+            <option value="cliente">Cliente</option>
+        </select>
+        <button type="submit">Crear cuenta</button>
+    </form>
+</body>
+</html>
