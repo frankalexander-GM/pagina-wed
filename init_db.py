@@ -5,6 +5,7 @@ Crea todas las tablas necesarias para la plataforma de arte
 """
 
 import os
+from datetime import datetime
 from app.factories.app_factory import create_app, db
 from app.factories.db_factory import DatabaseFactory
 
@@ -77,7 +78,7 @@ def init_database():
                 print("Usuario administrador ya existe")
             
             # Crear algunas categorías de ejemplo
-            categoria_repo = service_factory.get_categoria_repository()
+            categoria_service = service_factory.get_categoria_service()
             
             categorias_ejemplo = [
                 {'nombre': 'Pintura', 'descripcion': 'Obras de pintura al óleo, acrílico, acuarela, etc.'},
@@ -88,11 +89,91 @@ def init_database():
             ]
             
             for cat_data in categorias_ejemplo:
-                if not categoria_repo.name_exists(cat_data['nombre']):
-                    categoria = categoria_repo.create(cat_data)
+                if not categoria_service.name_exists(cat_data['nombre']):
+                    categoria = categoria_service.create(cat_data)
                     print(f"Categoría creada: {cat_data['nombre']}")
                 else:
                     print(f"Categoría ya existe: {cat_data['nombre']}")
+            
+            # Crear usuarios artistas de ejemplo
+            usuario_service = service_factory.get_usuario_service()
+            
+            artistas_ejemplo = [
+                {
+                    'nombre': 'María González',
+                    'email': 'maria.artista@example.com',
+                    'password': 'artista123',
+                    'rol': 'artista',
+                    'biografia': 'Artista plástica especializada en pintura al óleo',
+                    'is_active': True
+                },
+                {
+                    'nombre': 'Carlos Rodríguez',
+                    'email': 'carlos.foto@example.com',
+                    'password': 'artista123',
+                    'rol': 'artista',
+                    'biografia': 'Fotógrafo profesional con más de 10 años de experiencia',
+                    'is_active': True
+                }
+            ]
+            
+            artistas_creados = []
+            for artista_data in artistas_ejemplo:
+                if not usuario_service.get_by_email(artista_data['email']):
+                    artista, errores = usuario_service.create_user(artista_data)
+                    if artista:
+                        artistas_creados.append(artista)
+                        print(f"Artista creado: {artista_data['nombre']}")
+                    else:
+                        print(f"Error al crear artista {artista_data['nombre']}: {errores}")
+                else:
+                    artista = usuario_service.get_by_email(artista_data['email'])
+                    if artista:
+                        artistas_creados.append(artista)
+                        print(f"Artista ya existe: {artista_data['nombre']}")
+            
+            # Crear obras de ejemplo
+            obra_service = service_factory.get_obra_service()
+            
+            obras_ejemplo = [
+                {
+                    'titulo': 'Atardecer en el Campo',
+                    'descripcion': 'Pintura al óleo que captura la belleza de un atardecer rural',
+                    'tecnica': 'Óleo sobre lienzo',
+                    'precio': 1500.00,
+                    'id_categoria': 1,  # Pintura
+                    'id_artista': artistas_creados[0].id_usuario if artistas_creados else 2,
+                    'visible': True,
+                    'fecha_publicacion': datetime.now()
+                },
+                {
+                    'titulo': 'Retrato Moderno',
+                    'descripcion': 'Retrato expresionista de una mujer contemporánea',
+                    'tecnica': 'Acrílico sobre tela',
+                    'precio': 1200.00,
+                    'id_categoria': 1,  # Pintura
+                    'id_artista': artistas_creados[0].id_usuario if artistas_creados else 2,
+                    'visible': True,
+                    'fecha_publicacion': datetime.now()
+                },
+                {
+                    'titulo': 'Ciudad Nocturna',
+                    'descripcion': 'Fotografía urbana tomada durante la noche',
+                    'tecnica': 'Fotografía digital',
+                    'precio': 800.00,
+                    'id_categoria': 3,  # Fotografía
+                    'id_artista': artistas_creados[1].id_usuario if len(artistas_creados) > 1 else 3,
+                    'visible': True,
+                    'fecha_publicacion': datetime.now()
+                }
+            ]
+            
+            for obra_data in obras_ejemplo:
+                exito, obra = obra_service.crear_obra(obra_data)
+                if exito:
+                    print(f"Obra creada: {obra_data['titulo']}")
+                else:
+                    print(f"Error al crear obra: {obra_data['titulo']}")
             
             # Guardar cambios
             session.commit()
