@@ -26,20 +26,35 @@
         <div class="tulip" style="position: absolute; bottom: 0; left: 85%; width: 12px; height: 36px; background: linear-gradient(to top, #9C27B0, #6A1B9A); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 4s;"></div>
     </div>
     
-    <!-- Molino de viento animado -->
+    <!-- Molino Holandés Tradicional Animado -->
     <div class="windmill-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
-        <div class="windmill" style="width: 120px; height: 120px; position: relative; animation: float-windmill 8s ease-in-out infinite;">
-            <!-- Base del molino -->
-            <div class="windmill-base" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 20px; height: 40px; background: linear-gradient(to bottom, #8B4513, #654321); border-radius: 2px;"></div>
+        <div class="windmill" style="width: 180px; height: 180px; position: relative; animation: holandes-windmill 10s ease-in-out infinite;">
+            <!-- Base circular del molino -->
+            <div class="windmill-base" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 50px; background: linear-gradient(135deg, #8B4513, #654321); border: 3px solid #654321; border-radius: 50%;"></div>
             
-            <!-- Torres del molino -->
-            <div class="windmill-tower" style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 8px; height: 60px; background: linear-gradient(to bottom, #654321, #4A4A4A);"></div>
+            <!-- Cuerpo del molino con textura -->
+            <div class="windmill-body" style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; background: linear-gradient(to bottom, #D2691E, #8B4513); border: 2px solid #654321;"></div>
             
-            <!-- Aspas del molino -->
-            <div class="windmill-blades" style="position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 100px; height: 100px; animation: rotate-blades 2s linear infinite;">
-                <div class="blade" style="position: absolute; top: 50%; left: 0; width: 45px; height: 8px; background: linear-gradient(to right, #FFFFFF, #E0E0E0); transform-origin: right center; border-radius: 4px;"></div>
-                <div class="blade" style="position: absolute; top: 50%; left: 50%; transform: translateX(-50%) rotate(120deg); width: 45px; height: 8px; background: linear-gradient(to right, #FFFFFF, #E0E0E0); transform-origin: right center; border-radius: 4px;"></div>
-                <div class="blade" style="position: absolute; top: 50%; left: 50%; transform: translateX(-50%) rotate(240deg); width: 45px; height: 8px; background: linear-gradient(to right, #FFFFFF, #E0E0E0); transform-origin: right center; border-radius: 4px;"></div>
+            <!-- Techo cónico -->
+            <div class="windmill-roof" style="position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 60px solid #654321; border-radius: 50% 50% 0 0;"></div>
+            
+            <!-- Ventanas del molino -->
+            <div class="windmill-windows" style="position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); width: 40px; height: 30px; background: linear-gradient(to bottom, #4A4A4A, #2C1810); border: 2px solid #2C1810; border-radius: 4px;">
+                <div class="window" style="position: absolute; top: 5px; left: 5px; width: 10px; height: 15px; background: linear-gradient(135deg, #87CEEB, #B0E0E6); border-radius: 2px;"></div>
+                <div class="window" style="position: absolute; top: 5px; right: 5px; width: 10px; height: 15px; background: linear-gradient(135deg, #87CEEB, #B0E0E6); border-radius: 2px;"></div>
+            </div>
+            
+            <!-- Aspas holandesas tradicionales -->
+            <div class="windmill-blades" style="position: absolute; top: 50px; left: 50%; transform: translateX(-50%); width: 140px; height: 140px; animation: holandes-blades 4s ease-in-out infinite;">
+                <!-- Aspas superiores con bordes decorativos -->
+                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(0deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(72deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(144deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(216deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(288deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                
+                <!-- Centro del molino -->
+                <div class="windmill-center" style="position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%); width: 20px; height: 20px; background: linear-gradient(135deg, #654321, #8B4513); border-radius: 50%; border: 2px solid #F5F5DC;"></div>
             </div>
         </div>
     </div>

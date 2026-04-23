@@ -29,6 +29,18 @@ class UsuarioService:
         """
         return self.usuario_repo.get_by_id(usuario_id)
     
+    def get_by_email(self, email):
+        """
+        Obtener usuario por email
+        
+        Args:
+            email (str): Email del usuario
+            
+        Returns:
+            Usuario: Instancia del usuario o None
+        """
+        return self.usuario_repo.get_by_email(email)
+    
     def get_all(self, filters=None, limit=None, offset=None):
         """
         Obtener todos los usuarios con filtros opcionales

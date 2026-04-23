@@ -76,6 +76,19 @@ class CategoriaService:
         """
         return self.categoria_repo.name_exists(nombre, exclude_id)
     
+    def create(self, data, usuario_id=None):
+        """
+        Crear una nueva categoría
+        
+        Args:
+            data (dict): Datos de la categoría
+            usuario_id (int): ID del usuario que crea
+            
+        Returns:
+            Categoria: Instancia creada o None
+        """
+        return self.categoria_repo.create(data, usuario_id=usuario_id)
+    
     def get_with_obras(self, categoria_id, limit=None, offset=None):
         """
         Obtener categoría con sus obras
