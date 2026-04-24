@@ -1,59 +1,79 @@
 /* ============================================
    ÁGORA ART — Sistema de Diseño
-   Concepto: El Refugio del Creador
-   Paleta: Botánica Vibrante + Coral Intenso
+   Paleta: Teal Pavo Real + Malva + Crema
+   Turqueza azulado oscuro. Malva protagonista.
+   El morado noche del footer, dominante en secciones.
    ============================================ */
 
-/* ===== PALETA DE COLORES ===== */
 :root {
-  /* Colores base */
-  --canvas:      #FDFCF9;
-  --blanco:      #FFFFFF;
-  --carbon:      #1A1F1A;
+  /* === FONDO === */
+  --canvas:  #FFF8F0;   /* Crema cálida — lienzo */
+  --blanco:  #FFFFFF;
+  --carbon:  #2D2535;   /* El morado noche: profundo, cálido, artístico */
 
-  /* Primario — Verde Esmeralda/Bosque */
-  --salvia:      #2E8B57;
-  --salvia-dark: #1B5E3A;
-  --salvia-light:#D4EFE1;
-  --salvia-mid:  #52A87A;
+  /* === PRIMARIO: Teal Pavo Real ===
+     Más azulado y oscuro. Menos bebé, más carácter.
+     Entre el azul y el verde, con personalidad. */
+  --turq:        #1B8FA0;
+  --turq-dark:   #136E7C;
+  --turq-light:  #D0EEF3;
+  --turq-mid:    #3AABBC;
 
-  /* Secundario — Coral / Terracota Vivo */
-  --arcilla:     #E8622A;
-  --arcilla-dark:#C44A18;
-  --arcilla-light:#FCE8DC;
+  /* === SECUNDARIO: Malva Protagonista ===
+     Rico, cálido, artístico. Ya no es sólo un neutro.
+     Un lila-violeta suave que convive genial con el teal. */
+  --malva:       #8A6EA8;
+  --malva-dark:  #6A4E88;
+  --malva-light: #EDE5F5;
+  --malva-mid:   #A88EC0;
 
-  /* Acento — Ámbar cálido */
-  --ambar:       #F0A500;
-  --ambar-light: #FEF3D7;
+  /* === ACENTO: Coral polvoriento ===
+     El toque cálido. Llama a la acción sin gritar. */
+  --coral:       #F07868;
+  --coral-dark:  #D05848;
+  --coral-light: #FDE8E5;
+  --coral-mid:   #F59588;
 
-  /* Neutros orgánicos */
-  --piedra:      #6B7280;
-  --borde:       #E2DDD8;
-  --borde-suave: #F4F0EB;
-  --sombra:      rgba(30, 50, 30, 0.07);
-  --sombra-hover:rgba(30, 50, 30, 0.14);
+  /* === ACENTO 2: Dorado ===
+     Chispa y celebración. */
+  --dorado:      #F5C842;
+  --dorado-light:#FEF6D8;
 
-  /* Semánticos */
-  --primary:         var(--salvia);
-  --primary-dark:    var(--salvia-dark);
-  --primary-light:   var(--salvia-light);
-  --secondary:       var(--arcilla);
-  --secondary-dark:  var(--arcilla-dark);
-  --secondary-light: var(--arcilla-light);
-  --background:      var(--canvas);
-  --surface:         var(--blanco);
-  --text-primary:    var(--carbon);
-  --text-secondary:  var(--piedra);
-  --border:          var(--borde);
+  /* === MORADO NOCHE (footer/secciones oscuras) ===
+     Este es el color del footer que tanto gusta.
+     Usado en heroes oscuros, CTAs y secciones destacadas. */
+  --noche:       #2D2535;
+  --noche-mid:   #3D3050;
+  --noche-light: #F0EBF7;
 
-  /* Espaciados y formas */
+  /* === NEUTROS === */
+  --piedra:      #786E80;
+  --borde:       #EDE6F0;
+  --borde-suave: #F7F3FA;
+  --sombra:      rgba(45, 37, 53, 0.07);
+  --sombra-hover:rgba(45, 37, 53, 0.15);
+
+  /* === SEMÁNTICOS === */
+  --primary:        var(--turq);
+  --primary-dark:   var(--turq-dark);
+  --primary-light:  var(--turq-light);
+  --secondary:      var(--malva);
+  --secondary-dark: var(--malva-dark);
+  --secondary-light:var(--malva-light);
+  --background:     var(--canvas);
+  --surface:        var(--blanco);
+  --text-primary:   var(--carbon);
+  --text-secondary: var(--piedra);
+  --border:         var(--borde);
+
+  /* === FORMAS === */
   --radius-sm:   8px;
   --radius-md:   16px;
   --radius-lg:   24px;
   --radius-pill: 50px;
   --shadow-sm:   0 2px 16px var(--sombra);
   --shadow-md:   0 8px 36px var(--sombra);
-  --shadow-hover:0 20px 56px var(--sombra-hover);
+  --shadow-hover:0 20px 60px var(--sombra-hover);
   --transition:  all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -166,7 +186,7 @@ a:hover { color: var(--primary-dark); }
 .logo-mark {
   width: 36px;
   height: 36px;
-  background: var(--salvia);
+  background: var(--turq);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -189,7 +209,7 @@ a:hover { color: var(--primary-dark); }
 }
 
 .logo-name span {
-  color: var(--arcilla);
+  color: var(--malva);
 }
 
 /* NAV */
@@ -214,7 +234,7 @@ a:hover { color: var(--primary-dark); }
 
 .nav-link:hover {
   color: var(--text-primary);
-  background: var(--salvia-light);
+  background: var(--turq-light);
   text-decoration: none;
 }
 
@@ -264,58 +284,143 @@ a:hover { color: var(--primary-dark); }
 }
 
 /* ===== BOTONES ===== */
-.btn {
+/* Sobrescribimos Bootstrap para que use la paleta Teal+Malva */
+:root {
+  --bs-primary:         #1B8FA0;
+  --bs-primary-rgb:     27,143,160;
+  --bs-link-color:      #1B8FA0;
+  --bs-link-hover-color:#136E7C;
+}
+
+.btn,
+a.btn,
+button.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 0.7rem 1.6rem;
   border: none;
-  border-radius: var(--radius-pill);
-  font-family: 'Josefin Sans', sans-serif;
-  font-weight: 600;
-  font-size: 0.875rem;
+  border-radius: var(--radius-pill) !important;
+  font-family: 'Josefin Sans', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition) !important;
   text-decoration: none;
   white-space: nowrap;
 }
 
-.btn-primary {
-  background: var(--salvia);
-  color: white;
+/* PRIMARIO: Turquesa */
+.btn-primary,
+a.btn-primary,
+button.btn-primary {
+  background-color: var(--turq) !important;
+  border-color: var(--turq) !important;
+  color: white !important;
+  box-shadow: none !important;
 }
-.btn-primary:hover {
-  background: var(--salvia-dark);
-  color: white;
-  text-decoration: none;
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+  background-color: var(--turq-dark) !important;
+  border-color: var(--turq-dark) !important;
+  color: white !important;
+  text-decoration: none !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(123,140,122,0.35);
+  box-shadow: 0 6px 20px rgba(60,200,184,0.4) !important;
 }
 
-.btn-secondary {
-  background: var(--blanco);
-  color: var(--text-primary);
-  border: 1.5px solid var(--borde);
+/* SECUNDARIO: Borde sutil */
+.btn-secondary,
+a.btn-secondary,
+button.btn-secondary {
+  background-color: var(--blanco) !important;
+  border: 1.5px solid var(--borde) !important;
+  color: var(--text-primary) !important;
+  box-shadow: none !important;
 }
-.btn-secondary:hover {
-  background: var(--borde-suave);
-  border-color: var(--salvia);
-  color: var(--salvia-dark);
-  text-decoration: none;
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: var(--turq-light) !important;
+  border-color: var(--turq) !important;
+  color: var(--turq-dark) !important;
+  text-decoration: none !important;
   transform: translateY(-1px);
+  box-shadow: none !important;
 }
 
-.btn-accent {
-  background: var(--arcilla);
-  color: white;
+/* ACENTO: Coral */
+.btn-accent,
+a.btn-accent,
+button.btn-accent {
+  background-color: var(--coral) !important;
+  border-color: var(--coral) !important;
+  color: white !important;
+  box-shadow: none !important;
 }
-.btn-accent:hover {
-  background: var(--arcilla-dark);
-  color: white;
-  text-decoration: none;
+.btn-accent:hover,
+.btn-accent:focus {
+  background-color: var(--coral-dark) !important;
+  border-color: var(--coral-dark) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(240,120,104,0.4) !important;
+}
+
+/* GHOST: Transparente */
+.btn-ghost,
+a.btn-ghost {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border: 1.5px solid transparent !important;
+}
+.btn-ghost:hover {
+  background: var(--borde-suave) !important;
+  color: var(--text-primary) !important;
+  text-decoration: none !important;
+}
+
+/* TAMAÑOS */
+.btn-sm { padding: 0.45rem 1rem !important; font-size: 0.8rem !important; }
+.btn-lg { padding: 1rem 2.5rem !important; font-size: 1rem !important; }
+
+/* Sobrescritura Bootstrap outline/warning/danger/info */
+.btn-outline-primary {
+  color: var(--turq) !important;
+  border-color: var(--turq) !important;
+}
+.btn-outline-primary:hover {
+  background-color: var(--turq) !important;
+  color: white !important;
+}
+.btn-outline-secondary {
+  color: var(--piedra) !important;
+  border-color: var(--borde) !important;
+}
+.btn-outline-secondary:hover {
+  background-color: var(--borde-suave) !important;
+  color: var(--text-primary) !important;
+}
+.btn-outline-danger {
+  color: var(--coral-dark) !important;
+  border-color: var(--coral) !important;
+}
+.btn-outline-danger:hover {
+  background-color: var(--coral-light) !important;
+  color: var(--coral-dark) !important;
+}
+.btn-danger {
+  background-color: var(--coral) !important;
+  border-color: var(--coral) !important;
+  color: white !important;
+}
+.btn-danger:hover {
+  background-color: var(--coral-dark) !important;
+}
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(193,154,107,0.35);
 }
@@ -805,6 +910,33 @@ textarea.form-control { resize: vertical; min-height: 120px; }
   .profile-stats { gap: 1.5rem; }
 
   .btn { padding: 0.7rem 1.2rem; }
+}
+
+/* =========================================
+   USER MENU & AVATAR
+   ========================================= */
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--turq);
+  color: var(--blanco);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.avatar:hover {
+  background: var(--noche);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 @media (max-width: 480px) {

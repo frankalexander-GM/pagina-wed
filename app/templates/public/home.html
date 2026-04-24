@@ -8,7 +8,7 @@
     min-height: 88vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(140deg, #FDFCF9 0%, #D4EFE1 45%, #FCE8DC 100%);
+    background: linear-gradient(140deg, #FFF8F0 0%, #D0EEF3 40%, #EDE5F5 100%);
     position: relative;
     overflow: hidden;
 }
@@ -17,9 +17,9 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 10% 80%, rgba(46,139,87,0.18) 0%, transparent 50%),
-        radial-gradient(circle at 88% 15%, rgba(232,98,42,0.15) 0%, transparent 48%),
-        radial-gradient(circle at 50% 50%, rgba(240,165,0,0.06) 0%, transparent 70%);
+        radial-gradient(circle at 5% 80%, rgba(27,143,160,0.18) 0%, transparent 48%),
+        radial-gradient(circle at 92% 10%, rgba(138,110,168,0.14) 0%, transparent 48%),
+        radial-gradient(circle at 50% 100%, rgba(240,120,104,0.07) 0%, transparent 40%);
     pointer-events: none;
 }
 .hero-inner {
@@ -31,7 +31,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--salvia);
+    background: var(--turq);
     color: white;
     border-radius: var(--radius-pill);
     padding: 0.4rem 1.1rem;
@@ -41,7 +41,7 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 1.75rem;
-    box-shadow: 0 4px 14px rgba(46,139,87,0.35);
+    box-shadow: 0 4px 16px rgba(27,143,160,0.45);
 }
 .hero h1 {
     font-size: clamp(2.5rem, 5vw, 3.75rem);
@@ -52,7 +52,7 @@
 }
 .hero h1 em {
     font-style: normal;
-    color: var(--salvia);
+    color: var(--turq-dark);
     display: block;
 }
 .hero-desc {
@@ -80,7 +80,7 @@
 .hero-avatars .mini-av {
     width: 34px; height: 34px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--salvia), var(--arcilla));
+    background: linear-gradient(135deg, var(--turq), var(--malva));
     border: 2px solid white;
     margin-left: -8px;
     display: flex; align-items: center; justify-content: center;
@@ -117,7 +117,7 @@
 .hero-grid-item img { width:100%;height:100%;object-fit:cover; }
 .hero-grid-item .hg-label {
     position: absolute; bottom: 0; left: 0; right: 0;
-    background: linear-gradient(transparent, rgba(26,31,26,0.75));
+    background: linear-gradient(transparent, rgba(26,26,46,0.75));
     padding: 1rem 0.85rem 0.75rem;
     color: white;
     font-family: 'Josefin Sans', sans-serif;
@@ -143,7 +143,7 @@
     font-family: 'Josefin Sans', sans-serif;
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--salvia);
+    color: var(--turq-dark);
     display: block;
 }
 .stat-block .lbl {
@@ -175,8 +175,8 @@
     font-size: 1.4rem;
     margin: 0 auto 1.5rem;
 }
-.how-icon.salvia  { background: var(--salvia-light); color: var(--salvia); }
-.how-icon.arcilla { background: var(--arcilla-light); color: var(--arcilla); }
+.how-icon.salvia  { background: var(--turq-light); color: var(--turq-dark); }
+.how-icon.arcilla { background: var(--malva-light); color: var(--malva-dark); }
 .how-card h4 { font-size: 1.1rem; margin-bottom: 0.75rem; }
 .how-card p  { font-family: 'Lora', serif; font-style: italic; color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
 
@@ -206,14 +206,14 @@
     color: var(--text-primary);
 }
 .cat-chip:hover {
-    background: var(--salvia);
-    border-color: var(--salvia);
+    background: var(--turq);
+    border-color: var(--turq);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(46,139,87,0.3);
+    box-shadow: 0 6px 20px rgba(27,143,160,0.4);
     color: white;
     text-decoration: none;
 }
-.cat-chip-icon { font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--salvia); }
+.cat-chip-icon { font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--turq-dark); }
 .cat-chip-name { font-family: 'Josefin Sans', sans-serif; font-size: 0.9rem; font-weight: 600; display: block; }
 .cat-chip-count { font-size: 0.78rem; color: var(--text-secondary); }
 
@@ -239,22 +239,22 @@
 .artista-av {
     width: 72px; height: 72px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--salvia), var(--arcilla));
+    background: linear-gradient(135deg, var(--turq), var(--malva));
     display: flex; align-items: center; justify-content: center;
     font-family: 'Josefin Sans', sans-serif;
     font-size: 1.5rem; font-weight: 700; color: white;
     margin: 0 auto 1rem;
-    box-shadow: 0 4px 16px rgba(46,139,87,0.3);
+    box-shadow: 0 4px 18px rgba(27,143,160,0.35);
 }
 .artista-name { font-family: 'Josefin Sans', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
 .artista-handle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem; }
 .artista-stats { display: flex; justify-content: center; gap: 1.5rem; }
 .artista-stats span { font-size: 0.78rem; color: var(--text-secondary); }
-.artista-stats strong { display: block; font-family: 'Josefin Sans', sans-serif; font-size: 1rem; color: var(--salvia); }
+.artista-stats strong { display: block; font-family: 'Josefin Sans', sans-serif; font-size: 1rem; color: var(--malva-dark); }
 
 /* === CTA FINAL === */
 .cta-section {
-    background: linear-gradient(135deg, #1B5E3A 0%, #1A1F1A 50%, #6B2010 100%);
+    background: linear-gradient(135deg, #2D2535 0%, #3D3050 60%, #1B4050 100%);
     border-radius: var(--radius-lg);
     padding: 5rem 3rem;
     text-align: center;
@@ -265,8 +265,9 @@
 .cta-section::before {
     content: '';
     position: absolute; inset: 0;
-    background: radial-gradient(circle at 25% 50%, rgba(46,139,87,0.4) 0%, transparent 55%),
-                radial-gradient(circle at 80% 50%, rgba(232,98,42,0.35) 0%, transparent 55%);
+    background: radial-gradient(circle at 15% 60%, rgba(27,143,160,0.35) 0%, transparent 50%),
+                radial-gradient(circle at 85% 40%, rgba(138,110,168,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 50% 5%, rgba(240,120,104,0.12) 0%, transparent 40%);
     pointer-events: none;
 }
 .cta-section h2 { color: white; font-size: 2.25rem; margin-bottom: 1rem; position: relative; }
@@ -467,7 +468,7 @@
 
 <!-- ===== ARTISTAS ===== -->
 {% if artistas_destacados %}
-<section class="section" style="background:var(--borde-suave);padding:5rem 0;">
+<section class="section" style="background:var(--malva-light);padding:5rem 0;">
     <div class="container">
         <p class="section-title">Artistas de la comunidad</p>
         <p class="section-subtitle">Creadores independientes que dan vida a este espacio</p>

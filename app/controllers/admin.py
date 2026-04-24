@@ -27,15 +27,27 @@ def dashboard():
     usuario_service = service_factory.get_usuario_service()
     obra_service = service_factory.get_obra_service()
     producto_service = service_factory.get_producto_service()
+    categoria_service = service_factory.get_categoria_service()
     
-    # Obtener estadísticas generales
+    # Obtener estadísticas generales (formato anidado para el template)
     stats = {
-        'usuarios_count': usuario_service.count(),
-        'artistas_count': usuario_service.count({'rol': 'artista'}),
-        'clientes_count': usuario_service.count({'rol': 'cliente'}),
-        'obras_count': obra_service.count(),
-        'productos_count': producto_service.count(),
-        'productos_disponibles': producto_service.count({'stock__gt': 0})
+        'usuarios': {
+            'total': usuario_service.count(),
+            'artistas': usuario_service.count({'rol': 'artista'}),
+            'clientes': usuario_service.count({'rol': 'cliente'})
+        },
+        'obras': {
+            'total': obra_service.count(),
+            'visibles': obra_service.count({'estado': 'publicada'}),
+            'nuevas_mes': 0 # TODO: implementar filtro por fecha
+        },
+        'productos': {
+            'total': producto_service.count(),
+            'disponibles': producto_service.count({'stock__gt': 0})
+        },
+        'categorias': {
+            'total': categoria_service.count()
+        }
     }
     
     # Obtener usuarios recientes
@@ -48,6 +60,8 @@ def dashboard():
                          stats=stats,
                          usuarios_recientes=usuarios_recientes,
                          obras_recientes=obras_recientes)
+
+
 
 @admin_bp.route('/usuarios')
 @login_required
