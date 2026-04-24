@@ -1,33 +1,37 @@
 /* ============================================
    ÁGORA ART — Sistema de Diseño
    Concepto: El Refugio del Creador
-   Paleta: Botánica + Terracota
+   Paleta: Botánica Vibrante + Coral Intenso
    ============================================ */
 
 /* ===== PALETA DE COLORES ===== */
 :root {
   /* Colores base */
-  --canvas:      #FAFAFA;
+  --canvas:      #FDFCF9;
   --blanco:      #FFFFFF;
-  --carbon:      #2C2C2C;
+  --carbon:      #1A1F1A;
 
-  /* Primario — Verde Salvia */
-  --salvia:      #7B8C7A;
-  --salvia-dark: #5C6B5B;
-  --salvia-light:#EAF0E9;
-  --salvia-mid:  #9DAE9C;
+  /* Primario — Verde Esmeralda/Bosque */
+  --salvia:      #2E8B57;
+  --salvia-dark: #1B5E3A;
+  --salvia-light:#D4EFE1;
+  --salvia-mid:  #52A87A;
 
-  /* Secundario — Arcilla / Terracota */
-  --arcilla:     #C19A6B;
-  --arcilla-dark:#A07A4E;
-  --arcilla-light:#F5EDE3;
+  /* Secundario — Coral / Terracota Vivo */
+  --arcilla:     #E8622A;
+  --arcilla-dark:#C44A18;
+  --arcilla-light:#FCE8DC;
+
+  /* Acento — Ámbar cálido */
+  --ambar:       #F0A500;
+  --ambar-light: #FEF3D7;
 
   /* Neutros orgánicos */
-  --piedra:      #757575;
-  --borde:       #E8E4E0;
-  --borde-suave: #F0EDE9;
-  --sombra:      rgba(44, 44, 44, 0.06);
-  --sombra-hover:rgba(44, 44, 44, 0.12);
+  --piedra:      #6B7280;
+  --borde:       #E2DDD8;
+  --borde-suave: #F4F0EB;
+  --sombra:      rgba(30, 50, 30, 0.07);
+  --sombra-hover:rgba(30, 50, 30, 0.14);
 
   /* Semánticos */
   --primary:         var(--salvia);
@@ -47,9 +51,9 @@
   --radius-md:   16px;
   --radius-lg:   24px;
   --radius-pill: 50px;
-  --shadow-sm:   0 2px 12px var(--sombra);
-  --shadow-md:   0 8px 32px var(--sombra);
-  --shadow-hover:0 16px 48px var(--sombra-hover);
+  --shadow-sm:   0 2px 16px var(--sombra);
+  --shadow-md:   0 8px 36px var(--sombra);
+  --shadow-hover:0 20px 56px var(--sombra-hover);
   --transition:  all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
