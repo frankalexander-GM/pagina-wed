@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ categoria.nombre }} - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="bg-light py-5 mb-5 border-bottom">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold text-dark">{{ categoria.nombre }}</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            {{ categoria.descripcion or 'Explora las obras más increíbles de esta categoría y descubre el talento de nuestros artistas.' }}
+        </p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0">{{ obras|length }} Obra(s) en esta categoría</h3>
+        <a href="{{ url_for('public.categorias') }}" class="btn btn-outline-secondary">Ver todas las categorías</a>
+    </div>
+
+    {% if obras %}
+        <div class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-4">
+            {% for obra in obras %}
+                <div class="col">
+                    <div class="card h-100 border-0 project-card shadow-sm">
+                        <a href="{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}" class="text-decoration-none">
+                            {% if obra.imagen %}
+                                <img src="{{ obra.imagen }}" class="card-img-top" alt="{{ obra.titulo }}" style="height: 250px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-light text-center" style="height: 250px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                </div>
+                            {% endif %}
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title text-dark text-truncate">{{ obra.titulo }}</h5>
+                            <p class="card-text text-muted small mb-0">
+                                Por <a href="{{ url_for('public.perfil_artista', artista_id=obra.artista.id_usuario) }}" class="text-decoration-none">{{ obra.artista.nombre }}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5 my-5">
+            <i class="fas fa-folder-open fa-4x text-muted mb-4 opacity-50"></i>
+            <h3 class="text-muted">Aún no hay obras en esta categoría</h3>
+            <p class="text-muted mb-4">Pronto nuestros artistas publicarán nuevo contenido.</p>
+            <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">Explorar otras obras</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
