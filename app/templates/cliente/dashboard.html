@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard de Cliente - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Mi Panel</h2>
+        <a href="{{ url_for('public.explorar') }}" class="btn btn-outline-primary">
+            <i class="fas fa-compass"></i> Descubrir Arte
+        </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="card bg-info text-white text-center p-3">
+                <h3>{{ stats.favoritos_count }}</h3>
+                <div>Obras Favoritas</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white text-center p-3">
+                <h3>{{ stats.siguiendo_count }}</h3>
+                <div>Artistas que sigo</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-primary text-white text-center p-3">
+                <h3>{{ stats.lienzos_count }}</h3>
+                <div>Mis Lienzos</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white text-center p-3">
+                <h3>{{ stats.ordenes_count }}</h3>
+                <div>Compras</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Obras Favoritas Recientes -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-heart text-danger me-2"></i>Favoritos Recientes</h5>
+                    <a href="{{ url_for('cliente.obras_favoritas') }}" class="btn btn-sm btn-outline-secondary">Ver todos</a>
+                </div>
+                <div class="card-body">
+                    {% if obras_favoritas %}
+                        <div class="list-group list-group-flush">
+                            {% for obra in obras_favoritas %}
+                                <div class="list-group-item d-flex align-items-center">
+                                    {% if obra.imagen %}
+                                        <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center me-3 rounded" style="width: 60px; height: 60px;">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="mb-0">{{ obra.titulo }}</h6>
+                                        <small class="text-muted">Por {{ obra.artista.nombre }}</small>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="text-muted">No has guardado ninguna obra en favoritos.</p>
+                            <a href="{{ url_for('public.explorar') }}" class="btn btn-sm btn-primary">Explorar obras</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Artistas Siguiendo -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-user-plus text-primary me-2"></i>Artistas que sigo</h5>
+                    <a href="{{ url_for('cliente.artistas_siguiendo') }}" class="btn btn-sm btn-outline-secondary">Ver todos</a>
+                </div>
+                <div class="card-body">
+                    {% if artistas_siguiendo %}
+                        <div class="list-group list-group-flush">
+                            {% for artista in artistas_siguiendo %}
+                                <div class="list-group-item d-flex align-items-center">
+                                    {% if artista.foto_perfil %}
+                                        <img src="{{ artista.foto_perfil }}" alt="{{ artista.nombre }}" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-secondary text-white d-inline-flex align-items-center justify-content-center rounded-circle me-3" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="mb-0">{{ artista.nombre }}</h6>
+                                        <small class="text-muted">@{{ artista.username }}</small>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="text-muted">Aún no sigues a ningún artista.</p>
+                            <a href="{{ url_for('public.artistas') }}" class="btn btn-sm btn-primary">Descubrir artistas</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

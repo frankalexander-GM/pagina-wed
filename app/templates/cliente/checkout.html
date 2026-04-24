@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Finalizar Compra</h2>
+    
+    <div class="row">
+        <!-- Formulario de Checkout -->
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('cliente.procesar_checkout') }}">
+                        
+                        <h4 class="mb-3">Información de Envío</h4>
+                        
+                        <!-- Selección de dirección (simplificado para el MVP) -->
+                        <div class="mb-3">
+                            <label for="direccion_existente" class="form-label">Mis Direcciones</label>
+                            <select class="form-select" id="direccion_existente" name="id_direccion">
+                                {% if direcciones %}
+                                    <option value="">Seleccionar una dirección...</option>
+                                    {% for dir in direcciones %}
+                                        <option value="{{ dir.id_direccion }}">{{ dir.direccion }}, {{ dir.ciudad }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="">No tienes direcciones guardadas</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <h5 class="mb-3">O registrar nueva dirección</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="nombre_receptor" class="form-label">Nombre del receptor</label>
+                                <input type="text" class="form-control" id="nombre_receptor" name="nombre_receptor" value="{{ current_user.nombre }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono">
+                            </div>
+                            <div class="col-12">
+                                <label for="direccion" class="form-label">Dirección Completa</label>
+                                <input type="text" class="form-control" id="direccion" name="direccion">
+                            </div>
+                            <div class="col-md-5">
+                                <label for="ciudad" class="form-label">Ciudad</label>
+                                <input type="text" class="form-control" id="ciudad" name="ciudad">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="pais" class="form-label">País</label>
+                                <input type="text" class="form-control" id="pais" name="pais" value="México">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="codigo_postal" class="form-label">Código Postal</label>
+                                <input type="text" class="form-control" id="codigo_postal" name="codigo_postal">
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h4 class="mb-3">Método de Pago</h4>
+                        <div class="my-3">
+                            <div class="form-check">
+                                <input id="tarjeta" name="metodo_pago" type="radio" class="form-check-input" checked required>
+                                <label class="form-check-label" for="tarjeta">Tarjeta de crédito/débito</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="paypal" name="metodo_pago" type="radio" class="form-check-input" required>
+                                <label class="form-check-label" for="paypal">PayPal</label>
+                            </div>
+                        </div>
+
+                        <!-- Info simulada de tarjeta -->
+                        <div class="row gy-3">
+                            <div class="col-md-6">
+                                <label for="cc-nombre" class="form-label">Nombre en la tarjeta</label>
+                                <input type="text" class="form-control" id="cc-nombre" placeholder="Nombre completo">
+                                <small class="text-muted">Como aparece en la tarjeta</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cc-numero" class="form-label">Número de tarjeta</label>
+                                <input type="text" class="form-control" id="cc-numero" placeholder="0000 0000 0000 0000">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="cc-expiracion" class="form-label">Expiración</label>
+                                <input type="text" class="form-control" id="cc-expiracion" placeholder="MM/YY">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="cc-cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cc-cvv" placeholder="123">
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <button class="btn btn-primary w-100 py-3" type="submit">
+                            Confirmar Pago (${{ total }})
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen -->
+        <div class="col-md-4">
+            <div class="card shadow-sm sticky-top" style="top: 2rem;">
+                <div class="card-header bg-white pt-3">
+                    <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                        <span>Resumen</span>
+                        <span class="badge bg-primary rounded-pill">{{ count }}</span>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for item in items %}
+                            <li class="list-group-item d-flex justify-content-between lh-sm py-3">
+                                <div>
+                                    <h6 class="my-0">{{ item.producto.nombre }}</h6>
+                                    <small class="text-muted">Cantidad: {{ item.cantidad }}</small>
+                                </div>
+                                <span class="text-muted">${{ item.subtotal }}</span>
+                            </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <div class="text-success">
+                                <h6 class="my-0">Envío</h6>
+                                <small>Estándar</small>
+                            </div>
+                            <span class="text-success">Gratis</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between py-3">
+                            <span>Total (MXN)</span>
+                            <strong>${{ total }}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

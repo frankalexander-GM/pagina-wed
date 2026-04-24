@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Contacto - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center mb-5">
+            <h2>Contáctanos</h2>
+            <p class="text-muted">¿Tienes alguna pregunta, sugerencia o problema? Estamos aquí para ayudarte.</p>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 p-4">
+                <form>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="asunto" class="form-label">Asunto</label>
+                        <select class="form-select" id="asunto">
+                            <option value="soporte">Soporte Técnico</option>
+                            <option value="sugerencia">Sugerencia</option>
+                            <option value="negocios">Negocios / Colaboración</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="mensaje" rows="5" required></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100" onclick="alert('Mensaje enviado (Simulado para MVP)')">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mt-4 mt-md-0">
+            <div class="card shadow-sm border-0 h-100 bg-light p-4">
+                <h4>Información Directa</h4>
+                <div class="mt-4">
+                    <p><i class="fas fa-envelope text-primary me-2"></i> soporte@windmillsart.com</p>
+                    <p><i class="fas fa-phone text-primary me-2"></i> +52 (55) 1234-5678</p>
+                    <p><i class="fas fa-map-marker-alt text-primary me-2"></i> Ciudad de México, México</p>
+                </div>
+                
+                <h5 class="mt-5 mb-3">Redes Sociales</h5>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-dark fs-4"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-dark fs-4"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-dark fs-4"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

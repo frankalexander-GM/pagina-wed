@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Mi Blog - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5 text-center py-5">
+    <i class="fas fa-newspaper fa-4x mb-4 text-muted"></i>
+    <h2>Sección de Blog</h2>
+    <p class="lead text-muted">Esta funcionalidad estará disponible en una próxima actualización.</p>
+    <a href="{{ url_for('artista.dashboard') }}" class="btn btn-primary mt-3">Volver al Dashboard</a>
+</div>
+{% endblock %}
