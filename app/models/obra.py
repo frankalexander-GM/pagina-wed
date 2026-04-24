@@ -29,6 +29,12 @@ class Obra(db.Model):
     
     def to_dict(self):
         """Convertir obra a diccionario para API responses"""
+        favoritos_count = 0
+        try:
+            favoritos_count = self.favoritos_usuarios.count() if hasattr(self.favoritos_usuarios, 'count') else len(self.favoritos_usuarios)
+        except:
+            favoritos_count = 0
+            
         return {
             'id_obra': self.id_obra,
             'id_artista': self.id_artista,
@@ -41,7 +47,7 @@ class Obra(db.Model):
             'fecha_publicacion': self.fecha_publicacion.isoformat() if self.fecha_publicacion else None,
             'visible': self.visible,
             'artista_nombre': self.artista.nombre if self.artista else None,
-            'favoritos_count': len(self.favoritos_usuarios),
+            'favoritos_count': favoritos_count,
             'en_lienzos': self.lienzo_items.count()
         }
     
@@ -51,7 +57,10 @@ class Obra(db.Model):
     
     def get_favoritos_count(self):
         """Obtener cantidad de favoritos"""
-        return len(self.favoritos_usuarios)
+        try:
+            return self.favoritos_usuarios.count() if hasattr(self.favoritos_usuarios, 'count') else len(self.favoritos_usuarios)
+        except:
+            return 0
     
     def esta_en_favoritos(self, usuario):
         """Verificar si la obra está en favoritos de un usuario"""

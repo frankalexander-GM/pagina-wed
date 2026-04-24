@@ -101,6 +101,7 @@ def init_database():
             artistas_ejemplo = [
                 {
                     'nombre': 'María González',
+                    'username': 'maria_artista',
                     'email': 'maria.artista@example.com',
                     'password': 'artista123',
                     'rol': 'artista',
@@ -109,6 +110,7 @@ def init_database():
                 },
                 {
                     'nombre': 'Carlos Rodríguez',
+                    'username': 'carlos_foto',
                     'email': 'carlos.foto@example.com',
                     'password': 'artista123',
                     'rol': 'artista',
@@ -120,8 +122,8 @@ def init_database():
             artistas_creados = []
             for artista_data in artistas_ejemplo:
                 if not usuario_service.get_by_email(artista_data['email']):
-                    artista, errores = usuario_service.create_user(artista_data)
-                    if artista:
+                    exito, artista, errores = auth_service.registrar_usuario(artista_data)
+                    if exito:
                         artistas_creados.append(artista)
                         print(f"Artista creado: {artista_data['nombre']}")
                     else:
@@ -139,8 +141,8 @@ def init_database():
                 {
                     'titulo': 'Atardecer en el Campo',
                     'descripcion': 'Pintura al óleo que captura la belleza de un atardecer rural',
+                    'imagen': '/static/uploads/obra1.jpg',
                     'tecnica': 'Óleo sobre lienzo',
-                    'precio': 1500.00,
                     'id_categoria': 1,  # Pintura
                     'id_artista': artistas_creados[0].id_usuario if artistas_creados else 2,
                     'visible': True,
@@ -149,8 +151,8 @@ def init_database():
                 {
                     'titulo': 'Retrato Moderno',
                     'descripcion': 'Retrato expresionista de una mujer contemporánea',
+                    'imagen': '/static/uploads/obra2.jpg',
                     'tecnica': 'Acrílico sobre tela',
-                    'precio': 1200.00,
                     'id_categoria': 1,  # Pintura
                     'id_artista': artistas_creados[0].id_usuario if artistas_creados else 2,
                     'visible': True,
@@ -159,10 +161,10 @@ def init_database():
                 {
                     'titulo': 'Ciudad Nocturna',
                     'descripcion': 'Fotografía urbana tomada durante la noche',
+                    'imagen': '/static/uploads/obra3.jpg',
                     'tecnica': 'Fotografía digital',
-                    'precio': 800.00,
                     'id_categoria': 3,  # Fotografía
-                    'id_artista': artistas_creados[1].id_usuario if len(artistas_creados) > 1 else 3,
+                    'id_artista': artistas_creados[1].id_usuario if len(artistas_creados) > 1 else (artistas_creados[0].id_usuario if artistas_creados else 3),
                     'visible': True,
                     'fecha_publicacion': datetime.now()
                 }
