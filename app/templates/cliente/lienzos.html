@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Lienzos - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5 text-center py-5">
+    <i class="fas fa-layer-group fa-4x mb-4 text-muted"></i>
+    <h2>Mis Lienzos (Moodboards)</h2>
+    <p class="lead text-muted">Crea colecciones personalizadas con tus obras favoritas.</p>
+    <div class="alert alert-warning d-inline-block mt-3">
+        <i class="fas fa-tools me-2"></i> Esta funcionalidad estará disponible en la próxima actualización.
+    </div>
+    <div class="mt-4">
+        <a href="{{ url_for('cliente.dashboard') }}" class="btn btn-primary">Volver al Panel</a>
+    </div>
+</div>
+{% endblock %}
