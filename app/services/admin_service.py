@@ -11,14 +11,23 @@ class AdminService:
     Servicio de administración para operaciones de negocio
     """
     
-    def __init__(self, session):
+    def __init__(self, user_repo=None, obra_repo=None, producto_repo=None, session=None):
         """
         Inicializar servicio de administración
         
         Args:
-            session: Sesión de base de datos
+            user_repo: Repositorio de usuarios (opcional)
+            obra_repo: Repositorio de obras (opcional)
+            producto_repo: Repositorio de productos (opcional)
+            session: Sesión de base de datos (opcional, se extrae de repos)
         """
-        self.session = session
+        if session:
+            self.session = session
+        elif user_repo and hasattr(user_repo, 'session'):
+            self.session = user_repo.session
+        else:
+            from app.factories.app_factory import db
+            self.session = db.session
     
     def get_estadisticas_generales(self):
         """
@@ -63,7 +72,7 @@ class AdminService:
                     'activos': usuarios_activos,
                     'artistas': artistas_activos,
                     'clientes': clientes_activos,
-                    'nuevos_mes': usuarios_nuevas
+                    'nuevos_mes': usuarios_nuevos
                 },
                 'obras': {
                     'total': total_obras,

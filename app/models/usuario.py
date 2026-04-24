@@ -34,13 +34,11 @@ class Usuario(UserMixin, db.Model):
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)  # hash seguro (bcrypt)
-    rol = db.Column(db.Enum('admin', 'artista', 'cliente', name='rol_usuario'), 
-                    nullable=False, default='cliente')
+    rol = db.Column(db.String(20), nullable=False, default='cliente')  # admin, artista, cliente
     biografia = db.Column(db.Text)
     foto_perfil = db.Column(db.String(255))
     fecha_registro = db.Column(db.DateTime, default=datetime.utcnow)
-    estado = db.Column(db.Enum('activo', 'bloqueado', name='estado_usuario'), 
-                       default='activo')
+    estado = db.Column(db.String(20), default='activo')  # activo, bloqueado
     
     # Relaciones
     obras = db.relationship('Obra', backref='artista', lazy='dynamic', 
@@ -81,6 +79,10 @@ class Usuario(UserMixin, db.Model):
     # Relaciones de moodboards
     lienzos = db.relationship('Lienzo', backref='usuario', lazy='dynamic',
                              cascade='all, delete-orphan')
+    
+    def get_id(self):
+        """Override requerido por Flask-Login para identificar al usuario"""
+        return str(self.id_usuario)
     
     def __repr__(self):
         return f'<Usuario {self.username}>'

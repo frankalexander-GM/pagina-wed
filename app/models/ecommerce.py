@@ -54,8 +54,7 @@ class Orden(db.Model):
     id_cliente = db.Column(db.Integer, db.ForeignKey('usuarios.id_usuario'), nullable=False)
     id_direccion = db.Column(db.Integer, db.ForeignKey('direcciones.id_direccion'), nullable=False)
     total = db.Column(db.Numeric(10, 2), nullable=False)
-    estado = db.Column(db.Enum('pendiente', 'pagada', 'cancelada', 'reembolsada', 
-                              name='estado_orden'), default='pendiente')
+    estado = db.Column(db.String(20), default='pendiente')  # pendiente, pagada, cancelada, reembolsada
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relaciones
@@ -136,8 +135,7 @@ class Pago(db.Model):
     id_orden = db.Column(db.Integer, db.ForeignKey('ordenes.id_orden'), nullable=False)
     proveedor = db.Column(db.String(50), nullable=False)  # Stripe, PayPal, etc.
     referencia = db.Column(db.String(150), nullable=False)
-    estado = db.Column(db.Enum('aprobado', 'rechazado', 'pendiente', 
-                              name='estado_pago'), nullable=False)
+    estado = db.Column(db.String(20), nullable=False)  # aprobado, rechazado, pendiente
     monto = db.Column(db.Numeric(10, 2), nullable=False)
     fecha_pago = db.Column(db.DateTime, default=datetime.utcnow)
     

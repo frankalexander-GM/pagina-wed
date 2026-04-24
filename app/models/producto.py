@@ -16,6 +16,7 @@ class Producto(db.Model):
     precio = db.Column(db.Numeric(10, 2), nullable=False)
     stock = db.Column(db.Integer, default=0)
     imagen = db.Column(db.String(255))
+    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Estado calculado automáticamente desde stock
     estado = db.Column(db.String(20), default='disponible')

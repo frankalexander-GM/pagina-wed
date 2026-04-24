@@ -302,3 +302,67 @@ class UsuarioRepository(BaseRepository):
         except SQLAlchemyError as e:
             print(f"Error al dejar de seguir artista: {e}")
             return False
+    
+    def esta_siguiendo_artista(self, usuario_id, artista_id):
+        """
+        Verificar si un usuario sigue a un artista
+        
+        Args:
+            usuario_id (int): ID del usuario
+            artista_id (int): ID del artista
+            
+        Returns:
+            bool: True si sigue al artista
+        """
+        try:
+            from app.models.usuario import favoritos_artistas
+            
+            existe = self.session.query(favoritos_artistas).filter_by(
+                id_usuario=usuario_id, id_artista=artista_id
+            ).first()
+            
+            return existe is not None
+        except SQLAlchemyError as e:
+            print(f"Error al verificar seguimiento: {e}")
+            return False
+    
+    def get_siguiendo_count(self, usuario_id):
+        """
+        Obtener cantidad de artistas que sigue un usuario
+        
+        Args:
+            usuario_id (int): ID del usuario
+            
+        Returns:
+            int: Cantidad de artistas seguidos
+        """
+        try:
+            from app.models.usuario import favoritos_artistas
+            
+            return self.session.query(favoritos_artistas).filter_by(
+                id_usuario=usuario_id
+            ).count()
+        except SQLAlchemyError as e:
+            print(f"Error al contar artistas seguidos: {e}")
+            return 0
+    
+    def get_seguidores_count(self, artista_id):
+        """
+        Obtener cantidad de seguidores de un artista
+        
+        Args:
+            artista_id (int): ID del artista
+            
+        Returns:
+            int: Cantidad de seguidores
+        """
+        try:
+            from app.models.usuario import favoritos_artistas
+            
+            return self.session.query(favoritos_artistas).filter_by(
+                id_artista=artista_id
+            ).count()
+        except SQLAlchemyError as e:
+            print(f"Error al contar seguidores: {e}")
+            return 0
+

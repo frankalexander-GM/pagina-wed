@@ -1,5 +1,5 @@
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, func
 from app.repositories.base_repository import BaseRepository
 from app.models.producto import Producto, HistorialStock
 
