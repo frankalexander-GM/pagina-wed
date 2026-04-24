@@ -11,7 +11,7 @@ class Auditoria(db.Model):
     id_auditoria = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tabla_afectada = db.Column(db.String(50), nullable=False)
     id_registro = db.Column(db.Integer, nullable=False)
-    accion = db.Column(db.Enum('INSERT', 'UPDATE', 'DELETE', name='accion_auditoria'), nullable=False)
+    accion = db.Column(db.String(20), nullable=False)  # INSERT, UPDATE, DELETE
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuarios.id_usuario'))
     descripcion = db.Column(db.Text)
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
