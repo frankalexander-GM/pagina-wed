@@ -266,7 +266,7 @@ class CategoriaService:
         
         # Obtener la categoría con más obras
         populares = self.get_populares(limit=1)
-        categoria_mas_popular = populares[0] if populares else None
+        categoria_mas_popular = populares[0][0] if populares else None
         
         return {
             'total_categorias': total_categorias,
@@ -358,3 +358,9 @@ class CategoriaService:
         """
         # Este método sería útil si implementamos caché de conteos
         return self.get_obras_count(categoria_id)
+
+    def get_populares(self, limit=None):
+        """
+        Obtener categorías populares
+        """
+        return self.categoria_repo.get_populares(limit=limit)

@@ -86,7 +86,7 @@
             </div>
             <div style="text-align: center;">
                 <div style="font-size: 1.5rem; font-weight: 600; color: var(--secondary);">
-                    {{ artistas|sum(attribute='get_obras_count') or 0 }}
+                    {{ total_obras }}
                 </div>
                 <div style="font-size: 0.875rem; color: var(--text-secondary);">
                     Obras totales
@@ -94,7 +94,7 @@
             </div>
             <div style="text-align: center;">
                 <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent);">
-                    {{ artistas|sum(attribute='get_seguidores_count') or 0 }}
+                    {{ total_seguidores }}
                 </div>
                 <div style="font-size: 0.875rem; color: var(--text-secondary);">
                     Seguidores totales

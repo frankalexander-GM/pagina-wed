@@ -65,10 +65,15 @@ def artistas():
         artistas = usuario_service.buscar_usuarios(termino, rol='artista', limit=12)
     else:
         artistas = usuario_service.get_artistas_activos(limit=12)
+        
+    total_obras = sum(a.get_obras_count() for a in artistas)
+    total_seguidores = sum(a.get_seguidores_count() for a in artistas)
     
     return render_template('public/artistas.html',
                          artistas=artistas,
-                         termino_busqueda=termino)
+                         termino_busqueda=termino,
+                         total_obras=total_obras,
+                         total_seguidores=total_seguidores)
 
 @public_bp.route('/artista/<int:artista_id>')
 def perfil_artista(artista_id):

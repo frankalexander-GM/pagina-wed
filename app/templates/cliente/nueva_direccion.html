@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Dirección - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white pt-3 pb-2 border-bottom-0">
+                    <h3 class="mb-0">Agregar Dirección de Envío</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('cliente.nueva_direccion') }}">
+                        <div class="row g-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="nombre_receptor" class="form-label">Nombre de quien recibe *</label>
+                                <input type="text" class="form-control" id="nombre_receptor" name="nombre_receptor" required value="{{ current_user.nombre }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="telefono" class="form-label">Teléfono de contacto *</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono" required>
+                            </div>
+                            
+                            <div class="col-12 mb-3">
+                                <label for="direccion" class="form-label">Dirección Completa *</label>
+                                <input type="text" class="form-control" id="direccion" name="direccion" required placeholder="Calle, número exterior/interior, colonia...">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="ciudad" class="form-label">Ciudad / Municipio *</label>
+                                <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="estado" class="form-label">Estado / Provincia *</label>
+                                <input type="text" class="form-control" id="estado" name="estado" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="codigo_postal" class="form-label">C.P. *</label>
+                                <input type="text" class="form-control" id="codigo_postal" name="codigo_postal" required>
+                            </div>
+                            
+                            <div class="col-12 mb-4">
+                                <label for="pais" class="form-label">País *</label>
+                                <select class="form-select" id="pais" name="pais" required>
+                                    <option value="México" selected>México</option>
+                                    <option value="Estados Unidos">Estados Unidos</option>
+                                    <option value="España">España</option>
+                                    <option value="Colombia">Colombia</option>
+                                    <option value="Argentina">Argentina</option>
+                                    <option value="Chile">Chile</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4 border-top pt-4">
+                            <a href="{{ url_for('cliente.direcciones') }}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary px-5">Guardar Dirección</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
