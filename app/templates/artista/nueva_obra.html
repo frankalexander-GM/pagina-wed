@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Obra - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Nueva Obra</h3>
+                        <a href="{{ url_for('artista.obras') }}" class="btn btn-sm btn-outline-secondary">Volver</a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('artista.nueva_obra') }}">
+                        <div class="mb-3">
+                            <label for="titulo" class="form-label">Título de la Obra *</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="categoria" class="form-label">Categoría</label>
+                                <select class="form-select" id="categoria" name="categoria">
+                                    <option value="">Selecciona una categoría...</option>
+                                    {% for cat in categorias %}
+                                        <option value="{{ cat.id_categoria }}">{{ cat.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tecnica" class="form-label">Técnica</label>
+                                <input type="text" class="form-control" id="tecnica" name="tecnica" placeholder="Ej: Óleo sobre lienzo, Digital...">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="5"></textarea>
+                        </div>
+                        
+                        <!-- TODO: Upload de imagen real en el Sprint 3 -->
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle me-2"></i> La subida de imágenes estará disponible próximamente. Por ahora se usará una imagen por defecto.
+                        </div>
+                        
+                        <div class="form-check form-switch mb-4">
+                            <input class="form-check-input" type="checkbox" id="visible" name="visible" checked>
+                            <label class="form-check-label" for="visible">Hacer visible públicamente</label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 py-2">Guardar Obra</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

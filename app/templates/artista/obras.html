@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Obras - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Mis Obras</h2>
+        <a href="{{ url_for('artista.nueva_obra') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nueva Obra
+        </a>
+    </div>
+
+    {% if obras %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Obra</th>
+                        <th>Categoría</th>
+                        <th>Fecha</th>
+                        <th>Visibilidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for obra in obras %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if obra.imagen %}
+                                        <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center me-3 rounded" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="mb-0">{{ obra.titulo }}</h6>
+                                        <small class="text-muted">{{ obra.tecnica or 'Sin técnica' }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ obra.categoria.nombre if obra.categoria else 'Sin categoría' }}</td>
+                            <td>{{ obra.fecha_publicacion.strftime('%d/%m/%Y') }}</td>
+                            <td>
+                                <span class="badge {{ 'bg-success' if obra.visible else 'bg-secondary' }}">
+                                    {{ 'Visible' if obra.visible else 'Oculta' }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('artista.editar_obra', obra_id=obra.id_obra) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ url_for('artista.eliminar_obra', obra_id=obra.id_obra) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta obra?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-palette fa-3x mb-3 text-muted"></i>
+            <h5>Aún no has publicado ninguna obra</h5>
+            <p>Empieza a compartir tu arte con el mundo.</p>
+            <a href="{{ url_for('artista.nueva_obra') }}" class="btn btn-primary mt-2">Crear mi primera obra</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
