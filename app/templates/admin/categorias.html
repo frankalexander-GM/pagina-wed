@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Categorías - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 px-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gestión de Categorías</h2>
+        <div>
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary me-2">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
+            <!-- Botón para nueva categoría (MVP simple modal) -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaCategoriaModal">
+                <i class="fas fa-plus"></i> Nueva Categoría
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Obras Asociadas</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if categorias %}
+                            {% for cat, count in categorias %}
+                            <tr>
+                                <td>{{ cat.id_categoria }}</td>
+                                <td><strong>{{ cat.nombre }}</strong></td>
+                                <td>{{ cat.descripcion or 'Sin descripción' }}</td>
+                                <td>
+                                    <span class="badge bg-info">{{ count }} obras</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" disabled title="Próximamente"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" disabled title="Próximamente"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">No se encontraron categorías</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Categoría -->
+<div class="modal fade" id="nuevaCategoriaModal" tabindex="-1" aria-labelledby="nuevaCategoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="nuevaCategoriaModalLabel">Crear Nueva Categoría</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('admin.categorias') }}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
