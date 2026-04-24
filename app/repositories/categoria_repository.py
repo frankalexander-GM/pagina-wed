@@ -260,3 +260,24 @@ class CategoriaRepository(BaseRepository):
         except SQLAlchemyError as e:
             print(f"Error al actualizar categoría con conteo: {e}")
             return None
+            
+    def get_populares(self, limit=None):
+        """
+        Obtener categorías populares (con más obras)
+        """
+        try:
+            result = self.session.query(
+                Categoria,
+                func.count(Obra.id_obra).label('obras_count')
+            ).join(
+                Obra, 
+                Categoria.id_categoria == Obra.id_categoria
+            ).filter(Obra.visible == True).group_by(Categoria.id_categoria).order_by(func.count(Obra.id_obra).desc())
+            
+            if limit:
+                result = result.limit(limit)
+                
+            return result.all()
+        except SQLAlchemyError as e:
+            print(f"Error al obtener categorías populares: {e}")
+            return []

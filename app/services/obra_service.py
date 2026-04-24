@@ -329,3 +329,9 @@ class ObraService:
             'obras_ocultas': total_obras - obras_visibles,
             'total_favoritos': total_favoritos
         }
+        
+    def get_artistas_con_obras(self, limit=None):
+        """
+        Obtener artistas que tienen obras publicadas
+        """
+        return self.obra_repo.get_artistas_con_obras(limit=limit)

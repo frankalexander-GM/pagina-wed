@@ -110,13 +110,14 @@ class ObraRepository(BaseRepository):
             print(f"Error al obtener obras públicas: {e}")
             return []
     
-    def buscar_obras(self, termino, limit=None):
+    def buscar_obras(self, termino, limit=None, offset=None):
         """
         Buscar obras por título o descripción
         
         Args:
             termino (str): Término de búsqueda
             limit (int): Límite de resultados
+            offset (int): Desplazamiento
             
         Returns:
             list: Lista de obras que coinciden con la búsqueda
@@ -133,6 +134,8 @@ class ObraRepository(BaseRepository):
             
             if limit:
                 query = query.limit(limit)
+            if offset:
+                query = query.offset(offset)
             
             return query.all()
         except SQLAlchemyError as e:
