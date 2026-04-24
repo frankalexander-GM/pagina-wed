@@ -1,115 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Registro de Auditoría - Admin{% endblock %}
+{% block title %}Auditoría - Ágora Art{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4 px-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Registro de Auditoría</h2>
-        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left"></i> Volver al Panel
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
         </a>
     </div>
 
-    <!-- Filtros -->
-    <div class="card shadow-sm mb-4 border-0">
-        <div class="card-body">
-            <form method="GET" action="{{ url_for('admin.auditoria') }}" class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label">Usuario ID</label>
-                    <input type="number" class="form-control" name="usuario_id" placeholder="ID..." value="{{ request.args.get('usuario_id', '') }}">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Acción</label>
-                    <select class="form-select" name="accion">
-                        <option value="">Todas</option>
-                        <option value="creacion" {% if request.args.get('accion') == 'creacion' %}selected{% endif %}>Creación</option>
-                        <option value="actualizacion" {% if request.args.get('accion') == 'actualizacion' %}selected{% endif %}>Actualización</option>
-                        <option value="eliminacion" {% if request.args.get('accion') == 'eliminacion' %}selected{% endif %}>Eliminación</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Tabla Afectada</label>
-                    <input type="text" class="form-control" name="tabla" placeholder="ej. obras, usuarios..." value="{{ request.args.get('tabla', '') }}">
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Tabla -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0 align-middle table-sm">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Fecha/Hora</th>
-                            <th>Usuario ID</th>
-                            <th>Acción</th>
-                            <th>Tabla</th>
-                            <th>Reg. ID</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if registros %}
-                            {% for reg in registros %}
-                            <tr>
-                                <td class="text-nowrap">{{ reg.fecha.strftime('%d/%m/%Y %H:%M:%S') }}</td>
-                                <td>
-                                    {% if reg.id_usuario %}
-                                        {{ reg.id_usuario }}
-                                    {% else %}
-                                        <span class="text-muted">Sistema</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if reg.accion == 'creacion' %}
-                                        <span class="badge bg-success">Creación</span>
-                                    {% elif reg.accion == 'actualizacion' %}
-                                        <span class="badge bg-warning text-dark">Edición</span>
-                                    {% elif reg.accion == 'eliminacion' %}
-                                        <span class="badge bg-danger">Borrado</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">{{ reg.accion }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ reg.tabla_afectada }}</td>
-                                <td>{{ reg.id_registro }}</td>
-                                <td><small class="text-muted">{{ reg.descripcion }}</small></td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">
-                                    <i class="fas fa-search fa-3x mb-3 text-light"></i>
-                                    <h5>No se encontraron registros</h5>
-                                </td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-history fa-4x" style="color: var(--malva);"></i>
             </div>
-            
-            <!-- Paginación Simple -->
-            {% if total_paginas > 1 %}
-            <div class="card-footer bg-white mt-3">
-                <nav aria-label="Navegación de auditoría">
-                    <ul class="pagination justify-content-center mb-0">
-                        <li class="page-item {% if pagina == 1 %}disabled{% endif %}">
-                            <a class="page-link" href="{{ url_for('admin.auditoria', pagina=pagina-1, **request.args) }}">Anterior</a>
-                        </li>
-                        <li class="page-item disabled"><span class="page-link">Página {{ pagina }} de {{ total_paginas }}</span></li>
-                        <li class="page-item {% if pagina == total_paginas %}disabled{% endif %}">
-                            <a class="page-link" href="{{ url_for('admin.auditoria', pagina=pagina+1, **request.args) }}">Siguiente</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            {% endif %}
+            <h4 class="mb-3">Registro de Actividad en Construcción</h4>
+            <p class="text-muted" style="max-width: 500px; margin: 0 auto;">
+                Aquí podrás ver el registro histórico de todas las acciones importantes que ocurren en el sistema (cambios de estado, bloqueos de usuarios, etc.). Esta función estará lista próximamente.
+            </p>
         </div>
     </div>
 </div>

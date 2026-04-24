@@ -1,129 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Reportes y Estadísticas - Admin{% endblock %}
+{% block title %}Estadísticas - Ágora Art{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4 px-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Reportes y Estadísticas</h2>
-        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left"></i> Volver
+        <h2>Estadísticas Detalladas</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
         </a>
     </div>
 
-    <!-- Filtros de fecha -->
-    <div class="card shadow-sm mb-4 border-0">
-        <div class="card-body">
-            <form method="GET" action="{{ url_for('admin.estadisticas') }}" class="row g-3 align-items-center">
-                <div class="col-auto">
-                    <label class="col-form-label">Periodo:</label>
-                </div>
-                <div class="col-md-3">
-                    <input type="date" class="form-control" name="fecha_inicio" value="{{ fecha_inicio.strftime('%Y-%m-%d') }}">
-                </div>
-                <div class="col-auto">
-                    <span>a</span>
-                </div>
-                <div class="col-md-3">
-                    <input type="date" class="form-control" name="fecha_fin" value="{{ fecha_fin.strftime('%Y-%m-%d') }}">
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Aplicar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <div class="row">
-        <!-- Resumen del periodo -->
-        <div class="col-md-12 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white pt-3">
-                    <h5 class="mb-0">Resumen del Periodo</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-4 border-end">
-                            <h3 class="text-primary">{{ resumen.usuarios_registrados }}</h3>
-                            <p class="text-muted mb-0">Nuevos Usuarios</p>
-                        </div>
-                        <div class="col-md-4 border-end">
-                            <h3 class="text-success">{{ resumen.obras_publicadas }}</h3>
-                            <p class="text-muted mb-0">Obras Publicadas</p>
-                        </div>
-                        <div class="col-md-4">
-                            <h3 class="text-warning">{{ resumen.productos_creados }}</h3>
-                            <p class="text-muted mb-0">Productos Creados</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="col-12 text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-chart-line fa-4x" style="color: var(--turq);"></i>
             </div>
-        </div>
-
-        <!-- Obras por Categoría -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white pt-3">
-                    <h5 class="mb-0">Distribución de Obras por Categoría</h5>
-                </div>
-                <div class="card-body">
-                    {% if categorias_data %}
-                        <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Categoría</th>
-                                        <th class="text-end">Obras</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for nombre, cantidad in categorias_data %}
-                                        <tr>
-                                            <td>{{ nombre }}</td>
-                                            <td class="text-end">{{ cantidad }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted text-center py-4">No hay datos suficientes</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Crecimiento de Usuarios -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white pt-3">
-                    <h5 class="mb-0">Crecimiento de Usuarios (Últimos 30 días)</h5>
-                </div>
-                <div class="card-body">
-                    {% if crecimiento_usuarios %}
-                        <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th class="text-end">Nuevos Registros</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for fecha, cantidad in crecimiento_usuarios %}
-                                        <tr>
-                                            <td>{{ fecha }}</td>
-                                            <td class="text-end">+{{ cantidad }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted text-center py-4">No hay datos suficientes</p>
-                    {% endif %}
-                </div>
-            </div>
+            <h4 class="mb-3">Próximamente</h4>
+            <p class="text-muted" style="max-width: 500px; margin: 0 auto;">
+                El módulo avanzado de gráficas y métricas financieras de ventas y crecimiento estará disponible en la próxima actualización de la plataforma. Por ahora, puedes ver el resumen general en el Dashboard.
+            </p>
         </div>
     </div>
 </div>
