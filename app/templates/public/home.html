@@ -8,7 +8,7 @@
     min-height: 88vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(150deg, #FAFAFA 0%, #EAF0E9 50%, #F5EDE3 100%);
+    background: linear-gradient(140deg, #FDFCF9 0%, #D4EFE1 45%, #FCE8DC 100%);
     position: relative;
     overflow: hidden;
 }
@@ -17,8 +17,9 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 15% 85%, rgba(123,140,122,0.12) 0%, transparent 55%),
-        radial-gradient(circle at 85% 20%, rgba(193,154,107,0.10) 0%, transparent 50%);
+        radial-gradient(circle at 10% 80%, rgba(46,139,87,0.18) 0%, transparent 50%),
+        radial-gradient(circle at 88% 15%, rgba(232,98,42,0.15) 0%, transparent 48%),
+        radial-gradient(circle at 50% 50%, rgba(240,165,0,0.06) 0%, transparent 70%);
     pointer-events: none;
 }
 .hero-inner {
@@ -30,8 +31,8 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--salvia-light);
-    color: var(--salvia-dark);
+    background: var(--salvia);
+    color: white;
     border-radius: var(--radius-pill);
     padding: 0.4rem 1.1rem;
     font-family: 'Josefin Sans', sans-serif;
@@ -40,6 +41,7 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 1.75rem;
+    box-shadow: 0 4px 14px rgba(46,139,87,0.35);
 }
 .hero h1 {
     font-size: clamp(2.5rem, 5vw, 3.75rem);
@@ -50,7 +52,7 @@
 }
 .hero h1 em {
     font-style: normal;
-    color: var(--salvia-dark);
+    color: var(--salvia);
     display: block;
 }
 .hero-desc {
@@ -115,7 +117,7 @@
 .hero-grid-item img { width:100%;height:100%;object-fit:cover; }
 .hero-grid-item .hg-label {
     position: absolute; bottom: 0; left: 0; right: 0;
-    background: linear-gradient(transparent, rgba(44,44,44,0.7));
+    background: linear-gradient(transparent, rgba(26,31,26,0.75));
     padding: 1rem 0.85rem 0.75rem;
     color: white;
     font-family: 'Josefin Sans', sans-serif;
@@ -141,7 +143,7 @@
     font-family: 'Josefin Sans', sans-serif;
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--salvia-dark);
+    color: var(--salvia);
     display: block;
 }
 .stat-block .lbl {
@@ -173,8 +175,8 @@
     font-size: 1.4rem;
     margin: 0 auto 1.5rem;
 }
-.how-icon.salvia { background: var(--salvia-light); color: var(--salvia-dark); }
-.how-icon.arcilla { background: var(--arcilla-light); color: var(--arcilla-dark); }
+.how-icon.salvia  { background: var(--salvia-light); color: var(--salvia); }
+.how-icon.arcilla { background: var(--arcilla-light); color: var(--arcilla); }
 .how-card h4 { font-size: 1.1rem; margin-bottom: 0.75rem; }
 .how-card p  { font-family: 'Lora', serif; font-style: italic; color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
 
@@ -204,14 +206,14 @@
     color: var(--text-primary);
 }
 .cat-chip:hover {
-    background: var(--salvia-light);
+    background: var(--salvia);
     border-color: var(--salvia);
     transform: translateY(-3px);
-    box-shadow: var(--shadow-sm);
-    color: var(--salvia-dark);
+    box-shadow: 0 6px 20px rgba(46,139,87,0.3);
+    color: white;
     text-decoration: none;
 }
-.cat-chip-icon { font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--salvia-dark); }
+.cat-chip-icon { font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--salvia); }
 .cat-chip-name { font-family: 'Josefin Sans', sans-serif; font-size: 0.9rem; font-weight: 600; display: block; }
 .cat-chip-count { font-size: 0.78rem; color: var(--text-secondary); }
 
@@ -242,16 +244,17 @@
     font-family: 'Josefin Sans', sans-serif;
     font-size: 1.5rem; font-weight: 700; color: white;
     margin: 0 auto 1rem;
+    box-shadow: 0 4px 16px rgba(46,139,87,0.3);
 }
 .artista-name { font-family: 'Josefin Sans', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
 .artista-handle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem; }
 .artista-stats { display: flex; justify-content: center; gap: 1.5rem; }
 .artista-stats span { font-size: 0.78rem; color: var(--text-secondary); }
-.artista-stats strong { display: block; font-family: 'Josefin Sans', sans-serif; font-size: 1rem; color: var(--salvia-dark); }
+.artista-stats strong { display: block; font-family: 'Josefin Sans', sans-serif; font-size: 1rem; color: var(--salvia); }
 
 /* === CTA FINAL === */
 .cta-section {
-    background: var(--carbon);
+    background: linear-gradient(135deg, #1B5E3A 0%, #1A1F1A 50%, #6B2010 100%);
     border-radius: var(--radius-lg);
     padding: 5rem 3rem;
     text-align: center;
@@ -262,8 +265,8 @@
 .cta-section::before {
     content: '';
     position: absolute; inset: 0;
-    background: radial-gradient(circle at 30% 50%, rgba(123,140,122,0.25) 0%, transparent 60%),
-                radial-gradient(circle at 75% 50%, rgba(193,154,107,0.2) 0%, transparent 60%);
+    background: radial-gradient(circle at 25% 50%, rgba(46,139,87,0.4) 0%, transparent 55%),
+                radial-gradient(circle at 80% 50%, rgba(232,98,42,0.35) 0%, transparent 55%);
     pointer-events: none;
 }
 .cta-section h2 { color: white; font-size: 2.25rem; margin-bottom: 1rem; position: relative; }
