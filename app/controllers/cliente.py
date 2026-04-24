@@ -206,7 +206,44 @@ def carrito():
     """
     Carrito de compras
     """
-    return render_template('cliente/carrito.html')
+    service_factory = get_service_factory()
+    carrito_service = service_factory.get_carrito_service()
+    
+    items, total = carrito_service.get_items()
+    count = carrito_service.get_count()
+    
+    return render_template('cliente/carrito.html', items=items, total=total, count=count)
+
+@cliente_bp.route('/carrito/actualizar/<int:producto_id>', methods=['POST'])
+@login_required
+@requiere_cliente
+def actualizar_carrito(producto_id):
+    """
+    Actualizar cantidad de un producto en el carrito
+    """
+    cantidad = request.form.get('cantidad', type=int)
+    
+    if cantidad is not None:
+        service_factory = get_service_factory()
+        carrito_service = service_factory.get_carrito_service()
+        carrito_service.actualizar_cantidad(producto_id, cantidad)
+        flash('Carrito actualizado', 'success')
+        
+    return redirect(url_for('cliente.carrito'))
+
+@cliente_bp.route('/carrito/remover/<int:producto_id>', methods=['POST'])
+@login_required
+@requiere_cliente
+def remover_carrito(producto_id):
+    """
+    Remover producto del carrito
+    """
+    service_factory = get_service_factory()
+    carrito_service = service_factory.get_carrito_service()
+    carrito_service.remover_producto(producto_id)
+    flash('Producto eliminado del carrito', 'success')
+    
+    return redirect(url_for('cliente.carrito'))
 
 @cliente_bp.route('/checkout')
 @login_required
@@ -215,7 +252,45 @@ def checkout():
     """
     Proceso de pago
     """
-    return render_template('cliente/checkout.html')
+    service_factory = get_service_factory()
+    carrito_service = service_factory.get_carrito_service()
+    
+    items, total = carrito_service.get_items()
+    count = carrito_service.get_count()
+    
+    if count == 0:
+        flash('Tu carrito está vacío', 'error')
+        return redirect(url_for('cliente.carrito'))
+        
+    # Obtener direcciones del usuario (simulado para el MVP)
+    direcciones = []
+    
+    return render_template('cliente/checkout.html', items=items, total=total, count=count, direcciones=direcciones)
+
+@cliente_bp.route('/checkout/procesar', methods=['POST'])
+@login_required
+@requiere_cliente
+def procesar_checkout():
+    """
+    Procesar pago de la orden
+    """
+    service_factory = get_service_factory()
+    carrito_service = service_factory.get_carrito_service()
+    
+    # Validar carrito
+    items, total = carrito_service.get_items()
+    if not items:
+        flash('Tu carrito está vacío', 'error')
+        return redirect(url_for('cliente.carrito'))
+        
+    # Simular procesamiento de pago exitoso para el MVP
+    # En un sistema real aquí se llamaría al servicio de Stripe/PayPal y luego a orden_service
+    
+    # Vaciar carrito
+    carrito_service.vaciar_carrito()
+    
+    flash('¡Compra realizada con éxito! Tu orden está siendo procesada.', 'success')
+    return redirect(url_for('cliente.ordenes'))
 
 @cliente_bp.route('/newsletters')
 @login_required
@@ -287,10 +362,13 @@ def agregar_carrito():
     producto_id = request.json.get('producto_id')
     cantidad = request.json.get('cantidad', 1)
     
-    # TODO: Implementar servicio de carrito
+    service_factory = get_service_factory()
+    carrito_service = service_factory.get_carrito_service()
+    exitoso = carrito_service.agregar_producto(producto_id, cantidad)
+    
     return jsonify({
-        'exitoso': True,
-        'mensaje': 'Producto agregado al carrito'
+        'exitoso': exitoso,
+        'mensaje': 'Producto agregado al carrito' if exitoso else 'Error al agregar'
     })
 
 @cliente_bp.route('/api/carrito/quitar', methods=['POST'])
@@ -302,8 +380,11 @@ def quitar_carrito():
     """
     producto_id = request.json.get('producto_id')
     
-    # TODO: Implementar servicio de carrito
+    service_factory = get_service_factory()
+    carrito_service = service_factory.get_carrito_service()
+    exitoso = carrito_service.remover_producto(producto_id)
+    
     return jsonify({
-        'exitoso': True,
-        'mensaje': 'Producto quitado del carrito'
+        'exitoso': exitoso,
+        'mensaje': 'Producto quitado del carrito' if exitoso else 'Error al quitar'
     })
