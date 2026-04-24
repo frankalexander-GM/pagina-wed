@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Seguidores - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Mis Seguidores</h2>
+
+    {% if seguidores %}
+        <div class="row">
+            {% for seguidor in seguidores %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            {% if seguidor.foto_perfil %}
+                                <img src="{{ seguidor.foto_perfil }}" alt="{{ seguidor.nombre }}" class="img-fluid rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-secondary text-white d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </div>
+                            {% endif %}
+                            <h5 class="card-title mb-1">{{ seguidor.nombre }}</h5>
+                            <p class="text-muted mb-2">@{{ seguidor.username }}</p>
+                            <small class="text-muted">Siguiendo desde: {{ seguidor.fecha_registro.strftime('%d/%m/%Y') }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-users fa-3x mb-3 text-muted"></i>
+            <h5>Aún no tienes seguidores</h5>
+            <p>Publica más obras para atraer la atención de la comunidad.</p>
+            <a href="{{ url_for('artista.nueva_obra') }}" class="btn btn-primary mt-2">Publicar nueva obra</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

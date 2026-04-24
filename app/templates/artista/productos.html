@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Productos - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Mis Productos</h2>
+        <!-- Botón deshabilitado para el MVP si no está implementado el backend completo -->
+        <button class="btn btn-primary" disabled title="Próximamente">
+            <i class="fas fa-plus"></i> Nuevo Producto
+        </button>
+    </div>
+
+    {% if productos %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                        <th>Ventas</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if producto.imagen %}
+                                        <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center me-3 rounded" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                    {% endif %}
+                                    <h6 class="mb-0">{{ producto.nombre }}</h6>
+                                </div>
+                            </td>
+                            <td>${{ producto.precio }}</td>
+                            <td>{{ producto.stock }}</td>
+                            <td>
+                                <span class="badge {{ 'bg-success' if producto.stock > 0 else 'bg-danger' }}">
+                                    {{ 'Disponible' if producto.stock > 0 else 'Agotado' }}
+                                </span>
+                            </td>
+                            <td>{{ producto.ventas_count or 0 }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary" disabled><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" disabled><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-store fa-3x mb-3 text-muted"></i>
+            <h5>Aún no tienes productos a la venta</h5>
+            <p>Añade productos relacionados a tus obras (prints, merchandise, etc).</p>
+            <button class="btn btn-primary mt-2" disabled>Crear mi primer producto (Próximamente)</button>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

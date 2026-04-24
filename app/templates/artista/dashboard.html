@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard de Artista - WindMills Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Panel de Artista</h2>
+        <a href="{{ url_for('artista.nueva_obra') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nueva Obra
+        </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white text-center p-3">
+                <h3>{{ stats.obras_count }}</h3>
+                <div>Obras</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white text-center p-3">
+                <h3>{{ stats.productos_count }}</h3>
+                <div>Productos</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white text-center p-3">
+                <h3>{{ stats.seguidores_count }}</h3>
+                <div>Seguidores</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white text-center p-3">
+                <h3>{{ stats.ventas_count }}</h3>
+                <div>Ventas</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Obras Recientes -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Obras Recientes</h5>
+                    <a href="{{ url_for('artista.obras') }}" class="btn btn-sm btn-outline-secondary">Ver todas</a>
+                </div>
+                <div class="card-body">
+                    {% if obras_recientes %}
+                        <div class="list-group list-group-flush">
+                            {% for obra in obras_recientes %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">{{ obra.titulo }}</h6>
+                                        <small class="text-muted">{{ obra.fecha_publicacion.strftime('%d/%m/%Y') }}</small>
+                                    </div>
+                                    <div class="badge {{ 'bg-success' if obra.visible else 'bg-secondary' }}">
+                                        {{ 'Visible' if obra.visible else 'Oculta' }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No has publicado ninguna obra todavía.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos Recientes -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Productos Recientes</h5>
+                    <a href="{{ url_for('artista.productos') }}" class="btn btn-sm btn-outline-secondary">Ver todos</a>
+                </div>
+                <div class="card-body">
+                    {% if productos_recientes %}
+                        <div class="list-group list-group-flush">
+                            {% for producto in productos_recientes %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">{{ producto.nombre }}</h6>
+                                        <small class="text-muted">${{ producto.precio }} | Stock: {{ producto.stock }}</small>
+                                    </div>
+                                    <div class="badge {{ 'bg-success' if producto.stock > 0 else 'bg-danger' }}">
+                                        {{ 'Disponible' if producto.stock > 0 else 'Agotado' }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No has creado ningún producto todavía.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
