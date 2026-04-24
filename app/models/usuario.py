@@ -127,9 +127,9 @@ class Usuario(UserMixin, db.Model):
     
     def get_seguidores_count(self):
         """Obtener cantidad de seguidores"""
-        return len(self.seguidores)
+        return self.seguidores.count()
     
     def get_siguiendo_count(self):
         """Obtener cantidad de artistas que sigue"""
-        return len(self.artistas_seguidos)
+        return self.artistas_seguidos.count()
 
