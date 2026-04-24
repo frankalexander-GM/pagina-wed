@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Obras - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 px-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gestión de Obras</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Obra</th>
+                            <th>Artista</th>
+                            <th>Categoría</th>
+                            <th>Visibilidad</th>
+                            <th>Fecha Publicación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if obras %}
+                            {% for obra in obras %}
+                            <tr>
+                                <td>{{ obra.id_obra }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if obra.imagen %}
+                                            <img src="{{ obra.imagen }}" class="img-thumbnail me-2" style="width:40px; height:40px; object-fit:cover;">
+                                        {% endif %}
+                                        <strong>{{ obra.titulo }}</strong>
+                                    </div>
+                                </td>
+                                <td>{{ obra.artista.nombre }}</td>
+                                <td>{{ obra.categoria.nombre if obra.categoria else 'N/A' }}</td>
+                                <td>
+                                    {% if obra.visible %}
+                                        <span class="badge bg-success">Visible</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">Oculta</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ obra.fecha_publicacion.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    <form action="{{ url_for('admin.toggle_visibilidad_obra', obra_id=obra.id_obra) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm {% if obra.visible %}btn-outline-warning{% else %}btn-outline-success{% endif %}" title="{% if obra.visible %}Ocultar{% else %}Hacer Visible{% endif %}">
+                                            <i class="fas {% if obra.visible %}fa-eye-slash{% else %}fa-eye{% endif %}"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}" class="btn btn-sm btn-outline-primary" title="Ver obra" target="_blank">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">No se encontraron obras</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
