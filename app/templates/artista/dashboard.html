@@ -1,102 +1,438 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard de Artista - WindMills Art{% endblock %}
+{% block head %}
+<style>
+    /* === ÁGORA ART x BEHANCE PROFESSIONAL === */
+    :root {
+        --behance-blue: #0057ff; /* We'll use Ágora Teal instead */
+        --agora-accent: var(--turq);
+        --agora-secondary: var(--malva);
+        --bg-gray: #f9f9f9;
+        --border-color: #e8e8e8;
+    }
+
+    body {
+        background-color: var(--bg-gray) !important;
+    }
+
+    /* Banner Behance Style */
+    .artist-banner {
+        height: 320px;
+        background: linear-gradient(135deg, var(--noche), var(--noche-mid));
+        position: relative;
+        overflow: hidden;
+        margin-bottom: -60px;
+    }
+
+    .banner-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url('https://www.transparenttextures.com/patterns/cubes.png');
+        opacity: 0.1;
+    }
+
+    /* Main Container Layout */
+    .dashboard-wrapper {
+        position: relative;
+        z-index: 10;
+        padding-bottom: 80px;
+    }
+
+    /* Sidebar Behance Style */
+    .sidebar-artist {
+        background: white;
+        border-radius: 4px;
+        padding: 30px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        text-align: left;
+    }
+
+    .artist-profile-img {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        border: 4px solid white;
+        margin-top: -85px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        background: white;
+        object-fit: cover;
+    }
+
+    .artist-name-professional {
+        font-family: 'Josefin Sans', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .artist-title-pro {
+        color: var(--piedra);
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .btn-pro {
+        width: 100%;
+        padding: 12px;
+        border-radius: 25px;
+        font-weight: 700;
+        font-family: 'Josefin Sans', sans-serif;
+        margin-bottom: 10px;
+        border: none;
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    .btn-follow-pro { background-color: var(--agora-accent); color: white; }
+    .btn-message-pro { background-color: white; border: 1px solid var(--border-color); color: var(--carbon); }
+
+    .artist-stats-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 25px 0;
+        padding: 20px 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .stat-row-pro {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+    }
+
+    .stat-value-pro { font-weight: 700; }
+
+    /* Social Links */
+    .social-section h6 {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--piedra);
+        margin-bottom: 15px;
+    }
+
+    .social-link-pro {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        margin-bottom: 8px;
+        color: var(--carbon);
+        font-size: 13px;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .social-link-pro:hover {
+        background: var(--bg-gray);
+        border-color: var(--agora-accent);
+    }
+
+    /* Content Area Behance Style */
+    .content-artist {
+        background: transparent;
+    }
+
+    .tabs-pro {
+        background: white;
+        padding: 0 30px;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        display: flex;
+        gap: 30px;
+        margin-bottom: 25px;
+    }
+
+    .tab-item-pro {
+        padding: 20px 0;
+        font-family: 'Josefin Sans', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--piedra);
+        cursor: pointer;
+        position: relative;
+        border-bottom: 2px solid transparent;
+    }
+
+    .tab-item-pro.active {
+        color: var(--carbon);
+        border-bottom-color: var(--carbon);
+    }
+
+    /* Portfolio Grid Behance Style */
+    .portfolio-grid-pro {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .portfolio-card-pro {
+        background: white;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        transition: var(--transition);
+    }
+
+    .portfolio-card-pro:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .portfolio-img-wrapper {
+        height: 220px;
+        background: var(--agora-gray);
+        position: relative;
+    }
+
+    .portfolio-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .portfolio-info-pro {
+        padding: 15px;
+    }
+
+    .portfolio-title-pro {
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .portfolio-meta-pro {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: var(--piedra);
+    }
+
+    /* Shop Card Pro */
+    .shop-card-pro {
+        background: white;
+        border-radius: 4px;
+        padding: 20px;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        margin-bottom: 15px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .shop-img-pro {
+        width: 80px;
+        height: 80px;
+        border-radius: 4px;
+        object-fit: cover;
+    }
+
+    /* Blog Card Pro */
+    .blog-card-pro {
+        background: white;
+        border-radius: 4px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .blog-date-pro {
+        font-size: 11px;
+        color: var(--agora-accent);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Panel de Artista</h2>
-        <a href="{{ url_for('artista.nueva_obra') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Nueva Obra
-        </a>
-    </div>
+<!-- Full Width Artist Banner -->
+<div class="artist-banner">
+    <div class="banner-overlay"></div>
+</div>
 
-    <!-- Stats -->
-    <div class="row mb-5">
-        <div class="col-md-3">
-            <div class="card bg-primary text-white text-center p-3">
-                <h3>{{ stats.obras_count }}</h3>
-                <div>Obras</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white text-center p-3">
-                <h3>{{ stats.productos_count }}</h3>
-                <div>Productos</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-info text-white text-center p-3">
-                <h3>{{ stats.seguidores_count }}</h3>
-                <div>Seguidores</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-white text-center p-3">
-                <h3>{{ stats.ventas_count }}</h3>
-                <div>Ventas</div>
-            </div>
-        </div>
-    </div>
-
+<div class="container dashboard-wrapper">
     <div class="row">
-        <!-- Obras Recientes -->
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Obras Recientes</h5>
-                    <a href="{{ url_for('artista.obras') }}" class="btn btn-sm btn-outline-secondary">Ver todas</a>
+        <!-- Sidebar: Artist Info -->
+        <div class="col-lg-3">
+            <div class="sidebar-artist">
+                {% if current_user.foto_perfil %}
+                    <img src="{{ current_user.foto_perfil }}" class="artist-profile-img">
+                {% else %}
+                    <div class="artist-profile-img d-flex align-items-center justify-content-center bg-malva text-white fs-1 fw-bold">
+                        {{ current_user.nombre[0]|upper }}
+                    </div>
+                {% endif %}
+
+                <h2 class="artist-name-professional">{{ current_user.nombre }}</h2>
+                <p class="artist-title-pro">Artista Visual / Creador Ágora Art</p>
+                
+                <div class="d-flex flex-column gap-2">
+                    <a href="{{ url_for('artista.nueva_obra') }}" class="btn btn-pro btn-follow-pro">Publicar Proyecto</a>
+                    <a href="{{ url_for('artista.perfil') }}" class="btn btn-pro btn-message-pro">Configurar Perfil</a>
                 </div>
-                <div class="card-body">
-                    {% if obras_recientes %}
-                        <div class="list-group list-group-flush">
-                            {% for obra in obras_recientes %}
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-0">{{ obra.titulo }}</h6>
-                                        <small class="text-muted">{{ obra.fecha_publicacion.strftime('%d/%m/%Y') }}</small>
-                                    </div>
-                                    <div class="badge {{ 'bg-success' if obra.visible else 'bg-secondary' }}">
-                                        {{ 'Visible' if obra.visible else 'Oculta' }}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-muted mb-0">No has publicado ninguna obra todavía.</p>
-                    {% endif %}
+
+                <div class="artist-stats-grid">
+                    <div class="stat-row-pro">
+                        <span>Vistas de proyecto</span>
+                        <span class="stat-value-pro">{{ stats.vistas_proyectos }}</span>
+                    </div>
+                    <div class="stat-row-pro">
+                        <span>Valoraciones</span>
+                        <span class="stat-value-pro">{{ stats.valoraciones }}</span>
+                    </div>
+                    <div class="stat-row-pro">
+                        <span>Seguidores</span>
+                        <span class="stat-value-pro">{{ stats.seguidores_count }}</span>
+                    </div>
+                    <div class="stat-row-pro">
+                        <span>Siguiendo</span>
+                        <span class="stat-value-pro">{{ stats.siguiendo_count }}</span>
+                    </div>
+                </div>
+
+                <div class="social-section">
+                    <h6>En la Web</h6>
+                    <a href="#" class="social-link-pro"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#" class="social-link-pro"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#" class="social-link-pro"><i class="fas fa-link"></i> Portafolio Externo</a>
+                </div>
+
+                <div class="mt-4 pt-4 border-top">
+                    <h6>Sobre Mí</h6>
+                    <p class="small text-muted mb-0">
+                        {{ current_user.biografia or 'Artista apasionado por la creación en Ágora Art. Miembro de la comunidad desde ' ~ current_user.fecha_registro|date }}
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- Productos Recientes -->
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Productos Recientes</h5>
-                    <a href="{{ url_for('artista.productos') }}" class="btn btn-sm btn-outline-secondary">Ver todos</a>
-                </div>
-                <div class="card-body">
-                    {% if productos_recientes %}
-                        <div class="list-group list-group-flush">
-                            {% for producto in productos_recientes %}
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-0">{{ producto.nombre }}</h6>
-                                        <small class="text-muted">${{ producto.precio }} | Stock: {{ producto.stock }}</small>
+        <!-- Main Content: Tabs and Grid -->
+        <div class="col-lg-9 content-artist">
+            <!-- Tabs -->
+            <div class="tabs-pro">
+                <div class="tab-item-pro active" onclick="switchTab('portfolio')">Trabajo</div>
+                <div class="tab-item-pro" onclick="switchTab('blog')">Blog</div>
+                <div class="tab-item-pro" onclick="switchTab('shop')">Tienda</div>
+                <div class="tab-item-pro" onclick="switchTab('insights')">Estadísticas</div>
+            </div>
+
+            <!-- Tab: Portfolio -->
+            <div id="tab-portfolio" class="tab-content-pro">
+                <div class="portfolio-grid-pro">
+                    {% if obras %}
+                        {% for obra in obras %}
+                        <div class="portfolio-card-pro">
+                            <div class="portfolio-img-wrapper">
+                                {% if obra.imagen %}
+                                    <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}">
+                                {% else %}
+                                    <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-light">
+                                        <i class="fas fa-image fa-3x text-muted opacity-25"></i>
                                     </div>
-                                    <div class="badge {{ 'bg-success' if producto.stock > 0 else 'bg-danger' }}">
-                                        {{ 'Disponible' if producto.stock > 0 else 'Agotado' }}
-                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="portfolio-info-pro">
+                                <div class="portfolio-title-pro">{{ obra.titulo }}</div>
+                                <div class="portfolio-meta-pro">
+                                    <span class="fw-bold text-uppercase">{{ obra.categoria.nombre if obra.categoria else 'Arte' }}</span>
+                                    <span><i class="fas fa-eye me-1"></i> {{ (range(100, 500)|random) }}</span>
                                 </div>
-                            {% endfor %}
+                            </div>
                         </div>
+                        {% endfor %}
                     {% else %}
-                        <p class="text-muted mb-0">No has creado ningún producto todavía.</p>
+                        <div class="col-12 text-center py-5 bg-white rounded-1 border">
+                            <i class="fas fa-palette fa-4x text-muted mb-4 opacity-25"></i>
+                            <h5 class="fw-bold">Tu portafolio está vacío</h5>
+                            <p class="text-muted">Empieza a compartir tu talento con el mundo.</p>
+                            <a href="{{ url_for('artista.nueva_obra') }}" class="btn btn-primary mt-3">Publicar mi primera obra</a>
+                        </div>
                     {% endif %}
                 </div>
+            </div>
+
+            <!-- Tab: Blog (Placeholder for now) -->
+            <div id="tab-blog" class="tab-content-pro d-none">
+                {% if entradas_blog %}
+                    {% for entrada in entradas_blog %}
+                        <div class="blog-card-pro">
+                            <div class="blog-date-pro">Publicado el {{ entrada.fecha|date }}</div>
+                            <h4 class="fw-bold mb-3">{{ entrada.titulo }}</h4>
+                            <p class="text-muted">{{ entrada.contenido|truncate_words(40) }}</p>
+                            <a href="#" class="fw-bold text-turq small text-decoration-none">Leer más <i class="fas fa-arrow-right ms-2"></i></a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5 bg-white border">
+                        <i class="fas fa-feather-alt fa-3x text-muted mb-3 opacity-25"></i>
+                        <h5>Comparte tu proceso</h5>
+                        <p class="text-muted">El blog es ideal para conectar con tus seguidores.</p>
+                        <button class="btn btn-secondary mt-2">Escribir Entrada</button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Tab: Shop -->
+            <div id="tab-shop" class="tab-content-pro d-none">
+                {% if productos %}
+                    {% for producto in productos %}
+                    <div class="shop-card-pro">
+                        <img src="{{ producto.imagen or 'https://via.placeholder.com/150' }}" class="shop-img-pro">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-1">{{ producto.nombre }}</h5>
+                            <p class="text-muted small mb-0">{{ producto.descripcion|truncate_words(15) }}</p>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold fs-5 text-turq">${{ producto.precio }}</div>
+                            <div class="small text-muted">Stock: {{ producto.stock }}</div>
+                            <button class="btn btn-sm btn-outline-secondary mt-2">Gestionar</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5 bg-white border">
+                        <i class="fas fa-shopping-bag fa-3x text-muted mb-3 opacity-25"></i>
+                        <h5>Tu tienda está vacía</h5>
+                        <p class="text-muted">Ofrece tus productos y obras a la comunidad.</p>
+                        <button class="btn btn-primary mt-2">Agregar Producto</button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function switchTab(tabName) {
+        // Ocultar todos los contenidos
+        document.querySelectorAll('.tab-content-pro').forEach(tab => {
+            tab.classList.add('d-none');
+        });
+        
+        // Desactivar todos los tabs
+        document.querySelectorAll('.tab-item-pro').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Mostrar el contenido seleccionado
+        document.getElementById('tab-' + tabName).classList.remove('d-none');
+        
+        // Activar el tab seleccionado
+        event.currentTarget.classList.add('active');
+    }
+</script>
 {% endblock %}

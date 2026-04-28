@@ -21,31 +21,43 @@ def requiere_artista(f):
 @requiere_artista
 def dashboard():
     """
-    Dashboard del artista
+    Dashboard del artista (Estilo Behance Profesional)
     """
     service_factory = get_service_factory()
     obra_service = service_factory.get_obra_service()
     producto_service = service_factory.get_producto_service()
     usuario_service = service_factory.get_usuario_service()
+    categoria_service = service_factory.get_categoria_service()
     
     # Obtener estadísticas del artista
     stats = {
         'obras_count': obra_service.get_count_by_artista(current_user.id_usuario),
         'productos_count': producto_service.get_count_by_artista(current_user.id_usuario),
         'seguidores_count': usuario_service.get_seguidores_count(current_user.id_usuario),
-        'ventas_count': 0  # TODO: Implementar cuando tengamos sistema de ventas
+        'siguiendo_count': usuario_service.get_siguiendo_count(current_user.id_usuario),
+        'vistas_proyectos': 1250, # Placeholder para MVP
+        'valoraciones': 84
     }
     
-    # Obtener obras recientes
-    obras_recientes = obra_service.get_by_artista(current_user.id_usuario, limit=5)
+    # Obtener obras (Portfolio)
+    obras = obra_service.get_by_artista(current_user.id_usuario, visible_only=False)
     
-    # Obtener productos recientes
-    productos_recientes = producto_service.get_by_artista(current_user.id_usuario, limit=5)
+    # Obtener categorías para filtro
+    categorias = categoria_service.get_all()
+    
+    # Obtener productos (Tienda)
+    productos = producto_service.get_by_artista(current_user.id_usuario, disponibles_only=False)
+    
+    # Obtener entradas de blog
+    # entradas_blog = blog_service.get_by_artista(current_user.id_usuario) 
+    entradas_blog = [] # Placeholder
     
     return render_template('artista/dashboard.html',
                          stats=stats,
-                         obras_recientes=obras_recientes,
-                         productos_recientes=productos_recientes)
+                         obras=obras,
+                         productos=productos,
+                         entradas_blog=entradas_blog,
+                         categorias=categorias)
 
 @artista_bp.route('/perfil')
 @login_required
