@@ -53,6 +53,9 @@ def dashboard():
         # Obtener obras favoritas
         obras_favoritas = obra_service.get_favoritos_usuario(user_id, limit=6)
         
+        # Obtener lienzos (moodboards) para visualización
+        lienzos = moodboard_service.get_by_usuario(user_id)
+        
         # Obtener newsletters recientes
         newsletters_recientes = []
         try:
@@ -64,6 +67,7 @@ def dashboard():
                              stats=stats,
                              artistas_siguiendo=artistas_siguiendo,
                              obras_favoritas=obras_favoritas,
+                             lienzos=lienzos,
                              newsletters=newsletters_recientes)
     except Exception as e:
         import traceback
