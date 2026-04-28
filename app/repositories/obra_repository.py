@@ -259,7 +259,7 @@ class ObraRepository(BaseRepository):
             ).filter(
                 favoritos_obras.c.id_usuario == usuario_id,
                 Obra.visible == True
-            ).order_by(favoritos_obras.c.fecha.desc())
+            ).order_by(favoritos_obras.c.fecha_agregado.desc())
             
             if limit:
                 query = query.limit(limit)
@@ -349,4 +349,22 @@ class ObraRepository(BaseRepository):
             return query.count()
         except SQLAlchemyError as e:
             print(f"Error al contar obras del artista: {e}")
+            return 0
+
+    def get_favoritos_count(self, usuario_id):
+        """
+        Obtener cantidad de obras favoritas de un usuario
+        
+        Args:
+            usuario_id (int): ID del usuario
+            
+        Returns:
+            int: Cantidad de obras favoritas
+        """
+        try:
+            return self.session.query(favoritos_obras).filter_by(
+                id_usuario=usuario_id
+            ).count()
+        except SQLAlchemyError as e:
+            print(f"Error al contar obras favoritas: {e}")
             return 0

@@ -1,39 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Nuevo Lienzo - WindMills Art{% endblock %}
+{% block title %}Nuevo Lienzo - Ágora Art{% endblock %}
 
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white pt-3 pb-2 border-bottom-0">
-                    <h3 class="mb-0">Crear Nuevo Lienzo (Moodboard)</h3>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle me-2"></i> Los lienzos te permiten agrupar tus obras favoritas por temática, estilo o proyecto.
-                    </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Crear Nuevo Lienzo</h2>
+                    <p class="text-muted text-center mb-4">Dale un nombre a tu tablero de inspiración para empezar a organizar tus obras favoritas.</p>
                     
                     <form method="POST" action="{{ url_for('cliente.nuevo_lienzo') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="mb-4">
-                            <label for="nombre" class="form-label">Nombre del Lienzo *</label>
-                            <input type="text" class="form-control form-control-lg" id="nombre" name="nombre" required placeholder="Ej. Inspiración Nórdica, Arte Minimalista...">
+                            <label for="nombre" class="form-label fw-bold">Nombre del Lienzo</label>
+                            <input type="text" class="form-control form-control-lg rounded-pill" id="nombre" name="nombre" placeholder="Ej: Inspiración para mi sala" required>
                         </div>
-                        
-                        <div class="mb-4">
-                            <label for="descripcion" class="form-label">Descripción (Opcional)</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="¿De qué trata esta colección?"></textarea>
-                        </div>
-                        
-                        <div class="mb-4 form-check">
-                            <input type="checkbox" class="form-check-input" id="publico" name="publico">
-                            <label class="form-check-label" for="publico">Hacer este lienzo público (otros usuarios podrán verlo)</label>
-                        </div>
-                        
-                        <div class="d-flex justify-content-between mt-5">
-                            <a href="{{ url_for('cliente.lienzos') }}" class="btn btn-outline-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-primary px-5">Crear Lienzo</button>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill">Crear Lienzo</button>
+                            <a href="{{ url_for('cliente.lienzos') }}" class="btn btn-link text-muted">Cancelar</a>
                         </div>
                     </form>
                 </div>

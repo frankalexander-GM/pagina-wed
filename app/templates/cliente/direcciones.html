@@ -1,41 +1,61 @@
 {% extends "base.html" %}
 
-{% block title %}Mis Direcciones - WindMills Art{% endblock %}
+{% block title %}Mis Direcciones de Envío{% endblock %}
 
 {% block content %}
 <div class="container my-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Mis Direcciones de Envío</h2>
+        <div>
+            <h2>Mis Direcciones de Envío</h2>
+            <p class="text-muted">Gestiona tus direcciones para las compras</p>
+        </div>
         <a href="{{ url_for('cliente.nueva_direccion') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Nueva Dirección
         </a>
     </div>
 
     <div class="row">
-        <!-- Tarjeta de dirección simulada -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title">{{ current_user.nombre }}</h5>
-                        <span class="badge bg-primary">Principal</span>
+        {% if direcciones %}
+            {% for direccion in direcciones %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title">{{ direccion.nombre_receptor }}</h5>
+                                {% if direccion.es_principal %}
+                                    <span class="badge bg-primary">Principal</span>
+                                {% endif %}
+                            </div>
+                            <p class="card-text text-muted mb-1">
+                                <i class="fas fa-map-marker-alt me-2"></i> {{ direccion.direccion }}
+                            </p>
+                            <p class="card-text text-muted mb-1">
+                                {{ direccion.ciudad }}, {{ direccion.codigo_postal }}
+                            </p>
+                            <p class="card-text text-muted mb-3">
+                                {{ direccion.pais }}
+                            </p>
+                            <p class="card-text text-muted small">
+                                <i class="fas fa-phone me-2"></i> {{ direccion.telefono }}
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0 pt-0">
+                            <button class="btn btn-sm btn-outline-secondary me-2">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
                     </div>
-                    <p class="card-text text-muted mb-1"><i class="fas fa-map-marker-alt me-2"></i> Calle Principal 123, Col. Centro</p>
-                    <p class="card-text text-muted mb-1">Ciudad de México, 06000</p>
-                    <p class="card-text text-muted mb-3">México</p>
-                    <p class="card-text text-muted small"><i class="fas fa-phone me-2"></i> +52 55 1234 5678</p>
                 </div>
-                <div class="card-footer bg-white border-top-0 pt-0">
-                    <button class="btn btn-sm btn-outline-secondary me-2"><i class="fas fa-edit"></i> Editar</button>
-                    <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Eliminar</button>
-                </div>
-            </div>
-        </div>
+            {% endfor %}
+        {% endif %}
         
         <!-- Tarjeta para agregar -->
         <div class="col-md-6 mb-4">
             <a href="{{ url_for('cliente.nueva_direccion') }}" class="text-decoration-none">
-                <div class="card shadow-sm border-2 border-dashed h-100 bg-light" style="border-style: dashed !important; border-color: #dee2e6 !important;">
+                <div class="card shadow-sm border-2 h-100 bg-light" style="border-style: dashed !important; border-color: #dee2e6 !important;">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center text-muted py-5">
                         <i class="fas fa-plus-circle fa-3x mb-3"></i>
                         <h5>Agregar Nueva Dirección</h5>
@@ -44,5 +64,16 @@
             </a>
         </div>
     </div>
+
+    {% if not direcciones %}
+        <div class="alert alert-info text-center py-5" style="grid-column: 1 / -1;">
+            <i class="fas fa-map-location-dot fa-3x mb-3 text-muted"></i>
+            <h5>Aún no has registrado ninguna dirección</h5>
+            <p class="text-muted">Agrega una dirección para poder realizar compras en la plataforma.</p>
+            <a href="{{ url_for('cliente.nueva_direccion') }}" class="btn btn-primary mt-3">
+                <i class="fas fa-plus"></i> Agregar Primera Dirección
+            </a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

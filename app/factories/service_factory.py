@@ -89,15 +89,7 @@ class ServiceFactory:
         """Obtener servicio de órdenes"""
         if 'orden' not in self._services:
             from app.services.orden_service import OrdenService
-            from app.factories.db_factory import RepositoryFactory
-            
-            # Se necesitarán más repositorios para órdenes
-            from app.repositories.usuario_repository import UsuarioRepository
-            from app.repositories.producto_repository import ProductoRepository
-            
-            user_repo = UsuarioRepository(self.session)
-            producto_repo = ProductoRepository(self.session)
-            self._services['orden'] = OrdenService(user_repo, producto_repo)
+            self._services['orden'] = OrdenService(self.session)
         
         return self._services['orden']
     
@@ -119,13 +111,33 @@ class ServiceFactory:
         """Obtener servicio de newsletters"""
         if 'newsletter' not in self._services:
             from app.services.newsletter_service import NewsletterService
-            from app.factories.db_factory import RepositoryFactory
-            
-            user_repo = RepositoryFactory.create_user_repository(self.session)
-            self._services['newsletter'] = NewsletterService(user_repo)
+            self._services['newsletter'] = NewsletterService(self.session)
         
         return self._services['newsletter']
     
+    def get_moodboard_service(self):
+        """Obtener servicio de moodboards"""
+        if 'moodboard' not in self._services:
+            from app.services.moodboard_service import MoodboardService
+            from app.factories.db_factory import RepositoryFactory
+            
+            mood_repo = RepositoryFactory.create_moodboard_repository(self.session)
+            obra_repo = RepositoryFactory.create_obra_repository(self.session)
+            self._services['moodboard'] = MoodboardService(mood_repo, obra_repo)
+            
+        return self._services['moodboard']
+
+    def get_direccion_service(self):
+        """Obtener servicio de direcciones"""
+        if 'direccion' not in self._services:
+            from app.services.direccion_service import DireccionService
+            from app.factories.db_factory import RepositoryFactory
+            
+            dir_repo = RepositoryFactory.create_direccion_repository(self.session)
+            self._services['direccion'] = DireccionService(dir_repo)
+            
+        return self._services['direccion']
+
     def get_admin_service(self):
         """Obtener servicio de administración"""
         if 'admin' not in self._services:

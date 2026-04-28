@@ -147,8 +147,8 @@ class AuthService:
                 'estado': 'activo'
             }
             
-            # Crear usuario
-            usuario = self.usuario_repo.create(usuario_data)
+            # Crear usuario sin registrar en auditoría (es un registro inicial)
+            usuario = self.usuario_repo.create(usuario_data, registrar_auditoria=False)
             
             if usuario:
                 self.usuario_repo.save()
