@@ -1,397 +1,378 @@
 {% extends "base.html" %}
 
-{% block title %}Mi Espacio - Ágora Art{% endblock %}
+{% block title %}Dashboard - Ágora Art{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* === Dashboard Pinterest Style === */
+    /* === PURE PINTEREST AESTHETIC === */
     :root {
-        --grid-gap: 24px;
+        --pinterest-bg: #ffffff;
+        --pinterest-card-bg: #ffffff;
+        --pinterest-radius: 16px;
+        --pinterest-gray: #efefef;
+        --pinterest-text: #111111;
+        --pinterest-secondary-text: #767676;
     }
 
     body {
-        background-color: #fafafa;
+        background-color: var(--pinterest-bg);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, "ＭＳ Ｐゴシック", Arial, sans-serif !important;
+        color: var(--pinterest-text);
     }
 
-    /* Glassmorphism Header */
-    .welcome-banner {
-        background: rgba(255, 255, 255, 0.4);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: var(--radius-lg);
-        padding: 2.5rem;
-        margin-bottom: 3rem;
-        position: relative;
-        overflow: hidden;
-        box-shadow: var(--shadow-md);
+    /* Container for Masonry */
+    .pin-container {
+        margin: 0 auto;
+        width: 95%;
+        max-width: 1800px;
+        padding-top: 20px;
     }
 
-    .welcome-banner::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -20%;
-        width: 300px;
-        height: 300px;
-        background: radial-gradient(circle, var(--turq-light) 0%, transparent 70%);
-        z-index: -1;
-        opacity: 0.5;
+    /* Column layout for Masonry effect */
+    .pin-grid {
+        column-count: 5;
+        column-gap: 16px;
     }
 
-    .welcome-banner::after {
-        content: '';
-        position: absolute;
-        bottom: -50%;
-        right: -10%;
-        width: 250px;
-        height: 250px;
-        background: radial-gradient(circle, var(--malva-light) 0%, transparent 70%);
-        z-index: -1;
-        opacity: 0.5;
-    }
+    @media (max-width: 1600px) { .pin-grid { column-count: 4; } }
+    @media (max-width: 1200px) { .pin-grid { column-count: 3; } }
+    @media (max-width: 768px) { .pin-grid { column-count: 2; } }
+    @media (max-width: 480px) { .pin-grid { column-count: 1; } }
 
-    /* Stats Pills */
-    .stat-pill {
-        display: inline-flex;
-        align-items: center;
-        background: white;
-        padding: 0.5rem 1.25rem;
-        border-radius: var(--radius-pill);
-        margin-right: 0.75rem;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid var(--borde-suave);
-        transition: var(--transition);
-    }
-
-    .stat-pill:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-        border-color: var(--turq);
-    }
-
-    .stat-pill i {
-        margin-right: 10px;
-        color: var(--turq);
-    }
-
-    /* Pinterest Grid System */
-    .inspiration-grid {
-        column-count: 3;
-        column-gap: var(--grid-gap);
-        width: 100%;
-    }
-
-    @media (max-width: 992px) {
-        .inspiration-grid { column-count: 2; }
-    }
-
-    @media (max-width: 576px) {
-        .inspiration-grid { column-count: 1; }
-    }
-
-    .inspiration-item {
+    /* The Pin Card */
+    .pin-card {
         break-inside: avoid;
-        margin-bottom: var(--grid-gap);
+        margin-bottom: 16px;
         position: relative;
-        border-radius: var(--radius-md);
+        cursor: zoom-in;
+    }
+
+    .pin-image-wrapper {
+        position: relative;
+        border-radius: var(--pinterest-radius);
         overflow: hidden;
-        background: white;
-        box-shadow: var(--shadow-sm);
-        transition: var(--transition);
-        border: 1px solid var(--borde-suave);
+        background-color: var(--pinterest-gray);
+        transition: filter 0.2s ease-out;
     }
 
-    .inspiration-item:hover {
-        transform: scale(1.02);
-        box-shadow: var(--shadow-hover);
-        z-index: 10;
+    .pin-card:hover .pin-image-wrapper {
+        filter: brightness(0.85);
     }
 
-    .inspiration-item img {
+    .pin-image {
         width: 100%;
-        height: auto;
         display: block;
+        height: auto;
     }
 
-    .item-overlay {
+    /* Hover actions (Pinterest style) */
+    .pin-actions {
         position: absolute;
-        bottom: 0;
+        top: 0;
         left: 0;
         right: 0;
-        padding: 1.5rem;
-        background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-        color: white;
+        bottom: 0;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         opacity: 0;
-        transition: var(--transition);
+        transition: opacity 0.2s ease-out;
+        pointer-events: none;
     }
 
-    .inspiration-item:hover .item-overlay {
+    .pin-card:hover .pin-actions {
         opacity: 1;
+        pointer-events: auto;
     }
 
-    /* Sidebar Aesthetic */
-    .sidebar-section {
-        background: white;
-        border-radius: var(--radius-lg);
-        padding: 1.5rem;
-        border: 1px solid var(--borde-suave);
-        box-shadow: var(--shadow-sm);
-        margin-bottom: 2rem;
-    }
-
-    .sidebar-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 1.25rem;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--text-primary);
-    }
-
-    /* Artist Circle Avatar */
-    .artist-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        border: 2px solid var(--turq-light);
-        padding: 2px;
-        transition: var(--transition);
-    }
-
-    .artist-item:hover .artist-avatar {
-        border-color: var(--malva);
-        transform: rotate(10deg);
-    }
-
-    /* Newsletter Bubbles */
-    .news-bubble {
-        background: var(--noche-light);
-        border-radius: var(--radius-md);
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-left: 4px solid var(--turq);
-        transition: var(--transition);
-    }
-
-    .news-bubble:hover {
-        background: white;
-        box-shadow: var(--shadow-md);
-        transform: translateX(5px);
-    }
-
-    .quick-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 0.75rem 1rem;
-        border-radius: var(--radius-md);
-        color: var(--text-secondary);
-        transition: var(--transition);
-    }
-
-    .quick-link:hover {
-        background: var(--turq-light);
-        color: var(--turq-dark);
-        padding-left: 1.25rem;
-    }
-
-    .floating-action {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        z-index: 100;
-    }
-
-    .btn-float {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: var(--turq);
+    .btn-save {
+        align-self: flex-end;
+        background-color: #e60023;
         color: white;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 24px;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn-save:hover { background-color: #ad081b; }
+
+    .pin-footer-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .btn-icon-pin {
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
-        box-shadow: 0 10px 25px rgba(27, 143, 160, 0.4);
-        transition: var(--transition);
+        color: #111;
+        text-decoration: none;
     }
 
-    .btn-float:hover {
-        transform: rotate(90deg) scale(1.1);
-        background: var(--malva);
+    /* Info below the pin */
+    .pin-info {
+        padding: 8px 4px;
     }
+
+    .pin-title {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: var(--pinterest-text);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .pin-user {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .user-avatar-small {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .user-name-small {
+        font-size: 14px;
+        color: var(--pinterest-text);
+    }
+
+    /* Special Info Cards (Stats, News, etc.) */
+    .info-card {
+        break-inside: avoid;
+        margin-bottom: 16px;
+        background-color: var(--pinterest-gray);
+        border-radius: var(--pinterest-radius);
+        padding: 24px;
+    }
+
+    .info-card h4 {
+        font-weight: 700;
+        margin-bottom: 16px;
+        font-size: 20px;
+    }
+
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .quick-nav-link {
+        display: block;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: var(--pinterest-text);
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .quick-nav-link:last-child { border-bottom: none; }
+    .quick-nav-link:hover { opacity: 0.7; }
+
+    /* Floating Header / User Info */
+    .user-profile-header {
+        text-align: center;
+        padding: 40px 0 20px;
+    }
+
+    .profile-avatar-large {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin-bottom: 12px;
+        background-color: var(--malva);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 48px;
+        font-weight: 700;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .profile-name-large {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .profile-handle {
+        color: var(--pinterest-secondary-text);
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .profile-stats-summary {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .profile-stat-item {
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .profile-stat-item:hover { text-decoration: underline; }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-pinterest {
+        padding: 12px 24px;
+        border-radius: 24px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-gray { background-color: var(--pinterest-gray); color: black; }
+    .btn-red { background-color: #e60023; color: white; }
+
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="user-profile-header">
+    <div class="profile-avatar-large">
+        {{ current_user.nombre[0]|upper }}
+    </div>
+    <h1 class="profile-name-large">{{ current_user.nombre }}</h1>
+    <p class="profile-handle">@{{ current_user.username }}</p>
     
-    <!-- Welcome Section -->
-    <div class="welcome-banner">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="display-6 fw-bold mb-2">Hola, {{ current_user.nombre.split()[0] }}</h1>
-                <p class="lead mb-4 font-lora italic">Explora tus mundos guardados y descubre qué hay de nuevo en tu comunidad artística.</p>
-                
-                <div class="stats-container">
-                    <div class="stat-pill">
-                        <i class="fas fa-heart"></i>
-                        <span><strong>{{ stats.favoritos_count }}</strong> favoritos</span>
-                    </div>
-                    <div class="stat-pill">
-                        <i class="fas fa-users"></i>
-                        <span><strong>{{ stats.siguiendo_count }}</strong> siguiendo</span>
-                    </div>
-                    <div class="stat-pill">
-                        <i class="fas fa-layer-group"></i>
-                        <span><strong>{{ stats.lienzos_count }}</strong> lienzos</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 text-center d-none d-md-block">
-                <div class="avatar mx-auto" style="width: 100px; height: 100px; font-size: 2.5rem; border: 5px solid white;">
-                    {{ current_user.nombre[0]|upper }}
-                </div>
-            </div>
-        </div>
+    <div class="profile-stats-summary">
+        <div class="profile-stat-item">{{ stats.siguiendo_count }} siguiendo</div>
+        <div class="profile-stat-item">{{ stats.favoritos_count }} favoritos</div>
     </div>
 
-    <div class="row">
-        <!-- Main Content (Grid) -->
-        <div class="col-lg-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="mb-0">Tu Inspiración</h3>
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        Ordenar por
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Recientes</a></li>
-                        <li><a class="dropdown-item" href="#">Más relevantes</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            {% if obras_favoritas %}
-            <div class="inspiration-grid">
-                {% for obra in obras_favoritas %}
-                <div class="inspiration-item">
-                    <a href="{{ url_for('public.obra', obra_id=obra.id_obra) }}">
-                        {% if obra.imagen %}
-                            <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" loading="lazy">
-                        {% else %}
-                            <div class="bg-light p-5 text-center">
-                                <i class="fas fa-image fa-3x opacity-25"></i>
-                            </div>
-                        {% endif %}
-                    </a>
-                    <div class="item-overlay">
-                        <h6 class="mb-0 text-white">{{ obra.titulo }}</h6>
-                        <small class="opacity-75">@{{ obra.artista.username }}</small>
-                    </div>
-                    <div class="p-3 d-flex justify-content-between align-items-center bg-white">
-                        <div class="d-flex align-items-center">
-                            <div class="author-avatar me-2" style="width: 24px; height: 24px; font-size: 10px;">
-                                {{ obra.artista.nombre[0]|upper }}
-                            </div>
-                            <span class="small text-muted">{{ obra.artista.nombre }}</span>
-                        </div>
-                        <button class="btn btn-link btn-sm p-0 text-danger"><i class="fas fa-heart"></i></button>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="text-center py-5 sidebar-section">
-                <i class="fas fa-palette fa-4x text-muted mb-4 opacity-25"></i>
-                <h5>Tu muro está en blanco</h5>
-                <p class="text-muted">Explora la galería y guarda tus obras favoritas para verlas aquí.</p>
-                <a href="{{ url_for('public.explorar') }}" class="btn btn-primary mt-3">Explorar Obras</a>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Sidebar -->
-        <div class="col-lg-3">
-            <!-- Newsletters / Updates -->
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <i class="fas fa-sparkles text-dorado"></i>
-                    Actualizaciones
-                </div>
-                {% if newsletters %}
-                    {% for news in newsletters %}
-                    <div class="news-bubble">
-                        <div class="d-flex align-items-center mb-2">
-                            <div class="author-avatar me-2" style="width: 20px; height: 20px; font-size: 8px;">
-                                {{ news.artista.nombre[0]|upper }}
-                            </div>
-                            <small class="fw-bold">{{ news.artista.nombre }}</small>
-                        </div>
-                        <h6 class="small mb-1">{{ news.asunto }}</h6>
-                        <p class="small text-muted mb-0">{{ news.contenido|truncate_words(10) }}</p>
-                    </div>
-                    {% endfor %}
-                    <a href="{{ url_for('cliente.newsletters') }}" class="btn btn-link btn-sm w-100 text-decoration-none">Ver todo</a>
-                {% else %}
-                    <p class="small text-muted text-center py-3">No hay novedades por ahora.</p>
-                {% endif %}
-            </div>
-
-            <!-- Followed Artists -->
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <i class="fas fa-user-check text-turq"></i>
-                    Artistas favoritos
-                </div>
-                <div class="d-flex flex-wrap gap-3">
-                    {% if artistas_siguiendo %}
-                        {% for artista in artistas_siguiendo %}
-                        <a href="{{ url_for('public.artista_perfil', username=artista.username) }}" class="artist-item" title="{{ artista.nombre }}">
-                            {% if artista.foto_perfil %}
-                                <img src="{{ artista.foto_perfil }}" class="artist-avatar">
-                            {% else %}
-                                <div class="avatar artist-avatar" style="font-size: 1rem;">{{ artista.nombre[0]|upper }}</div>
-                            {% endif %}
-                        </a>
-                        {% endfor %}
-                    {% else %}
-                        <p class="small text-muted">Sigue artistas para verlos aquí.</p>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Quick Access -->
-            <div class="sidebar-section p-0 overflow-hidden">
-                <div class="p-4 pb-2">
-                    <div class="sidebar-title mb-2">Gestión</div>
-                </div>
-                <div class="pb-3">
-                    <a href="{{ url_for('cliente.lienzos') }}" class="quick-link">
-                        <i class="fas fa-layer-group"></i> Mis Lienzos
-                    </a>
-                    <a href="{{ url_for('cliente.direcciones') }}" class="quick-link">
-                        <i class="fas fa-shipping-fast"></i> Envíos
-                    </a>
-                    <a href="{{ url_for('cliente.ordenes') }}" class="quick-link">
-                        <i class="fas fa-bag-shopping"></i> Mis Compras
-                    </a>
-                    <a href="{{ url_for('cliente.perfil') }}" class="quick-link">
-                        <i class="fas fa-cog"></i> Configuración
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="action-buttons">
+        <a href="{{ url_for('cliente.perfil') }}" class="btn-pinterest btn-gray">Compartir</a>
+        <a href="{{ url_for('cliente.perfil') }}" class="btn-pinterest btn-gray">Editar perfil</a>
     </div>
 </div>
 
-<!-- Floating Action for New Moodboard -->
-<div class="floating-action">
-    <a href="{{ url_for('cliente.nuevo_lienzo') }}" class="btn-float" title="Crear nuevo lienzo">
-        <i class="fas fa-plus"></i>
-    </a>
+<div class="pin-container">
+    <div class="pin-grid">
+        
+        <!-- Info Card: Mi Resumen (Pinterest doesn't usually have this, but for utility) -->
+        <div class="info-card">
+            <h4>Mis Datos</h4>
+            <div class="stat-row">
+                <span>Favoritos</span>
+                <strong>{{ stats.favoritos_count }}</strong>
+            </div>
+            <div class="stat-row">
+                <span>Siguiendo</span>
+                <strong>{{ stats.siguiendo_count }}</strong>
+            </div>
+            <div class="stat-row">
+                <span>Lienzos</span>
+                <strong>{{ stats.lienzos_count }}</strong>
+            </div>
+            <div class="stat-row">
+                <span>Órdenes</span>
+                <strong>{{ stats.ordenes_count }}</strong>
+            </div>
+        </div>
+
+        <!-- Info Card: Gestión -->
+        <div class="info-card">
+            <h4>Acciones</h4>
+            <a href="{{ url_for('cliente.lienzos') }}" class="quick-nav-link">Mis Lienzos</a>
+            <a href="{{ url_for('cliente.direcciones') }}" class="quick-nav-link">Direcciones</a>
+            <a href="{{ url_for('cliente.ordenes') }}" class="quick-nav-link">Historial de Compras</a>
+            <a href="{{ url_for('cliente.nuevo_lienzo') }}" class="quick-nav-link">Crear Lienzo</a>
+        </div>
+
+        <!-- Correspondence Card -->
+        {% if newsletters %}
+        <div class="info-card">
+            <h4>Mensajes</h4>
+            {% for news in newsletters %}
+            <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <div style="width: 24px; height: 24px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">
+                        {{ news.artista.nombre[0]|upper }}
+                    </div>
+                    <span style="font-weight: 700; font-size: 14px;">{{ news.artista.nombre }}</span>
+                </div>
+                <div style="font-size: 14px; font-weight: 700;">{{ news.asunto }}</div>
+                <div style="font-size: 12px; color: #767676;">{{ news.contenido|truncate_words(8) }}</div>
+            </div>
+            {% endfor %}
+            <a href="{{ url_for('cliente.newsletters') }}" style="font-weight: 700; color: #e60023; text-decoration: none; font-size: 14px;">Ver bandeja de entrada</a>
+        </div>
+        {% endif %}
+
+        <!-- THE PINS (Favorites) -->
+        {% if obras_favoritas %}
+            {% for obra in obras_favoritas %}
+            <div class="pin-card">
+                <div class="pin-image-wrapper">
+                    <a href="{{ url_for('public.obra', obra_id=obra.id_obra) }}">
+                        {% if obra.imagen %}
+                            <img src="{{ obra.imagen }}" class="pin-image" alt="{{ obra.titulo }}">
+                        {% else %}
+                            <div style="height: 200px; display: flex; align-items: center; justify-content: center; color: #ccc;">
+                                <i class="fas fa-image fa-3x"></i>
+                            </div>
+                        {% endif %}
+                    </a>
+                    <div class="pin-actions">
+                        <button class="btn-save">Guardado</button>
+                        <div class="pin-footer-actions">
+                            <a href="#" class="btn-icon-pin"><i class="fas fa-external-link-alt"></i></a>
+                            <a href="#" class="btn-icon-pin"><i class="fas fa-ellipsis-h"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pin-info">
+                    <div class="pin-title">{{ obra.titulo }}</div>
+                    <div class="pin-user">
+                        {% if obra.artista.foto_perfil %}
+                            <img src="{{ obra.artista.foto_perfil }}" class="user-avatar-small">
+                        {% else %}
+                            <div class="user-avatar-small" style="background-color: var(--turq); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px;">
+                                {{ obra.artista.nombre[0]|upper }}
+                            </div>
+                        {% endif %}
+                        <span class="user-name-small">{{ obra.artista.nombre }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Floating Action Button -->
+<div style="position: fixed; bottom: 32px; right: 32px; z-index: 1000;">
+    <button style="width: 56px; height: 56px; border-radius: 50%; background: white; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <i class="fas fa-plus" style="font-size: 24px;"></i>
+    </button>
 </div>
 
 {% endblock %}
