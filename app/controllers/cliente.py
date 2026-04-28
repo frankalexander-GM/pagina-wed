@@ -27,24 +27,29 @@ def dashboard():
     usuario_service = service_factory.get_usuario_service()
     obra_service = service_factory.get_obra_service()
     
-    # Obtener datos del dashboard
-    stats = {
-        'artistas_siguiendo': usuario_service.get_siguiendo_count(current_user.id_usuario),
-        'obras_favoritas': obra_service.get_favoritos_count(current_user.id_usuario),
-        'lienzos_count': 0,  # TODO: Implementar cuando tengamos moodboards
-        'ordenes_count': 0   # TODO: Implementar cuando tengamos e-commerce
-    }
-    
-    # Obtener artistas que sigue
-    artistas_siguiendo = usuario_service.get_siguiendo(current_user.id_usuario, limit=6)
-    
-    # Obtener obras favoritas
-    obras_favoritas = obra_service.get_favoritos_usuario(current_user.id_usuario, limit=6)
-    
-    return render_template('cliente/dashboard.html',
-                         stats=stats,
-                         artistas_siguiendo=artistas_siguiendo,
-                         obras_favoritas=obras_favoritas)
+    try:
+        # Obtener datos del dashboard
+        stats = {
+            'siguiendo_count': usuario_service.get_siguiendo_count(current_user.id_usuario),
+            'favoritos_count': obra_service.get_favoritos_count(current_user.id_usuario),
+            'lienzos_count': 0,  # TODO: Implementar cuando tengamos moodboards
+            'ordenes_count': 0   # TODO: Implementar cuando tengamos e-commerce
+        }
+        
+        # Obtener artistas que sigue
+        artistas_siguiendo = usuario_service.get_siguiendo(current_user.id_usuario, limit=6)
+        
+        # Obtener obras favoritas
+        obras_favoritas = obra_service.get_favoritos_usuario(current_user.id_usuario, limit=6)
+        
+        return render_template('cliente/dashboard.html',
+                             stats=stats,
+                             artistas_siguiendo=artistas_siguiendo,
+                             obras_favoritas=obras_favoritas)
+    except Exception as e:
+        print(f"Error en dashboard de cliente: {e}")
+        flash('Error al cargar el dashboard', 'error')
+        return redirect(url_for('public.home'))
 
 @cliente_bp.route('/perfil')
 @login_required
@@ -122,7 +127,16 @@ def lienzos():
     """
     Moodboards del cliente
     """
-    return render_template('cliente/lienzos.html')
+    try:
+        service_factory = get_service_factory()
+        # TODO: Obtener lienzos del usuario cuando el servicio esté listo
+        # Por ahora mostramos lista vacía
+        lienzos = []
+        return render_template('cliente/lienzos.html', lienzos=lienzos)
+    except Exception as e:
+        print(f"Error al cargar lienzos: {e}")
+        flash('Error al cargar tus lienzos', 'error')
+        return redirect(url_for('cliente.dashboard'))
 
 @cliente_bp.route('/lienzos/nuevo', methods=['GET', 'POST'])
 @login_required
@@ -151,7 +165,14 @@ def direcciones():
     """
     Direcciones de envío del cliente
     """
-    return render_template('cliente/direcciones.html')
+    try:
+        # TODO: Obtener direcciones reales cuando el servicio esté completamente listo
+        direcciones = []
+        return render_template('cliente/direcciones.html', direcciones=direcciones)
+    except Exception as e:
+        print(f"Error al cargar direcciones: {e}")
+        flash('Error al cargar tus direcciones', 'error')
+        return redirect(url_for('cliente.dashboard'))
 
 @cliente_bp.route('/direcciones/nueva', methods=['GET', 'POST'])
 @login_required
@@ -197,7 +218,15 @@ def ordenes():
     """
     Historial de órdenes del cliente
     """
-    return render_template('cliente/ordenes.html')
+    try:
+        service_factory = get_service_factory()
+        # TODO: Obtener órdenes reales cuando el servicio esté listo
+        ordenes = []
+        return render_template('cliente/ordenes.html', ordenes=ordenes)
+    except Exception as e:
+        print(f"Error al cargar órdenes: {e}")
+        flash('Error al cargar tus órdenes', 'error')
+        return redirect(url_for('cliente.dashboard'))
 
 @cliente_bp.route('/carrito')
 @login_required
@@ -297,9 +326,20 @@ def procesar_checkout():
 @requiere_cliente
 def newsletters():
     """
-    Newsletters recibidos
+    Newsletters recibidos (bandeja de entrada)
     """
-    return render_template('cliente/newsletters.html')
+    try:
+        service_factory = get_service_factory()
+        newsletter_service = service_factory.get_newsletter_service()
+        
+        # Obtener newsletters del usuario
+        newsletters = newsletter_service.get_by_usuario(current_user.id_usuario)
+        
+        return render_template('cliente/newsletters.html', newsletters=newsletters)
+    except Exception as e:
+        print(f"Error al cargar newsletters: {e}")
+        flash('Error al cargar tus newsletters', 'error')
+        return redirect(url_for('cliente.dashboard'))
 
 # API endpoints
 @cliente_bp.route('/api/seguir-artista', methods=['POST'])

@@ -38,13 +38,22 @@ class BaseRepository:
             self.session.flush()  # Obtener ID sin hacer commit
             
             if registrar_auditoria:
-                Auditoria.registrar_cambio(
-                    tabla=self.tabla_nombre,
-                    id_registro=getattr(instance, 'id_' + self.tabla_nombre.rstrip('s'), None),
-                    accion='INSERT',
-                    usuario_id=usuario_id,
-                    descripcion=f"Creación de {self.model_class.__name__}"
-                )
+                try:
+                    id_field = 'id_' + self.tabla_nombre.rstrip('s')
+                    id_registro = getattr(instance, id_field, None)
+                    
+                    # Solo registrar auditoría si tenemos ID válido
+                    if id_registro is not None:
+                        Auditoria.registrar_cambio(
+                            tabla=self.tabla_nombre,
+                            id_registro=id_registro,
+                            accion='INSERT',
+                            usuario_id=usuario_id,
+                            descripcion=f"Creación de {self.model_class.__name__}"
+                        )
+                except Exception as audit_error:
+                    # Si la auditoría falla, loguear pero no fallar la creación
+                    print(f"Advertencia: Error al registrar auditoría: {audit_error}")
             
             return instance
         except SQLAlchemyError as e:
