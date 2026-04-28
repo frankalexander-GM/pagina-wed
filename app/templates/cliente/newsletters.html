@@ -1,23 +1,50 @@
 {% extends "base.html" %}
 
-{% block title %}Mis Newsletters - WindMills Art{% endblock %}
+{% block title %}Mi Bandeja de Entrada - Newsletters{% endblock %}
 
 {% block content %}
-<div class="container my-5 text-center py-5">
-    <i class="fas fa-envelope-open-text fa-4x mb-4 text-muted"></i>
-    <h2>Suscripciones y Newsletters</h2>
-    <p class="lead text-muted">Administra los correos y boletines de tus artistas favoritos.</p>
-    
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-            <div class="alert alert-warning border-0 shadow-sm">
-                <i class="fas fa-tools me-2"></i> Esta sección está en construcción. Pronto podrás gestionar tus suscripciones desde aquí.
-            </div>
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Bandeja de Entrada</h2>
+            <p class="text-muted">Newsletters y comunicaciones de artistas que sigues</p>
         </div>
+        <a href="{{ url_for('cliente.artistas_siguiendo') }}" class="btn btn-outline-primary">
+            <i class="fas fa-heart"></i> Gestionar Suscripciones
+        </a>
     </div>
-    
-    <div class="mt-4">
-        <a href="{{ url_for('cliente.dashboard') }}" class="btn btn-primary">Volver al Panel</a>
-    </div>
+
+    {% if newsletters %}
+        <div class="list-group">
+            {% for newsletter in newsletters %}
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">{{ newsletter.titulo }}</h5>
+                            <p class="mb-1 text-muted">De: <strong>{{ newsletter.artista.nombre }}</strong></p>
+                            <p class="mb-1">{{ newsletter.contenido[:150] }}...</p>
+                        </div>
+                        <div class="text-end ms-3">
+                            <small class="text-muted d-block">
+                                <i class="far fa-calendar"></i> {{ newsletter.fecha_envio.strftime('%d/%m/%Y') if newsletter.fecha_envio else 'Sin fecha' }}
+                            </small>
+                            {% if not newsletter.leido %}
+                                <span class="badge bg-primary">Nuevo</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-envelope-open-text fa-3x mb-3 text-muted"></i>
+            <h5>Tu bandeja de entrada está vacía</h5>
+            <p class="text-muted">Sigue a tus artistas favoritos para recibir sus newsletters y mantenerte actualizado sobre sus proyectos.</p>
+            <a href="{{ url_for('public.artistas') }}" class="btn btn-primary mt-3">
+                <i class="fas fa-search"></i> Descubrir Artistas
+            </a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
