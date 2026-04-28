@@ -1,373 +1,518 @@
 {% extends "base.html" %}
+{% block title %}Ágora Art — El refugio del creador{% endblock %}
 
-{% block title %}WindMills Art - El viento que impulsa tu arte{% endblock %}
+{% block head %}
+<style>
+/* === HERO === */
+.hero {
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(140deg, #FFF8F0 0%, #D0EEF3 40%, #EDE5F5 100%);
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 5% 80%, rgba(27,143,160,0.18) 0%, transparent 48%),
+        radial-gradient(circle at 92% 10%, rgba(138,110,168,0.14) 0%, transparent 48%),
+        radial-gradient(circle at 50% 100%, rgba(240,120,104,0.07) 0%, transparent 40%);
+    pointer-events: none;
+}
+.hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+}
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--turq);
+    color: white;
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 1.1rem;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.75rem;
+    box-shadow: 0 4px 16px rgba(27,143,160,0.45);
+}
+.hero h1 {
+    font-size: clamp(2.5rem, 5vw, 3.75rem);
+    font-weight: 700;
+    line-height: 1.12;
+    margin-bottom: 1.25rem;
+    color: var(--carbon);
+}
+.hero h1 em {
+    font-style: normal;
+    color: var(--turq-dark);
+    display: block;
+}
+.hero-desc {
+    font-family: 'Lora', serif;
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+    max-width: 520px;
+}
+.hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3.5rem;
+}
+.hero-social-proof {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.hero-avatars {
+    display: flex;
+}
+.hero-avatars .mini-av {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--turq), var(--malva));
+    border: 2px solid white;
+    margin-left: -8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.7rem; font-weight: 700; color: white;
+}
+.hero-avatars .mini-av:first-child { margin-left: 0; }
+.hero-social-proof p {
+    font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.4;
+}
+.hero-social-proof strong { color: var(--text-primary); font-weight: 600; }
+
+/* Hero decorative grid */
+.hero-grid {
+    position: absolute;
+    right: -20px; top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    z-index: 1;
+    width: 420px;
+    opacity: 0.92;
+}
+.hero-grid-item {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    background: var(--salvia-light);
+    aspect-ratio: 3/4;
+    position: relative;
+}
+.hero-grid-item:first-child { margin-top: 40px; }
+.hero-grid-item img { width:100%;height:100%;object-fit:cover; }
+.hero-grid-item .hg-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(26,26,46,0.75));
+    padding: 1rem 0.85rem 0.75rem;
+    color: white;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* === STATS === */
+.stats-bar {
+    background: var(--blanco);
+    border-top: 1px solid var(--borde-suave);
+    border-bottom: 1px solid var(--borde-suave);
+    padding: 2rem 0;
+}
+.stats-bar-inner {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+}
+.stat-block { text-align: center; }
+.stat-block .num {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--turq-dark);
+    display: block;
+}
+.stat-block .lbl {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* === HOW IT WORKS === */
+.how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+.how-card {
+    background: var(--blanco);
+    border: 1px solid var(--borde-suave);
+    border-radius: var(--radius-lg);
+    padding: 2.25rem 2rem;
+    text-align: center;
+    transition: var(--transition);
+}
+.how-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+.how-icon {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin: 0 auto 1.5rem;
+}
+.how-icon.salvia  { background: var(--turq-light); color: var(--turq-dark); }
+.how-icon.arcilla { background: var(--malva-light); color: var(--malva-dark); }
+.how-card h4 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+.how-card p  { font-family: 'Lora', serif; font-style: italic; color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+
+/* === OBRAS GRID === */
+.obras-masonry {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* === CATEGORIAS === */
+.cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+.cat-chip {
+    background: var(--blanco);
+    border: 1.5px solid var(--borde);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: block;
+    color: var(--text-primary);
+}
+.cat-chip:hover {
+    background: var(--turq);
+    border-color: var(--turq);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(27,143,160,0.4);
+    color: white;
+    text-decoration: none;
+}
+.cat-chip-icon { font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--turq-dark); }
+.cat-chip-name { font-family: 'Josefin Sans', sans-serif; font-size: 0.9rem; font-weight: 600; display: block; }
+.cat-chip-count { font-size: 0.78rem; color: var(--text-secondary); }
+
+/* === ARTISTAS CARDS === */
+.artistas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+.artista-card {
+    background: var(--blanco);
+    border: 1px solid var(--borde-suave);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    color: var(--text-primary);
+}
+.artista-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-5px); text-decoration: none; color: var(--text-primary); }
+.artista-av {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--turq), var(--malva));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.5rem; font-weight: 700; color: white;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 18px rgba(27,143,160,0.35);
+}
+.artista-name { font-family: 'Josefin Sans', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+.artista-handle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem; }
+.artista-stats { display: flex; justify-content: center; gap: 1.5rem; }
+.artista-stats span { font-size: 0.78rem; color: var(--text-secondary); }
+.artista-stats strong { display: block; font-family: 'Josefin Sans', sans-serif; font-size: 1rem; color: var(--malva-dark); }
+
+/* === CTA FINAL === */
+.cta-section {
+    background: linear-gradient(135deg, #2D2535 0%, #3D3050 60%, #1B4050 100%);
+    border-radius: var(--radius-lg);
+    padding: 5rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin: 0 2rem;
+}
+.cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 15% 60%, rgba(27,143,160,0.35) 0%, transparent 50%),
+                radial-gradient(circle at 85% 40%, rgba(138,110,168,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 50% 5%, rgba(240,120,104,0.12) 0%, transparent 40%);
+    pointer-events: none;
+}
+.cta-section h2 { color: white; font-size: 2.25rem; margin-bottom: 1rem; position: relative; }
+.cta-section p { font-family: 'Lora', serif; font-style: italic; color: rgba(255,255,255,0.65); font-size: 1.05rem; margin-bottom: 2.5rem; position: relative; }
+.cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+.btn-cta-blanco {
+    background: white; color: var(--carbon);
+    border-radius: var(--radius-pill);
+    padding: 0.9rem 2.25rem;
+    font-family: 'Josefin Sans', sans-serif; font-weight: 700;
+    font-size: 0.875rem; letter-spacing: 0.05em; text-transform: uppercase;
+    text-decoration: none; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-cta-blanco:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.2); text-decoration: none; color: var(--carbon); }
+.btn-cta-arcilla {
+    background: var(--arcilla); color: white;
+    border-radius: var(--radius-pill);
+    padding: 0.9rem 2.25rem;
+    font-family: 'Josefin Sans', sans-serif; font-weight: 700;
+    font-size: 0.875rem; letter-spacing: 0.05em; text-transform: uppercase;
+    text-decoration: none; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-cta-arcilla:hover { background: var(--arcilla-dark); transform: translateY(-2px); text-decoration: none; color: white; }
+
+@media (max-width: 900px) {
+    .hero { flex-direction: column; min-height: auto; padding: 4rem 0 2rem; }
+    .hero-grid { display: none; }
+    .how-grid, .obras-masonry { grid-template-columns: 1fr; }
+    .stats-bar-inner { gap: 2rem; }
+    .cta-section { margin: 0; border-radius: 0; }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Hero Section con Molino Holandés Animado -->
-<section class="section hero-section" style="background: linear-gradient(135deg, var(--azul-cielo), var(--azul-cielo-claro)); color: white; text-align: center; padding: 6rem 0; position: relative; overflow: hidden;">
-    <!-- Fondo animado de tulipanes -->
-    <div class="tulip-field" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
-        <div class="tulip" style="position: absolute; width: 15px; height: 40px; background: linear-gradient(to top, #FFB6C1, #FF69B4); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite;">
-            <div class="tulip-petals" style="position: absolute; top: -20px; left: -8px;">
-                <div class="petal" style="position: absolute; width: 12px; height: 8px; background: #FFB6C1; border-radius: 50% 0; transform-origin: bottom center; animation: petal-wave 2s ease-in-out infinite;"></div>
-                <div class="petal" style="position: absolute; top: -20px; left: 0px; width: 12px; height: 8px; background: #FF69B4; border-radius: 0 50%; transform-origin: bottom center; animation: petal-wave 2s ease-in-out infinite 0.3s;"></div>
-                <div class="petal" style="position: absolute; top: -20px; left: 8px; width: 12px; height: 8px; background: #FFB6C1; border-radius: 50% 0 0 50%; transform-origin: bottom center; animation: petal-wave 2s ease-in-out infinite 0.6s;"></div>
-            </div>
-        </div>
-        
-        <!-- Múltiples tulipanes -->
-        <div class="tulip" style="position: absolute; bottom: 0; left: 15%; width: 12px; height: 35px; background: linear-gradient(to top, #FFD700, #FFA500); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 0.5s;"></div>
-        <div class="tulip" style="position: absolute; bottom: 0; left: 25%; width: 10px; height: 30px; background: linear-gradient(to top, #FF6B6B, #FF1744); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 1s;"></div>
-        <div class="tulip" style="position: absolute; bottom: 0; left: 35%; width: 13px; height: 38px; background: linear-gradient(to top, #4ECDC4, #8B4513); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 1.5s;"></div>
-        <div class="tulip" style="position: absolute; bottom: 0; left: 45%; width: 11px; height: 33px; background: linear-gradient(to top, #87CEEB, #4682B4); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 2s;"></div>
-        <div class="tulip" style="position: absolute; bottom: 0; left: 55%; width: 14px; height: 42px; background: linear-gradient(to top, #98FB98, #22C55E); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 2.5s;"></div>
-        <div class="tulip" style="position: absolute; bottom: 0; left: 65%; width: 9px; height: 28px; background: linear-gradient(to top, #F7DC6F, #F59E0B); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 3s;"></div>
-        <div class="tulip" style="position: absolute; bottom: 0; left: 75%; width: 16px; height: 45px; background: linear-gradient(to top, #E91E63, #C2185B); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 3.5s;"></div>
-        <div class="tulip" style="position: absolute; bottom: 0; left: 85%; width: 12px; height: 36px; background: linear-gradient(to top, #9C27B0, #6A1B9A); border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite 4s;"></div>
-    </div>
-    
-    <!-- Molino Holandés Tradicional Animado -->
-    <div class="windmill-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
-        <div class="windmill" style="width: 180px; height: 180px; position: relative; animation: holandes-windmill 10s ease-in-out infinite;">
-            <!-- Base circular del molino -->
-            <div class="windmill-base" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 50px; background: linear-gradient(135deg, #8B4513, #654321); border: 3px solid #654321; border-radius: 50%;"></div>
-            
-            <!-- Cuerpo del molino con textura -->
-            <div class="windmill-body" style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; background: linear-gradient(to bottom, #D2691E, #8B4513); border: 2px solid #654321;"></div>
-            
-            <!-- Techo cónico -->
-            <div class="windmill-roof" style="position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 60px solid #654321; border-radius: 50% 50% 0 0;"></div>
-            
-            <!-- Ventanas del molino -->
-            <div class="windmill-windows" style="position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); width: 40px; height: 30px; background: linear-gradient(to bottom, #4A4A4A, #2C1810); border: 2px solid #2C1810; border-radius: 4px;">
-                <div class="window" style="position: absolute; top: 5px; left: 5px; width: 10px; height: 15px; background: linear-gradient(135deg, #87CEEB, #B0E0E6); border-radius: 2px;"></div>
-                <div class="window" style="position: absolute; top: 5px; right: 5px; width: 10px; height: 15px; background: linear-gradient(135deg, #87CEEB, #B0E0E6); border-radius: 2px;"></div>
-            </div>
-            
-            <!-- Aspas holandesas tradicionales -->
-            <div class="windmill-blades" style="position: absolute; top: 50px; left: 50%; transform: translateX(-50%); width: 140px; height: 140px; animation: holandes-blades 4s ease-in-out infinite;">
-                <!-- Aspas superiores con bordes decorativos -->
-                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(0deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
-                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(72deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
-                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(144deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
-                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(216deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
-                <div class="blade" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(288deg); width: 65px; height: 12px; background: linear-gradient(to right, #FFFFFF, #F5F5DC); transform-origin: right center; border-radius: 2px 6px 0 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
-                
-                <!-- Centro del molino -->
-                <div class="windmill-center" style="position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%); width: 20px; height: 20px; background: linear-gradient(135deg, #654321, #8B4513); border-radius: 50%; border: 2px solid #F5F5DC;"></div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container" style="position: relative; z-index: 20;">
-        <div class="mb-4">
-            <div class="logo" style="color: white; font-size: 3rem; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-                <div class="logo-icon" style="width: 60px; height: 60px; font-size: 30px; display: inline-block; animation: pulse 2s ease-in-out infinite;">
-                    <i class="fas fa-fan"></i>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <div class="container" style="width:100%;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:3rem;">
+            <div class="hero-inner fade-up">
+                <div class="hero-tag">
+                    <i class="fas fa-seedling"></i> El refugio del creador
                 </div>
-                WindMills Art
-            </div>
-        </div>
-        
-        <h1 style="font-size: 3.5rem; font-weight: 700; margin-bottom: 1.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-            El viento que impulsa tu arte
-        </h1>
-        
-        <p style="font-size: 1.5rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
-            Donde el talento holandés encuentra su viento. 
-            Descubre obras inspiradoras, conecta con artistas talentosos y transforma tu creatividad en oportunidad.
-        </p>
-        
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            {% if not current_user.is_authenticated %}
-                <a href="{{ url_for('auth.register') }}" class="btn" style="background: white; color: var(--primary); font-size: 1.1rem; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(0,0,0,0.2); transition: all 0.3s ease;">
-                    <i class="fas fa-rocket"></i>
-                    Comienza Ahora
-                </a>
-                <a href="{{ url_for('public.explorar') }}" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem; border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s ease;">
-                    <i class="fas fa-compass"></i>
-                    Explorar Obras
-                </a>
-            {% else %}
-                <a href="{{ url_for('public.explorar') }}" class="btn" style="background: white; color: var(--primary); font-size: 1.1rem; padding: 1rem 2rem;">
-                    <i class="fas fa-compass"></i>
-                    Explorar Obras
-                </a>
-                {% if current_user.is_artista() %}
-                    <a href="{{ url_for('artista.dashboard') }}" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                        <i class="fas fa-plus"></i>
-                        Nueva Obra
+                <h1>
+                    Arte original,
+                    <em>sin intermediarios.</em>
+                </h1>
+                <p class="hero-desc">
+                    Ágora Art es el espacio donde los artistas exhiben su obra, construyen comunidad y venden sus creaciones. Sin algoritmos. Sin ruido. Solo arte.
+                </p>
+                <div class="hero-ctas">
+                    <a href="{{ url_for('public.explorar') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-compass"></i> Explorar obras
                     </a>
-                {% endif %}
-            {% endif %}
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">
+                        Únete gratis
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="hero-social-proof">
+                    <div class="hero-avatars">
+                        <div class="mini-av">M</div>
+                        <div class="mini-av">C</div>
+                        <div class="mini-av">L</div>
+                        <div class="mini-av" style="background:var(--arcilla);">+</div>
+                    </div>
+                    <p><strong>Artistas independientes</strong><br>ya comparten su obra aquí</p>
+                </div>
+            </div>
+
+            <!-- Collage decorativo -->
+            <div class="hero-grid" aria-hidden="true">
+                <div class="hero-grid-item">
+                    <div style="width:100%;height:100%;background:linear-gradient(160deg,#EAF0E9,#C5D4C4);"></div>
+                    <div class="hg-label">Pintura · Óleo</div>
+                </div>
+                <div class="hero-grid-item">
+                    <div style="width:100%;height:100%;background:linear-gradient(160deg,#F5EDE3,#D4B89A);"></div>
+                    <div class="hg-label">Fotografía</div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- Sección de características -->
+<!-- ===== STATS ===== -->
+<div class="stats-bar">
+    <div class="stats-bar-inner">
+        <div class="stat-block">
+            <span class="num">{{ obras_recientes|length if obras_recientes else '0' }}+</span>
+            <span class="lbl">Obras publicadas</span>
+        </div>
+        <div class="stat-block">
+            <span class="num">{{ artistas_destacados|length if artistas_destacados else '0' }}+</span>
+            <span class="lbl">Artistas activos</span>
+        </div>
+        <div class="stat-block">
+            <span class="num">{{ categorias_populares|length if categorias_populares else '0' }}</span>
+            <span class="lbl">Categorías</span>
+        </div>
+        <div class="stat-block">
+            <span class="num">100%</span>
+            <span class="lbl">Libres de algoritmos</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== CÓMO FUNCIONA ===== -->
 <section class="section">
     <div class="container">
-        <div class="row" style="gap: 2rem;">
-            <div class="col-4 card" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;">
-                    <i class="fas fa-palette"></i>
-                </div>
-                <h3>Para Artistas</h3>
-                <p style="color: var(--text-secondary);">
-                    Exhibe tu obra, vende tus productos y conecta con coleccionistas de todo el mundo. 
-                    Deja que el viento impulse tu carrera.
-                </p>
-                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
-                    <i class="fas fa-arrow-right"></i>
-                    Únete como Artista
-                </a>
+        <p class="section-title">Un espacio para cada rol</p>
+        <p class="section-subtitle">Sin complejidad. Solo lo que necesitas para crear, coleccionar e inspirarte.</p>
+        <div class="how-grid">
+            <div class="how-card">
+                <div class="how-icon salvia"><i class="fas fa-palette"></i></div>
+                <h4>Para artistas</h4>
+                <p>Publica tu portafolio, escribe en tu blog, abre tu tienda. Todo en un solo lugar, sin depender de redes sociales.</p>
             </div>
-            
-            <div class="col-4 card" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <h3>Para Clientes</h3>
-                <p style="color: var(--text-secondary);">
-                    Descubre artistas únicos, crea moodboards y compra arte original directamente. 
-                    Encuentra piezas que te inspiren.
-                </p>
-                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
-                    <i class="fas fa-arrow-right"></i>
-                    Únete como Cliente
-                </a>
+            <div class="how-card">
+                <div class="how-icon arcilla"><i class="fas fa-heart"></i></div>
+                <h4>Para coleccionistas</h4>
+                <p>Sigue artistas, guarda tus favoritos, crea moodboards y compra arte original directamente a su creador.</p>
             </div>
-            
-            <div class="col-4 card" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;">
-                    <i class="fas fa-compass"></i>
-                </div>
-                <h3>Explorar</h3>
-                <p style="color: var(--text-secondary);">
-                    Navega por nuestra galería, descubre nuevos artistas y encuentra obras que te inspiren. 
-                    El arte está a un clic de distancia.
-                </p>
-                <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">
-                    <i class="fas fa-arrow-right"></i>
-                    Explorar Ahora
-                </a>
+            <div class="how-card">
+                <div class="how-icon salvia"><i class="fas fa-users"></i></div>
+                <h4>Comunidad real</h4>
+                <p>Recibe newsletters de los artistas que amas. Construye tu gusto sin el ruido de los trending topics.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Filtros estilo Behance -->
+<!-- ===== OBRAS DESTACADAS ===== -->
 {% if obras_recientes %}
-<section class="filters-section">
+<section class="section" style="background:var(--borde-suave);padding:5rem 0;">
     <div class="container">
-        <div class="filters-container">
-            <div class="filter-group">
-                <span class="filter-label">Tipo:</span>
-                <select class="filter-select">
-                    <option>Todos</option>
-                    <option>Pintura</option>
-                    <option>Escultura</option>
-                    <option>Fotografía</option>
-                    <option>Digital</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <span class="filter-label">Categoría:</span>
-                <select class="filter-select">
-                    <option>Todas</option>
-                    {% for categoria, count in categorias_populares[:5] %}
-                    <option>{{ categoria.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <div class="filter-tags">
-                <span class="tag active">Destacado</span>
-                <span class="tag">Reciente</span>
-                <span class="tag">Popular</span>
-                <span class="tag">Emergente</span>
-            </div>
-        </div>
-    </div>
-</section>
+        <p class="section-title">Obras recientes</p>
+        <p class="section-subtitle">Piezas originales de artistas de nuestra comunidad</p>
 
-<!-- Grid de obras estilo Behance -->
-<section class="section">
-    <div class="container">
-        <h2 class="section-title">Obras Destacadas</h2>
-        
         <div class="projects-grid">
-            {% for obra in obras_recientes %}
-            <div class="project-card" onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}'">
-                <div class="project-image" style="background: url('{{ obra.imagen or 'https://picsum.photos/seed/windmills{{ obra.id_obra }}/400/300.jpg' }}') center/cover;">
-                    <!-- Overlay para efectos hover -->
-                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);"></div>
+            {% for obra in obras_recientes[:6] %}
+            <div class="project-card fade-up"
+                 onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}'"
+                 style="animation-delay:{{ loop.index0 * 0.08 }}s">
+                <div class="project-image" style="height:240px;position:relative;">
+                    {% if obra.imagen %}
+                    <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" style="width:100%;height:100%;object-fit:cover;">
+                    {% else %}
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--salvia-light),var(--arcilla-light));display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-image" style="font-size:2rem;color:var(--borde);"></i>
+                    </div>
+                    {% endif %}
+                    {% if obra.categoria %}
+                    <span class="badge primary" style="position:absolute;top:12px;left:12px;">{{ obra.categoria.nombre }}</span>
+                    {% endif %}
                 </div>
-                
                 <div class="project-content">
-                    <h3 class="project-title">{{ obra.titulo }}</h3>
-                    
+                    <p class="project-title">{{ obra.titulo }}</p>
                     <div class="project-author">
-                        <div class="author-avatar">
-                            {{ obra.artista.nombre[0]|upper }}
-                        </div>
+                        <div class="author-avatar">{{ obra.artista.nombre[0]|upper }}</div>
                         <span class="author-name">{{ obra.artista.nombre }}</span>
                     </div>
-                    
-                    {% if obra.descripcion %}
-                    <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.4; margin-bottom: 1rem;">
-                        {{ obra.descripcion[:80] }}{% if obra.descripcion|length > 80 %}...{% endif %}
-                    </p>
+                    {% if obra.precio %}
+                    <p style="font-family:'Josefin Sans',sans-serif;font-weight:700;color:var(--salvia-dark);font-size:0.95rem;margin:0;">${{ obra.precio }}</p>
                     {% endif %}
-                    
-                    <div class="project-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-heart"></i>
-                            <span>0</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-eye"></i>
-                            <span>0</span>
-                        </div>
-                        {% if obra.categoria %}
-                        <div class="stat-item">
-                            <span class="badge secondary">{{ obra.categoria.nombre }}</span>
-                        </div>
-                        {% endif %}
-                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        
+
         <div class="text-center mt-4">
-            <a href="{{ url_for('public.explorar') }}" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                <i class="fas fa-th"></i>
-                Ver Más Obras
-            </a>
+            <a href="{{ url_for('public.explorar') }}" class="btn btn-primary btn-lg">Ver todas las obras</a>
         </div>
     </div>
 </section>
 {% endif %}
 
-<!-- Categorías Populares -->
+<!-- ===== CATEGORÍAS ===== -->
 {% if categorias_populares %}
-<section class="section" style="background: var(--gris-claro);">
-    <div class="container">
-        <h2 class="section-title">Categorías Populares</h2>
-        
-        <div class="row" style="gap: 1.5rem;">
-            {% for categoria, count in categorias_populares[:6] %}
-            <div class="col-4 card" style="text-align: center; padding: 2rem; cursor: pointer;" 
-                 onclick="window.location.href='{{ url_for('public.obras_categoria', categoria_id=categoria.id_categoria) }}'">
-                <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">
-                    <i class="fas fa-folder"></i>
-                </div>
-                <h4>{{ categoria.nombre }}</h4>
-                <p style="color: var(--text-secondary); font-size: 1.1rem;">
-                    {{ count }} obras
-                </p>
-                <div style="color: var(--primary); font-weight: 500;">
-                    Explorar <i class="fas fa-arrow-right"></i>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div class="text-center mt-4">
-            <a href="{{ url_for('public.categorias') }}" class="btn btn-secondary">
-                <i class="fas fa-th-large"></i>
-                Ver Todas las Categorías
-            </a>
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- Artistas Destacados -->
-{% if artistas_destacados %}
 <section class="section">
     <div class="container">
-        <h2 class="section-title">Artistas Destacados</h2>
-        
-        <div class="projects-grid">
-            {% for artista in artistas_destacados %}
-            <div class="card" style="text-align: center; padding: 2rem; cursor: pointer;" 
-                 onclick="window.location.href='{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}'">
-                <div class="avatar" style="width: 80px; height: 80px; margin: 0 auto 1rem; font-size: 2rem;">
-                    {{ artista.nombre[0]|upper }}
-                </div>
-                
-                <h4>{{ artista.nombre }}</h4>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    @{{ artista.username }}
-                </p>
-                
-                <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--primary);">
-                            {{ artista.get_obras_count() or 0 }}
-                        </div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                            Obras
-                        </div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--secondary);">
-                            {{ artista.get_seguidores_count() or 0 }}
-                        </div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                            Seguidores
-                        </div>
-                    </div>
-                </div>
-                
-                {% if artista.biografia %}
-                <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.4;">
-                    {{ artista.biografia[:100] }}{% if artista.biografia|length > 100 %}...{% endif %}
-                </p>
-                {% endif %}
-                
-                <div style="margin-top: 1rem;">
-                    <span class="badge primary">Artista</span>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div class="text-center mt-4">
-            <a href="{{ url_for('public.artistas') }}" class="btn btn-primary">
-                <i class="fas fa-users"></i>
-                Ver Todos los Artistas
+        <p class="section-title">Explora por disciplina</p>
+        <p class="section-subtitle">Encuentra arte en la categoría que más te inspire</p>
+        <div class="cat-grid">
+            {% for categoria, count in categorias_populares[:8] %}
+            <a href="{{ url_for('public.obras_categoria', categoria_id=categoria.id_categoria) }}" class="cat-chip">
+                <div class="cat-chip-icon"><i class="fas fa-folder-open"></i></div>
+                <span class="cat-chip-name">{{ categoria.nombre }}</span>
+                <span class="cat-chip-count">{{ count }} obra{{ 's' if count != 1 }}</span>
             </a>
+            {% endfor %}
         </div>
     </div>
 </section>
 {% endif %}
 
-<!-- CTA Final -->
-<section class="section" style="background: linear-gradient(135deg, var(--verde-prado), var(--verde-prado-oscuro)); color: white; text-align: center;">
+<!-- ===== ARTISTAS ===== -->
+{% if artistas_destacados %}
+<section class="section" style="background:var(--malva-light);padding:5rem 0;">
     <div class="container">
-        <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">
-            ¿Listo para dejar que el viento impulse tu arte?
-        </h2>
-        
-        <p style="font-size: 1.25rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-            Únete a la comunidad de artistas y amantes del arte más inspiradora. 
-            Tu próximo gran proyecto está a un paso de distancia.
-        </p>
-        
-        <div style="display: flex; gap: 1rem; justify-content: center;">
-            <a href="{{ url_for('auth.register') }}" class="btn" style="background: white; color: var(--secondary); font-size: 1.1rem; padding: 1rem 2rem;">
-                <i class="fas fa-rocket"></i>
-                Comienza Ahora
+        <p class="section-title">Artistas de la comunidad</p>
+        <p class="section-subtitle">Creadores independientes que dan vida a este espacio</p>
+        <div class="artistas-grid">
+            {% for artista in artistas_destacados[:4] %}
+            <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" class="artista-card">
+                <div class="artista-av">{{ artista.nombre[0]|upper }}</div>
+                <p class="artista-name">{{ artista.nombre }}</p>
+                <p class="artista-handle">@{{ artista.username }}</p>
+                {% if artista.biografia %}
+                <p style="font-family:'Lora',serif;font-style:italic;font-size:0.82rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.6;">
+                    {{ artista.biografia[:80] }}{% if artista.biografia|length > 80 %}…{% endif %}
+                </p>
+                {% endif %}
+                <div class="artista-stats">
+                    <span><strong>{{ artista.get_obras_count() }}</strong>obras</span>
+                    <span><strong>{{ artista.get_seguidores_count() }}</strong>seguidores</span>
+                </div>
             </a>
-            <a href="{{ url_for('public.explorar') }}" class="btn btn-secondary" style="background: transparent; border: 2px solid white; color: white; font-size: 1.1rem; padding: 1rem 2rem;">
-                <i class="fas fa-compass"></i>
-                Explorar Obras
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('public.artistas') }}" class="btn btn-secondary">Ver todos los artistas</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ===== CTA FINAL ===== -->
+<section class="section">
+    <div class="cta-section">
+        <h2>Tu arte merece un refugio propio</h2>
+        <p>Sin algoritmos que decidan quién te ve. Sin ruido. Solo tu obra y las personas que genuinamente la valoran.</p>
+        <div class="cta-btns">
+            {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('auth.register') }}" class="btn-cta-blanco">
+                <i class="fas fa-seedling"></i> Crear mi espacio
+            </a>
+            {% endif %}
+            <a href="{{ url_for('public.explorar') }}" class="btn-cta-arcilla">
+                <i class="fas fa-compass"></i> Explorar obras
             </a>
         </div>
     </div>
 </section>
+
 {% endblock %}

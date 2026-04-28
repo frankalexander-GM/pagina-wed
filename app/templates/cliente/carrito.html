@@ -1,92 +1,376 @@
 {% extends "base.html" %}
 
-{% block title %}Mi Carrito - WindMills Art{% endblock %}
+{% block title %}Mi Carrito — Ágora Art{% endblock %}
+
+{% block head %}
+<style>
+.carrito-wrap {
+    max-width: 960px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+
+.carrito-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.carrito-header h1 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.carrito-count {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* LAYOUT */
+.carrito-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 3rem;
+    align-items: start;
+}
+
+/* LISTA DE ITEMS */
+.carrito-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.carrito-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto auto auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--borde-suave);
+    transition: var(--transition);
+}
+.carrito-item:first-child { border-top: 1px solid var(--borde-suave); }
+.carrito-item:hover { background: var(--salvia-light); margin: 0 -1.5rem; padding: 1.75rem 1.5rem; border-radius: var(--radius-md); border-color: transparent; }
+
+/* Imagen */
+.item-img {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    background: var(--borde-suave);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.item-img img { width: 100%; height: 100%; object-fit: cover; }
+.item-img i { color: var(--borde); font-size: 1.5rem; }
+
+/* Info */
+.item-info { min-width: 0; }
+.item-name {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.item-artist {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+
+/* Cantidad */
+.item-qty {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1.5px solid var(--borde);
+    border-radius: var(--radius-pill);
+    padding: 0.3rem 0.6rem;
+    background: var(--blanco);
+}
+.item-qty input {
+    width: 36px;
+    text-align: center;
+    border: none;
+    outline: none;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: transparent;
+    -moz-appearance: textfield;
+}
+.item-qty input::-webkit-outer-spin-button,
+.item-qty input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+/* Precio */
+.item-price {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Eliminar */
+.item-remove {
+    background: none;
+    border: none;
+    color: var(--borde);
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 50%;
+    transition: var(--transition);
+    line-height: 1;
+    font-size: 1rem;
+}
+.item-remove:hover { color: #C0453A; background: #FCF0EE; }
+
+/* ===== RESUMEN ===== */
+.carrito-resumen {
+    background: var(--blanco);
+    border: 1.5px solid var(--borde-suave);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    position: sticky;
+    top: 100px;
+}
+
+.resumen-title {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.resumen-linea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.85rem;
+}
+
+.resumen-linea.total {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-top: 1.5px solid var(--borde-suave);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-checkout {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    background: var(--salvia);
+    color: white;
+    border-radius: var(--radius-pill);
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: var(--transition);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+.btn-checkout:hover {
+    background: var(--salvia-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(123,140,122,0.35);
+    text-decoration: none;
+}
+
+.seguir-comprando {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+}
+.seguir-comprando:hover { color: var(--salvia-dark); }
+
+/* CARRITO VACÍO */
+.carrito-vacio {
+    max-width: 480px;
+    margin: 6rem auto;
+    text-align: center;
+    padding: 0 2rem;
+}
+.carrito-vacio-icon {
+    width: 88px;
+    height: 88px;
+    background: var(--salvia-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    font-size: 2rem;
+    color: var(--salvia-dark);
+}
+.carrito-vacio h2 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+.carrito-vacio p {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .carrito-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .carrito-item {
+        grid-template-columns: 64px 1fr auto;
+        grid-template-rows: auto auto;
+    }
+    .item-qty  { grid-column: 2; }
+    .item-price{ grid-column: 3; grid-row: 2; }
+    .item-remove { grid-column: 3; grid-row: 1; }
+    .carrito-resumen { position: static; }
+    .carrito-item:hover { margin: 0; padding: 1.75rem 0; border-radius: 0; border-color: var(--borde-suave); background: transparent; }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <h2 class="mb-4">Carrito de Compras</h2>
+{% if items %}
+<div class="carrito-wrap fade-up">
+    <div class="carrito-header">
+        <h1>Mi Carrito</h1>
+        <span class="carrito-count">{{ items|length }} {{ 'pieza' if items|length == 1 else 'piezas' }}</span>
+    </div>
 
-    {% if items %}
-        <div class="row">
-            <!-- Lista de items -->
-            <div class="col-md-8">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        {% for item in items %}
-                            <div class="row align-items-center mb-3 pb-3 border-bottom">
-                                <div class="col-md-2">
-                                    {% if item.producto.imagen %}
-                                        <img src="{{ item.producto.imagen }}" class="img-fluid rounded" alt="{{ item.producto.nombre }}">
-                                    {% else %}
-                                        <div class="bg-light text-center rounded py-3">
-                                            <i class="fas fa-box fa-2x text-muted"></i>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-4">
-                                    <h5 class="mb-1">{{ item.producto.nombre }}</h5>
-                                    <p class="text-muted small mb-0">Por {{ item.producto.artista.nombre }}</p>
-                                </div>
-                                <div class="col-md-3 text-center">
-                                    <form action="{{ url_for('cliente.actualizar_carrito', producto_id=item.producto.id_producto) }}" method="POST" class="d-flex align-items-center justify-content-center">
-                                        <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1" max="{{ item.producto.stock }}" class="form-control form-control-sm w-50 text-center me-2" onchange="this.form.submit()">
-                                    </form>
-                                </div>
-                                <div class="col-md-2 text-end">
-                                    <strong>${{ item.subtotal }}</strong>
-                                </div>
-                                <div class="col-md-1 text-end">
-                                    <form action="{{ url_for('cliente.remover_carrito', producto_id=item.producto.id_producto) }}" method="POST">
-                                        <button type="submit" class="btn btn-sm btn-link text-danger" title="Eliminar">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+    <div class="carrito-layout">
+
+        <!-- Lista de Items -->
+        <div class="carrito-items">
+            {% for item in items %}
+            <div class="carrito-item">
+                <!-- Imagen -->
+                <div class="item-img">
+                    {% if item.producto.imagen %}
+                        <img src="{{ item.producto.imagen }}" alt="{{ item.producto.nombre }}">
+                    {% else %}
+                        <i class="fas fa-image"></i>
+                    {% endif %}
                 </div>
+
+                <!-- Info -->
+                <div class="item-info">
+                    <p class="item-name">{{ item.producto.nombre }}</p>
+                    <span class="item-artist">por {{ item.producto.artista.nombre }}</span>
+                </div>
+
+                <!-- Cantidad -->
+                <form action="{{ url_for('cliente.actualizar_carrito', producto_id=item.producto.id_producto) }}"
+                      method="POST" id="form-qty-{{ item.producto.id_producto }}">
+                    <div class="item-qty">
+                        <span style="color:var(--text-secondary);font-size:0.75rem;">×</span>
+                        <input type="number"
+                               name="cantidad"
+                               value="{{ item.cantidad }}"
+                               min="1"
+                               max="{{ item.producto.stock }}"
+                               onchange="document.getElementById('form-qty-{{ item.producto.id_producto }}').submit()">
+                    </div>
+                </form>
+
+                <!-- Precio -->
+                <div class="item-price">${{ item.subtotal }}</div>
+
+                <!-- Eliminar -->
+                <form action="{{ url_for('cliente.remover_carrito', producto_id=item.producto.id_producto) }}" method="POST">
+                    <button type="submit" class="item-remove" title="Quitar del carrito">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Resumen -->
+        <aside class="carrito-resumen">
+            <p class="resumen-title">Resumen del Pedido</p>
+
+            <div class="resumen-linea">
+                <span>Subtotal</span>
+                <span>${{ total }}</span>
+            </div>
+            <div class="resumen-linea">
+                <span>Envío</span>
+                <span style="font-style:italic;font-family:'Lora',serif;font-size:0.82rem;">Calculado en el pago</span>
+            </div>
+            <div class="resumen-linea total">
+                <span>Total estimado</span>
+                <span>${{ total }}</span>
             </div>
 
-            <!-- Resumen y Checkout -->
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-white pt-3">
-                        <h5 class="mb-0">Resumen del Pedido</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal</span>
-                            <span>${{ total }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span>Envío</span>
-                            <span class="text-muted">Calculado en checkout</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-4">
-                            <strong>Total Estimado</strong>
-                            <strong>${{ total }}</strong>
-                        </div>
-                        <a href="{{ url_for('cliente.checkout') }}" class="btn btn-primary w-100 py-2">
-                            Proceder al Pago
-                        </a>
-                        <div class="text-center mt-3">
-                            <a href="{{ url_for('public.explorar') }}" class="text-muted small text-decoration-none">
-                                <i class="fas fa-arrow-left me-1"></i> Continuar comprando
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <a href="{{ url_for('cliente.checkout') }}" class="btn-checkout">
+                Proceder al pago
+            </a>
+            <a href="{{ url_for('public.explorar') }}" class="seguir-comprando">
+                ← Seguir explorando
+            </a>
+
+            <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--borde-suave);">
+                <p style="font-size:0.78rem;color:var(--text-secondary);text-align:center;line-height:1.6;font-family:'Lora',serif;font-style:italic;">
+                    Cada compra apoya directamente a un artista independiente.
+                </p>
             </div>
-        </div>
-    {% else %}
-        <div class="alert alert-info text-center py-5">
-            <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
-            <h5>Tu carrito está vacío</h5>
-            <p>Explora nuestras obras y productos para encontrar piezas únicas.</p>
-            <a href="{{ url_for('public.explorar') }}" class="btn btn-primary mt-2">Explorar Obras</a>
-        </div>
-    {% endif %}
+        </aside>
+
+    </div>
 </div>
+
+{% else %}
+<!-- Carrito Vacío -->
+<div class="carrito-vacio fade-up">
+    <div class="carrito-vacio-icon">
+        <i class="fas fa-bag-shopping"></i>
+    </div>
+    <h2>Tu carrito está vacío</h2>
+    <p>Explora las obras y productos de nuestros artistas. Hay piezas únicas esperándote.</p>
+    <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">Explorar obras</a>
+</div>
+{% endif %}
+
 {% endblock %}
