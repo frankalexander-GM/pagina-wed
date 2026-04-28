@@ -1,116 +1,397 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard de Cliente - WindMills Art{% endblock %}
+{% block title %}Mi Espacio - Ágora Art{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* === Dashboard Pinterest Style === */
+    :root {
+        --grid-gap: 24px;
+    }
+
+    body {
+        background-color: #fafafa;
+    }
+
+    /* Glassmorphism Header */
+    .welcome-banner {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: var(--radius-lg);
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+    }
+
+    .welcome-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, var(--turq-light) 0%, transparent 70%);
+        z-index: -1;
+        opacity: 0.5;
+    }
+
+    .welcome-banner::after {
+        content: '';
+        position: absolute;
+        bottom: -50%;
+        right: -10%;
+        width: 250px;
+        height: 250px;
+        background: radial-gradient(circle, var(--malva-light) 0%, transparent 70%);
+        z-index: -1;
+        opacity: 0.5;
+    }
+
+    /* Stats Pills */
+    .stat-pill {
+        display: inline-flex;
+        align-items: center;
+        background: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-pill);
+        margin-right: 0.75rem;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--borde-suave);
+        transition: var(--transition);
+    }
+
+    .stat-pill:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--turq);
+    }
+
+    .stat-pill i {
+        margin-right: 10px;
+        color: var(--turq);
+    }
+
+    /* Pinterest Grid System */
+    .inspiration-grid {
+        column-count: 3;
+        column-gap: var(--grid-gap);
+        width: 100%;
+    }
+
+    @media (max-width: 992px) {
+        .inspiration-grid { column-count: 2; }
+    }
+
+    @media (max-width: 576px) {
+        .inspiration-grid { column-count: 1; }
+    }
+
+    .inspiration-item {
+        break-inside: avoid;
+        margin-bottom: var(--grid-gap);
+        position: relative;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background: white;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        border: 1px solid var(--borde-suave);
+    }
+
+    .inspiration-item:hover {
+        transform: scale(1.02);
+        box-shadow: var(--shadow-hover);
+        z-index: 10;
+    }
+
+    .inspiration-item img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .item-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1.5rem;
+        background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+        color: white;
+        opacity: 0;
+        transition: var(--transition);
+    }
+
+    .inspiration-item:hover .item-overlay {
+        opacity: 1;
+    }
+
+    /* Sidebar Aesthetic */
+    .sidebar-section {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        border: 1px solid var(--borde-suave);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 2rem;
+    }
+
+    .sidebar-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-primary);
+    }
+
+    /* Artist Circle Avatar */
+    .artist-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid var(--turq-light);
+        padding: 2px;
+        transition: var(--transition);
+    }
+
+    .artist-item:hover .artist-avatar {
+        border-color: var(--malva);
+        transform: rotate(10deg);
+    }
+
+    /* Newsletter Bubbles */
+    .news-bubble {
+        background: var(--noche-light);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid var(--turq);
+        transition: var(--transition);
+    }
+
+    .news-bubble:hover {
+        background: white;
+        box-shadow: var(--shadow-md);
+        transform: translateX(5px);
+    }
+
+    .quick-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0.75rem 1rem;
+        border-radius: var(--radius-md);
+        color: var(--text-secondary);
+        transition: var(--transition);
+    }
+
+    .quick-link:hover {
+        background: var(--turq-light);
+        color: var(--turq-dark);
+        padding-left: 1.25rem;
+    }
+
+    .floating-action {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 100;
+    }
+
+    .btn-float {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--turq);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 10px 25px rgba(27, 143, 160, 0.4);
+        transition: var(--transition);
+    }
+
+    .btn-float:hover {
+        transform: rotate(90deg) scale(1.1);
+        background: var(--malva);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Mi Panel</h2>
-        <a href="{{ url_for('public.explorar') }}" class="btn btn-outline-primary">
-            <i class="fas fa-compass"></i> Descubrir Arte
-        </a>
-    </div>
-
-    <!-- Stats -->
-    <div class="row mb-5">
-        <div class="col-md-3">
-            <div class="card bg-info text-white text-center p-3">
-                <h3>{{ stats.favoritos_count }}</h3>
-                <div>Obras Favoritas</div>
+<div class="container py-5">
+    
+    <!-- Welcome Section -->
+    <div class="welcome-banner">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-6 fw-bold mb-2">Hola, {{ current_user.nombre.split()[0] }}</h1>
+                <p class="lead mb-4 font-lora italic">Explora tus mundos guardados y descubre qué hay de nuevo en tu comunidad artística.</p>
+                
+                <div class="stats-container">
+                    <div class="stat-pill">
+                        <i class="fas fa-heart"></i>
+                        <span><strong>{{ stats.favoritos_count }}</strong> favoritos</span>
+                    </div>
+                    <div class="stat-pill">
+                        <i class="fas fa-users"></i>
+                        <span><strong>{{ stats.siguiendo_count }}</strong> siguiendo</span>
+                    </div>
+                    <div class="stat-pill">
+                        <i class="fas fa-layer-group"></i>
+                        <span><strong>{{ stats.lienzos_count }}</strong> lienzos</span>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white text-center p-3">
-                <h3>{{ stats.siguiendo_count }}</h3>
-                <div>Artistas que sigo</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-primary text-white text-center p-3">
-                <h3>{{ stats.lienzos_count }}</h3>
-                <div>Mis Lienzos</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-white text-center p-3">
-                <h3>{{ stats.ordenes_count }}</h3>
-                <div>Compras</div>
+            <div class="col-md-4 text-center d-none d-md-block">
+                <div class="avatar mx-auto" style="width: 100px; height: 100px; font-size: 2.5rem; border: 5px solid white;">
+                    {{ current_user.nombre[0]|upper }}
+                </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <!-- Obras Favoritas Recientes -->
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-heart text-danger me-2"></i>Favoritos Recientes</h5>
-                    <a href="{{ url_for('cliente.obras_favoritas') }}" class="btn btn-sm btn-outline-secondary">Ver todos</a>
+        <!-- Main Content (Grid) -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="mb-0">Tu Inspiración</h3>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Ordenar por
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Recientes</a></li>
+                        <li><a class="dropdown-item" href="#">Más relevantes</a></li>
+                    </ul>
                 </div>
-                <div class="card-body">
-                    {% if obras_favoritas %}
-                        <div class="list-group list-group-flush">
-                            {% for obra in obras_favoritas %}
-                                <div class="list-group-item d-flex align-items-center">
-                                    {% if obra.imagen %}
-                                        <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;">
-                                    {% else %}
-                                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center me-3 rounded" style="width: 60px; height: 60px;">
-                                            <i class="fas fa-image"></i>
-                                        </div>
-                                    {% endif %}
-                                    <div>
-                                        <h6 class="mb-0">{{ obra.titulo }}</h6>
-                                        <small class="text-muted">Por {{ obra.artista.nombre }}</small>
-                                    </div>
-                                </div>
-                            {% endfor %}
+            </div>
+
+            {% if obras_favoritas %}
+            <div class="inspiration-grid">
+                {% for obra in obras_favoritas %}
+                <div class="inspiration-item">
+                    <a href="{{ url_for('public.obra', obra_id=obra.id_obra) }}">
+                        {% if obra.imagen %}
+                            <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" loading="lazy">
+                        {% else %}
+                            <div class="bg-light p-5 text-center">
+                                <i class="fas fa-image fa-3x opacity-25"></i>
+                            </div>
+                        {% endif %}
+                    </a>
+                    <div class="item-overlay">
+                        <h6 class="mb-0 text-white">{{ obra.titulo }}</h6>
+                        <small class="opacity-75">@{{ obra.artista.username }}</small>
+                    </div>
+                    <div class="p-3 d-flex justify-content-between align-items-center bg-white">
+                        <div class="d-flex align-items-center">
+                            <div class="author-avatar me-2" style="width: 24px; height: 24px; font-size: 10px;">
+                                {{ obra.artista.nombre[0]|upper }}
+                            </div>
+                            <span class="small text-muted">{{ obra.artista.nombre }}</span>
                         </div>
+                        <button class="btn btn-link btn-sm p-0 text-danger"><i class="fas fa-heart"></i></button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5 sidebar-section">
+                <i class="fas fa-palette fa-4x text-muted mb-4 opacity-25"></i>
+                <h5>Tu muro está en blanco</h5>
+                <p class="text-muted">Explora la galería y guarda tus obras favoritas para verlas aquí.</p>
+                <a href="{{ url_for('public.explorar') }}" class="btn btn-primary mt-3">Explorar Obras</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <!-- Newsletters / Updates -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-sparkles text-dorado"></i>
+                    Actualizaciones
+                </div>
+                {% if newsletters %}
+                    {% for news in newsletters %}
+                    <div class="news-bubble">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="author-avatar me-2" style="width: 20px; height: 20px; font-size: 8px;">
+                                {{ news.artista.nombre[0]|upper }}
+                            </div>
+                            <small class="fw-bold">{{ news.artista.nombre }}</small>
+                        </div>
+                        <h6 class="small mb-1">{{ news.asunto }}</h6>
+                        <p class="small text-muted mb-0">{{ news.contenido|truncate_words(10) }}</p>
+                    </div>
+                    {% endfor %}
+                    <a href="{{ url_for('cliente.newsletters') }}" class="btn btn-link btn-sm w-100 text-decoration-none">Ver todo</a>
+                {% else %}
+                    <p class="small text-muted text-center py-3">No hay novedades por ahora.</p>
+                {% endif %}
+            </div>
+
+            <!-- Followed Artists -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-user-check text-turq"></i>
+                    Artistas favoritos
+                </div>
+                <div class="d-flex flex-wrap gap-3">
+                    {% if artistas_siguiendo %}
+                        {% for artista in artistas_siguiendo %}
+                        <a href="{{ url_for('public.artista_perfil', username=artista.username) }}" class="artist-item" title="{{ artista.nombre }}">
+                            {% if artista.foto_perfil %}
+                                <img src="{{ artista.foto_perfil }}" class="artist-avatar">
+                            {% else %}
+                                <div class="avatar artist-avatar" style="font-size: 1rem;">{{ artista.nombre[0]|upper }}</div>
+                            {% endif %}
+                        </a>
+                        {% endfor %}
                     {% else %}
-                        <div class="text-center py-4">
-                            <p class="text-muted">No has guardado ninguna obra en favoritos.</p>
-                            <a href="{{ url_for('public.explorar') }}" class="btn btn-sm btn-primary">Explorar obras</a>
-                        </div>
+                        <p class="small text-muted">Sigue artistas para verlos aquí.</p>
                     {% endif %}
                 </div>
             </div>
-        </div>
 
-        <!-- Artistas Siguiendo -->
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-user-plus text-primary me-2"></i>Artistas que sigo</h5>
-                    <a href="{{ url_for('cliente.artistas_siguiendo') }}" class="btn btn-sm btn-outline-secondary">Ver todos</a>
+            <!-- Quick Access -->
+            <div class="sidebar-section p-0 overflow-hidden">
+                <div class="p-4 pb-2">
+                    <div class="sidebar-title mb-2">Gestión</div>
                 </div>
-                <div class="card-body">
-                    {% if artistas_siguiendo %}
-                        <div class="list-group list-group-flush">
-                            {% for artista in artistas_siguiendo %}
-                                <div class="list-group-item d-flex align-items-center">
-                                    {% if artista.foto_perfil %}
-                                        <img src="{{ artista.foto_perfil }}" alt="{{ artista.nombre }}" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                    {% else %}
-                                        <div class="bg-secondary text-white d-inline-flex align-items-center justify-content-center rounded-circle me-3" style="width: 50px; height: 50px;">
-                                            <i class="fas fa-user"></i>
-                                        </div>
-                                    {% endif %}
-                                    <div>
-                                        <h6 class="mb-0">{{ artista.nombre }}</h6>
-                                        <small class="text-muted">@{{ artista.username }}</small>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="text-center py-4">
-                            <p class="text-muted">Aún no sigues a ningún artista.</p>
-                            <a href="{{ url_for('public.artistas') }}" class="btn btn-sm btn-primary">Descubrir artistas</a>
-                        </div>
-                    {% endif %}
+                <div class="pb-3">
+                    <a href="{{ url_for('cliente.lienzos') }}" class="quick-link">
+                        <i class="fas fa-layer-group"></i> Mis Lienzos
+                    </a>
+                    <a href="{{ url_for('cliente.direcciones') }}" class="quick-link">
+                        <i class="fas fa-shipping-fast"></i> Envíos
+                    </a>
+                    <a href="{{ url_for('cliente.ordenes') }}" class="quick-link">
+                        <i class="fas fa-bag-shopping"></i> Mis Compras
+                    </a>
+                    <a href="{{ url_for('cliente.perfil') }}" class="quick-link">
+                        <i class="fas fa-cog"></i> Configuración
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Floating Action for New Moodboard -->
+<div class="floating-action">
+    <a href="{{ url_for('cliente.nuevo_lienzo') }}" class="btn-float" title="Crear nuevo lienzo">
+        <i class="fas fa-plus"></i>
+    </a>
+</div>
+
 {% endblock %}

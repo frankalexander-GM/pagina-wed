@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lienzo.nombre }} - Ágora Art{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('cliente.dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('cliente.lienzos') }}">Mis Lienzos</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ lienzo.nombre }}</li>
+              </ol>
+            </nav>
+            <h2 class="display-6 fw-bold">{{ lienzo.nombre }}</h2>
+            <p class="text-muted">{{ lienzo.items|length }} obras en este tablero</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline-danger btn-sm">
+                <i class="fas fa-trash me-2"></i> Eliminar Lienzo
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% if lienzo.items %}
+            {% for item in lienzo.items %}
+                <div class="col-md-4 col-lg-3">
+                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+                        <div class="position-relative" style="height: 250px;">
+                            {% if item.obra.imagen %}
+                                <img src="{{ item.obra.imagen }}" class="card-img-top w-100 h-100 object-fit-cover" alt="{{ item.obra.titulo }}">
+                            {% else %}
+                                <div class="bg-light w-100 h-100 d-flex align-items-center justify-content-center text-muted">
+                                    <i class="fas fa-image fa-3x opacity-25"></i>
+                                </div>
+                            {% endif %}
+                            <div class="position-absolute top-0 end-0 p-2">
+                                <button class="btn btn-sm btn-light rounded-circle shadow-sm">
+                                    <i class="fas fa-times text-danger"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title mb-1 text-truncate">{{ item.obra.titulo }}</h6>
+                            <p class="card-text text-muted small">Por {{ item.obra.artista.nombre }}</p>
+                            {% if item.nota %}
+                                <div class="bg-light p-2 rounded-2 small mt-2 italic">
+                                    "{{ item.nota }}"
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-white border-top-0 pt-0">
+                            <a href="{{ url_for('public.obra', obra_id=item.id_obra) }}" class="btn btn-sm btn-link text-decoration-none px-0">Ver detalle</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="text-center py-5 bg-white rounded-4 shadow-sm">
+                    <i class="fas fa-images fa-4x text-muted mb-4 opacity-25"></i>
+                    <h4>Tu lienzo está vacío</h4>
+                    <p class="text-muted">Empieza a agregar obras de arte a este lienzo para crear tu composición.</p>
+                    <a href="{{ url_for('public.explorar') }}" class="btn btn-primary rounded-pill px-4 mt-3">Explorar Obras</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

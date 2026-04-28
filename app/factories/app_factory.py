@@ -126,9 +126,11 @@ def register_template_filters(app):
     @app.template_filter('date')
     def date_filter(value, format='%d/%m/%Y'):
         """Formatear fecha"""
+        if value is None:
+            return ""
         try:
             return value.strftime(format)
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, AttributeError):
             return str(value)
     
     @app.template_filter('truncate_words')

@@ -159,3 +159,23 @@ class RepositoryFactory:
             session = DatabaseFactory.get_session()
         
         return CategoriaRepository(session)
+
+    @staticmethod
+    def create_moodboard_repository(session=None):
+        """Crear repositorio de moodboards"""
+        from app.repositories.moodboard_repository import MoodboardRepository
+        
+        if session is None:
+            session = DatabaseFactory.get_session()
+            
+        return MoodboardRepository(session)
+
+    @staticmethod
+    def create_direccion_repository(session=None):
+        """Crear repositorio de direcciones"""
+        from app.repositories.direccion_repository import DireccionRepository
+        
+        if session is None:
+            session = DatabaseFactory.get_session()
+            
+        return DireccionRepository(session)

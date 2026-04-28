@@ -198,17 +198,20 @@ class UsuarioRepository(BaseRepository):
             list: Lista de usuarios que siguen al artista
         """
         try:
-            artista = self.get_by_id(artista_id)
-            if artista:
-                query = artista.seguidores
+            from app.models.usuario import favoritos_artistas, Usuario
+            
+            query = self.session.query(Usuario).join(
+                favoritos_artistas, Usuario.id_usuario == favoritos_artistas.c.id_usuario
+            ).filter(
+                favoritos_artistas.c.id_artista == artista_id
+            ).order_by(favoritos_artistas.c.fecha_seguimiento.desc())
+            
+            if limit:
+                query = query.limit(limit)
+            if offset:
+                query = query.offset(offset)
                 
-                if limit:
-                    query = query.limit(limit)
-                if offset:
-                    query = query.offset(offset)
-                
-                return query.all()
-            return []
+            return query.all()
         except SQLAlchemyError as e:
             print(f"Error al obtener seguidores: {e}")
             return []
@@ -226,17 +229,20 @@ class UsuarioRepository(BaseRepository):
             list: Lista de artistas que sigue el usuario
         """
         try:
-            usuario = self.get_by_id(usuario_id)
-            if usuario:
-                query = usuario.artistas_seguidos
+            from app.models.usuario import favoritos_artistas, Usuario
+            
+            query = self.session.query(Usuario).join(
+                favoritos_artistas, Usuario.id_usuario == favoritos_artistas.c.id_artista
+            ).filter(
+                favoritos_artistas.c.id_usuario == usuario_id
+            ).order_by(favoritos_artistas.c.fecha_seguimiento.desc())
+            
+            if limit:
+                query = query.limit(limit)
+            if offset:
+                query = query.offset(offset)
                 
-                if limit:
-                    query = query.limit(limit)
-                if offset:
-                    query = query.offset(offset)
-                
-                return query.all()
-            return []
+            return query.all()
         except SQLAlchemyError as e:
             print(f"Error al obtener artistas seguidos: {e}")
             return []

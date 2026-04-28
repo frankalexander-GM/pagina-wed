@@ -1,32 +1,114 @@
 {% extends "base.html" %}
 
-{% block title %}Mis Lienzos - Tableros de Inspiración{% endblock %}
+{% block title %}Mis Lienzos - Ágora Art{% endblock %}
+
+{% block extra_css %}
+<style>
+    .lienzo-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid var(--borde-suave);
+        transition: var(--transition);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .lienzo-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--malva-light);
+    }
+
+    .lienzo-preview {
+        height: 180px;
+        background: var(--noche-light);
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 2px;
+        padding: 2px;
+    }
+
+    .preview-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: #eee;
+    }
+
+    .preview-placeholder {
+        background: var(--borde-suave);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--piedra);
+        font-size: 1.5rem;
+    }
+
+    .lienzo-body {
+        padding: 1.5rem;
+        flex-grow: 1;
+    }
+
+    .btn-create-lienzo {
+        background: linear-gradient(135deg, var(--turq), var(--malva));
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: var(--radius-pill);
+        font-weight: 700;
+        box-shadow: 0 10px 20px rgba(138, 110, 168, 0.3);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
-            <h2>Mis Lienzos</h2>
-            <p class="text-muted">Crea tableros personalizados con tus obras favoritas</p>
+            <h1 class="display-5 fw-bold mb-0">Mis Lienzos</h1>
+            <p class="text-muted font-lora italic">Tus mundos personales, organizados por ti.</p>
         </div>
-        <a href="{{ url_for('cliente.nuevo_lienzo') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Nuevo Lienzo
+        <a href="{{ url_for('cliente.nuevo_lienzo') }}" class="btn btn-create-lienzo">
+            <i class="fas fa-plus me-2"></i> Nuevo Lienzo
         </a>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
         {% if lienzos %}
             {% for lienzo in lienzos %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ lienzo.nombre }}</h5>
-                            <p class="text-muted small">{{ lienzo.obras|length }} obras</p>
-                            <p class="card-text text-muted">{{ lienzo.descripcion[:100] }}...</p>
+                <div class="col-md-6 col-xl-4">
+                    <div class="lienzo-card">
+                        <div class="lienzo-preview">
+                            {% set preview_items = lienzo.items[:3] %}
+                            <div class="grid-main" style="grid-row: span 2;">
+                                {% if preview_items|length > 0 %}
+                                    <img src="{{ preview_items[0].obra.imagen }}" class="preview-img">
+                                {% else %}
+                                    <div class="preview-placeholder"><i class="fas fa-palette opacity-25"></i></div>
+                                {% endif %}
+                            </div>
+                            <div class="grid-side-1">
+                                {% if preview_items|length > 1 %}
+                                    <img src="{{ preview_items[1].obra.imagen }}" class="preview-img">
+                                {% else %}
+                                    <div class="preview-placeholder"><i class="fas fa-image opacity-25"></i></div>
+                                {% endif %}
+                            </div>
+                            <div class="grid-side-2">
+                                {% if preview_items|length > 2 %}
+                                    <img src="{{ preview_items[2].obra.imagen }}" class="preview-img">
+                                {% else %}
+                                    <div class="preview-placeholder"><i class="fas fa-circle opacity-25"></i></div>
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="card-footer bg-white border-top">
-                            <a href="{{ url_for('cliente.ver_lienzo', lienzo_id=lienzo.id_lienzo) }}" class="btn btn-sm btn-outline-primary w-100">
-                                <i class="fas fa-eye"></i> Ver Lienzo
+                        <div class="lienzo-body text-center">
+                            <h4 class="mb-2">{{ lienzo.nombre }}</h4>
+                            <p class="text-muted small mb-4">{{ lienzo.items|length }} obras guardadas</p>
+                            <a href="{{ url_for('cliente.ver_lienzo', lienzo_id=lienzo.id_lienzo) }}" class="btn btn-secondary w-100">
+                                Abrir Lienzo
                             </a>
                         </div>
                     </div>
@@ -34,13 +116,11 @@
             {% endfor %}
         {% else %}
             <div class="col-12">
-                <div class="alert alert-info text-center py-5">
-                    <i class="fas fa-layer-group fa-3x mb-3 text-muted"></i>
-                    <h5>Aún no has creado ningún lienzo</h5>
-                    <p class="text-muted">Los lienzos te permiten organizar y guardar composiciones personalizadas con tus obras favoritas.</p>
-                    <a href="{{ url_for('cliente.nuevo_lienzo') }}" class="btn btn-primary mt-3">
-                        <i class="fas fa-plus"></i> Crear tu Primer Lienzo
-                    </a>
+                <div class="text-center py-5 bg-white rounded-4 shadow-sm border">
+                    <i class="fas fa-layer-group fa-4x text-muted mb-4 opacity-25"></i>
+                    <h3>Empieza tu colección</h3>
+                    <p class="text-muted max-w-500 mx-auto">Los lienzos son tableros donde puedes agrupar obras para tus proyectos, decoración o simple inspiración.</p>
+                    <a href="{{ url_for('cliente.nuevo_lienzo') }}" class="btn btn-primary btn-lg mt-4 px-5">Crear mi primer lienzo</a>
                 </div>
             </div>
         {% endif %}
