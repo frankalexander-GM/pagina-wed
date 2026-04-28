@@ -1,284 +1,64 @@
 {% extends "base.html" %}
-
-{% block title %}Artistas - WindMills Art{% endblock %}
+{% block title %}Artistas — Ágora Art{% endblock %}
 
 {% block content %}
-<!-- Header de artistas estilo Behance -->
-<section class="section" style="background: linear-gradient(135deg, var(--azul-cielo), var(--azul-cielo-oscuro)); color: white; padding: 4rem 0;">
+<!-- Header -->
+<div style="padding:24px 0 0;background:white;border-bottom:1px solid #ECECEC;">
     <div class="container">
-        <div style="text-align: center;">
-            <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem;">
-                Artistas Inspiradores
-            </h1>
-            <p style="font-size: 1.25rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.9;">
-                Descubre talentos únicos que están transformando el mundo del arte. 
-                Cada artista con su propio viento creativo.
-            </p>
-            
-            <!-- Búsqueda integrada -->
-            <div style="max-width: 500px; margin: 0 auto;">
-                <div class="search-bar" style="position: relative;">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" 
-                           class="search-input" 
-                           name="q" 
-                           value="{{ termino_busqueda }}" 
-                           placeholder="Buscar artistas por nombre, estilo..."
-                           onkeypress="if(event.key === 'Enter') { window.location.href='?q=' + encodeURIComponent(this.value); }">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:16px;">
+            <div>
+                <h1 style="font-size:1.75rem;margin-bottom:4px;">Artistas</h1>
+                <p style="color:#8C8C8C;font-size:14px;margin:0;">{{ artistas|length if artistas else 0 }} artistas en la comunidad</p>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <div style="position:relative;">
+                    <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#B0B0B0;font-size:12px;"></i>
+                    <input type="text" value="{{ termino_busqueda }}" placeholder="Buscar artistas…"
+                           style="padding:8px 14px 8px 34px;border:1px solid #DEDEDE;border-radius:100px;font-size:13px;width:240px;outline:none;"
+                           onkeypress="if(event.key==='Enter'){window.location.href='?q='+encodeURIComponent(this.value);}">
                 </div>
                 {% if termino_busqueda %}
-                <div style="text-align: center; margin-top: 1rem;">
-                    <a href="{{ url_for('public.artistas') }}" class="btn btn-secondary" style="background: transparent; border: 1px solid white; color: white;">
-                        <i class="fas fa-times"></i>
-                        Limpiar búsqueda
-                    </a>
-                </div>
+                <a href="{{ url_for('public.artistas') }}" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i></a>
                 {% endif %}
             </div>
         </div>
     </div>
-</section>
+</div>
 
-<!-- Filtros y estadísticas -->
 {% if artistas %}
-<section class="filters-section">
+<section style="padding:24px 0 48px;background:#FAFAFA;min-height:60vh;">
     <div class="container">
-        <div class="filters-container">
-            <div class="filter-group">
-                <span class="filter-label">Estilo:</span>
-                <select class="filter-select" onchange="window.location.href='?estilo=' + this.value + ( '{{ termino_busqueda }}' ? '&q={{ termino_busqueda }}' : '' )">
-                    <option value="">Todos los estilos</option>
-                    <option value="abstracto">Abstracto</option>
-                    <option value="realista">Realista</option>
-                    <option value="digital">Digital</option>
-                    <option value="fotografia">Fotografía</option>
-                    <option value="escultura">Escultura</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <span class="filter-label">Ordenar por:</span>
-                <select class="filter-select">
-                    <option>Más seguidos</option>
-                    <option>Más obras</option>
-                    <option>Más recientes</option>
-                    <option>Nombre A-Z</option>
-                </select>
-            </div>
-            
-            <div class="filter-tags">
-                <span class="tag active">Todos</span>
-                <span class="tag">Emergentes</span>
-                <span class="tag">Establecidos</span>
-                <span class="tag">Internacionales</span>
-            </div>
-        </div>
-        
-        <!-- Estadísticas rápidas -->
-        <div style="display: flex; gap: 3rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
-            <div style="text-align: center;">
-                <div style="font-size: 1.5rem; font-weight: 600; color: var(--primary);">
-                    {{ artistas|length }}
-                </div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                    Artistas encontrados
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: 1.5rem; font-weight: 600; color: var(--secondary);">
-                    {{ total_obras }}
-                </div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                    Obras totales
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent);">
-                    {{ total_seguidores }}
-                </div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                    Seguidores totales
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Grid de artistas estilo Behance -->
-<section class="section">
-    <div class="container">
-        <div class="projects-grid">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">
             {% for artista in artistas %}
-            <div class="card" style="cursor: pointer;" onclick="window.location.href='{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}'">
-                <!-- Avatar del artista -->
-                <div style="position: relative; padding: 2rem 2rem 1rem; text-align: center;">
-                    {% if artista.foto_perfil %}
-                    <img src="{{ artista.foto_perfil }}" 
-                         class="avatar" 
-                         style="width: 100px; height: 100px; margin: 0 auto; font-size: 3rem;"
-                         alt="{{ artista.nombre }}">
-                    {% else %}
-                    <div class="avatar" style="width: 100px; height: 100px; margin: 0 auto; font-size: 3rem;">
-                        {{ artista.nombre[0]|upper }}
-                    </div>
-                    {% endif %}
-                    
-                    <!-- Badge de verificación -->
-                    {% if artista.get_seguidores_count() > 50 %}
-                    <div style="position: absolute; top: 2rem; right: 2rem;">
-                        <i class="fas fa-check-circle" style="color: var(--secondary); font-size: 1.2rem;"></i>
-                    </div>
-                    {% endif %}
+            <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" style="text-align:center;padding:32px 20px;background:white;border:1px solid #ECECEC;border-radius:12px;transition:all 0.2s;text-decoration:none;color:#191919;display:block;"
+               onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';this.style.borderColor='#DEDEDE'"
+               onmouseout="this.style.boxShadow='none';this.style.borderColor='#ECECEC'">
+                {% if artista.foto_perfil %}
+                <img src="{{ artista.foto_perfil }}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin:0 auto 12px;display:block;">
+                {% else %}
+                <div style="width:64px;height:64px;border-radius:50%;background:#1769FF;color:white;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;margin:0 auto 12px;">{{ artista.nombre[0]|upper }}</div>
+                {% endif %}
+                <div style="font-size:14px;font-weight:600;margin-bottom:2px;">{{ artista.nombre }}</div>
+                <div style="font-size:12px;color:#8C8C8C;margin-bottom:8px;">@{{ artista.username }}</div>
+                {% if artista.biografia %}
+                <p style="font-size:12px;color:#8C8C8C;line-height:1.5;margin-bottom:12px;">{{ artista.biografia[:80] }}{% if artista.biografia|length > 80 %}…{% endif %}</p>
+                {% endif %}
+                <div style="font-size:12px;color:#8C8C8C;">
+                    <strong style="color:#191919;">{{ artista.get_obras_count() }}</strong> obras ·
+                    <strong style="color:#191919;">{{ artista.get_seguidores_count() }}</strong> seguidores
                 </div>
-                
-                <!-- Información del artista -->
-                <div class="project-content">
-                    <h3 class="project-title">{{ artista.nombre }}</h3>
-                    
-                    <div class="project-author">
-                        <div class="author-avatar" style="width: 20px; height: 20px; font-size: 10px;">
-                            {{ artista.nombre[0]|upper }}
-                        </div>
-                        <span class="author-name">@{{ artista.username }}</span>
-                    </div>
-                    
-                    {% if artista.biografia %}
-                    <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.4; margin-bottom: 1rem;">
-                        {{ artista.biografia[:120] }}{% if artista.biografia|length > 120 %}...{% endif %}
-                    </p>
-                    {% endif %}
-                    
-                    <!-- Estadísticas del artista -->
-                    <div class="project-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-palette"></i>
-                            <span>{{ artista.get_obras_count() or 0 }}</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-users"></i>
-                            <span>{{ artista.get_seguidores_count() or 0 }}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="badge primary">Artista</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Botones de acción -->
-                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                        <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" 
-                           class="btn btn-primary" 
-                           style="flex: 1; font-size: 0.875rem; padding: 0.5rem;"
-                           onclick="event.stopPropagation();">
-                            <i class="fas fa-eye"></i>
-                            Ver Perfil
-                        </a>
-                        
-                        {% if current_user.is_authenticated and current_user.is_cliente() %}
-                        <button class="btn btn-secondary" 
-                                style="flex: 1; font-size: 0.875rem; padding: 0.5rem;"
-                                onclick="event.stopPropagation(); toggleSeguir('{{ artista.id_usuario }}')">
-                            <span id="seguir-{{ artista.id_usuario }}">
-                                <i class="fas fa-plus"></i>
-                                Seguir
-                            </span>
-                        </button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
-        
-        <!-- Paginación mejorada -->
-        {% if artistas|length > 12 %}
-        <nav aria-label="Paginación de artistas" style="margin-top: 3rem;">
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" href="#" style="color: var(--primary); border-color: var(--primary);">
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#" style="background: var(--primary); border-color: var(--primary);">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" style="color: var(--primary); border-color: var(--primary);">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" style="color: var(--primary); border-color: var(--primary);">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        {% endif %}
     </div>
 </section>
-
 {% else %}
-<!-- Estado vacío estilo Behance -->
-<section class="section">
-    <div class="container">
-        <div style="text-align: center; padding: 4rem 2rem;">
-            <div style="font-size: 4rem; color: var(--primary); margin-bottom: 2rem;">
-                <i class="fas fa-search"></i>
-            </div>
-            
-            <h2 style="font-size: 2rem; margin-bottom: 1rem;">
-                No se encontraron artistas
-            </h2>
-            
-            <p style="color: var(--text-secondary); font-size: 1.125rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto;">
-                {% if termino_busqueda %}
-                No hay artistas que coincidan con "{{ termino_busqueda }}". 
-                Intenta con otros términos o explora todos nuestros artistas.
-                {% else %}
-                Aún no tenemos artistas registrados. 
-                Sé el primero en unirte a nuestra comunidad creativa.
-                {% endif %}
-            </p>
-            
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                {% if termino_busqueda %}
-                <a href="{{ url_for('public.artistas') }}" class="btn btn-primary">
-                    <i class="fas fa-list"></i>
-                    Ver Todos los Artistas
-                </a>
-                {% else %}
-                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
-                    <i class="fas fa-user-plus"></i>
-                    Registrarse como Artista
-                </a>
-                <a href="{{ url_for('public.explorar') }}" class="btn btn-secondary">
-                    <i class="fas fa-compass"></i>
-                    Explorar Obras
-                </a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- CTA para artistas -->
-{% if not current_user.is_authenticated or not current_user.is_artista() %}
-<section class="section" style="background: var(--gris-claro);">
-    <div class="container">
-        <div style="text-align: center;">
-            <h2 style="font-size: 2rem; margin-bottom: 1rem;">
-                ¿Eres artista?
-            </h2>
-            
-            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-                Únete a WindMills Art y deja que el viento impulse tu carrera. 
-                Comparte tu obra con miles de amantes del arte.
-            </p>
-            
-            <a href="{{ url_for('auth.register') }}" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                <i class="fas fa-rocket"></i>
-                Comienza tu Carrera
-            </a>
-        </div>
+<section style="padding:64px 0;text-align:center;min-height:50vh;display:flex;align-items:center;justify-content:center;">
+    <div>
+        <i class="fas fa-users" style="font-size:3rem;color:#DEDEDE;margin-bottom:16px;display:block;"></i>
+        <h3 style="margin-bottom:8px;">No se encontraron artistas</h3>
+        <p style="color:#8C8C8C;margin-bottom:24px;">{% if termino_busqueda %}Sin resultados para "{{ termino_busqueda }}".{% else %}Aún no hay artistas.{% endif %}</p>
+        <a href="{{ url_for('public.artistas') }}" class="btn btn-primary">Ver todos</a>
     </div>
 </section>
 {% endif %}
@@ -288,72 +68,10 @@
 {% if current_user.is_authenticated and current_user.is_cliente() %}
 <script>
 function toggleSeguir(artistaId) {
-    const button = document.getElementById('seguir-' + artistaId);
-    const originalContent = button.innerHTML;
-    
-    // Mostrar estado de carga
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
-    button.disabled = true;
-    
-    fetch('/api/seguir-artista', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            artista_id: artistaId,
-            accion: 'seguir'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.exitoso) {
-            // Actualizar botón
-            if(data.accion === 'siguiendo') {
-                button.innerHTML = '<i class="fas fa-check"></i> Siguiendo';
-                button.parentElement.classList.remove('btn-secondary');
-                button.parentElement.classList.add('btn-success');
-            } else {
-                button.innerHTML = '<i class="fas fa-plus"></i> Seguir';
-                button.parentElement.classList.remove('btn-success');
-                button.parentElement.classList.add('btn-secondary');
-            }
-            
-            // Mostrar notificación sutil
-            showNotification(data.mensaje, 'success');
-        } else {
-            button.innerHTML = originalContent;
-            showNotification(data.mensaje, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        button.innerHTML = originalContent;
-        showNotification('Error al procesar la solicitud', 'error');
-    })
-    .finally(() => {
-        button.disabled = false;
-    });
-}
-
-function showNotification(message, type) {
-    // Crear notificación flotante
-    const notification = document.createElement('div');
-    notification.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show`;
-    notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-    notification.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-eliminar después de 3 segundos
-    setTimeout(() => {
-        if(notification.parentElement) {
-            notification.remove();
-        }
-    }, 3000);
+    const btn = document.getElementById('seguir-'+artistaId);
+    if(!btn) return;
+    fetch('/api/seguir-artista',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({artista_id:artistaId,accion:'seguir'})})
+    .then(r=>r.json()).then(d=>{if(d.exitoso)location.reload();}).catch(()=>{});
 }
 </script>
 {% endif %}

@@ -1,189 +1,120 @@
 {% extends "base.html" %}
+{% block title %}Explorar — Ágora Art{% endblock %}
 
-{% block title %}Explorar Obras - WindMills Art{% endblock %}
+{% block head %}
+<style>
+.be-explore-header {
+    padding: 24px 0 0;
+    background: white;
+    border-bottom: 1px solid #ECECEC;
+}
+.be-explore-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+    flex-wrap: wrap;
+}
+.be-filter-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 9px 14px 9px 36px;
+    border: 1px solid #DEDEDE;
+    border-radius: 100px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    position: relative;
+}
+.be-filter-input:focus { border-color: #1769FF; }
+.be-filter-select {
+    padding: 9px 32px 9px 14px;
+    border: 1px solid #DEDEDE;
+    border-radius: 100px;
+    font-size: 13px;
+    background: white;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234A4A4A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    outline: none;
+}
+.be-filter-select:focus { border-color: #1769FF; }
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Header estilo Behance -->
-<section class="section" style="background: linear-gradient(135deg, var(--azul-cielo), var(--azul-cielo-oscuro)); color: white; padding: 4rem 0;">
+<!-- Header con filtros -->
+<div class="be-explore-header">
     <div class="container">
-        <div style="text-align: center;">
-            <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem;">
-                Explorar Obras
-            </h1>
-            <p style="font-size: 1.25rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.9;">
-                Descubre obras inspiradoras de artistas talentosos. 
-                Usa los filtros para encontrar exactamente lo que buscas.
-            </p>
-        </div>
+        <h1 style="font-size:1.75rem;margin-bottom:0;">Explorar</h1>
+        <form method="GET" class="be-explore-filters">
+            <div style="position:relative;flex:1;min-width:200px;">
+                <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#B0B0B0;font-size:12px;"></i>
+                <input type="text" name="q" value="{{ termino_busqueda }}" placeholder="Buscar obras, artistas…"
+                       class="be-filter-input">
+            </div>
+            <select name="categoria" class="be-filter-select">
+                <option value="">Todas las categorías</option>
+                {% for categoria in categorias %}
+                <option value="{{ categoria.id_categoria }}" {% if categoria_actual == categoria.id_categoria %}selected{% endif %}>{{ categoria.nombre }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary" style="padding:9px 20px;">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+            {% if termino_busqueda or categoria_actual %}
+            <a href="{{ url_for('public.explorar') }}" class="btn btn-secondary" style="padding:9px 16px;">
+                <i class="fas fa-times"></i>
+            </a>
+            {% endif %}
+        </form>
     </div>
-</section>
+</div>
 
-<!-- Filtros Section -->
-<section class="section" style="background: var(--blanco-nube);">
-    <div class="container">
-        <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-            <form method="GET" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end;">
-                <div>
-                    <label for="q" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--marron-tierra);">Buscar</label>
-                    <input type="text" 
-                           id="q" 
-                           name="q" 
-                           value="{{ termino_busqueda }}" 
-                           placeholder="Buscar obras por título, artista..."
-                           style="width: 100%; padding: 0.8rem; border: 2px solid var(--azul-cielo-claro); border-radius: 8px; font-size: 1rem;">
-                </div>
-                <div>
-                    <label for="categoria" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--marron-tierra);">Categoría</label>
-                    <select id="categoria" name="categoria" style="width: 100%; padding: 0.8rem; border: 2px solid var(--azul-cielo-claro); border-radius: 8px; font-size: 1rem;">
-                        <option value="">Todas las categorías</option>
-                        {% for categoria in categorias %}
-                        <option value="{{ categoria.id_categoria }}" {% if categoria_actual == categoria.id_categoria %}selected{% endif %}>
-                            {{ categoria.nombre }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem;">
-                        <i class="fas fa-search"></i> Buscar
-                    </button>
-                    <a href="{{ url_for('public.explorar') }}" class="btn btn-outline" style="padding: 0.8rem 1.5rem;">
-                        <i class="fas fa-times"></i> Limpiar
-                    </a>
-                </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-<!-- Results Section -->
-<section class="section" style="background: var(--blanco-nube);">
+<!-- Grid de resultados -->
+<section style="padding:24px 0 48px;background:#FAFAFA;min-height:60vh;">
     <div class="container">
         {% if obras %}
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
-                {% for obra in obras %}
-                <div class="project-card">
-                    <div class="project-image">
-                        {% if obra.imagen %}
-                        <img src="{{ url_for('static', filename='uploads/obras/' + obra.imagen) }}" alt="{{ obra.titulo }}">
-                        {% else %}
-                        <div style="width: 100%; height: 200px; background: var(--verde-prado); display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-image" style="font-size: 3rem; color: white;"></i>
-                        </div>
-                        {% endif %}
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">
+            {% for obra in obras %}
+            <div class="project-card" onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}'">
+                <div class="project-image" style="height:210px;overflow:hidden;border-radius:8px;">
+                    {% if obra.imagen %}
+                    <img src="{{ url_for('static', filename='uploads/obras/' + obra.imagen) }}" alt="{{ obra.titulo }}" style="width:100%;height:100%;object-fit:cover;transition:transform 0.3s;">
+                    {% else %}
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#F0F0F0,#E0E0E0);display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-image" style="font-size:2rem;color:#CECECE;"></i>
                     </div>
-                    
-                    <div class="project-overlay">
-                        <h3>{{ obra.titulo }}</h3>
-                        <p>{{ obra.descripcion[:100] }}{% if obra.descripcion|length > 100 %}...{% endif %}</p>
-                        
-                        <div style="margin-top: 1rem;">
-                            {% if obra.categoria %}
-                            <span style="background: var(--azul-cielo); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; margin-right: 0.5rem;">
-                                {{ obra.categoria.nombre }}
-                            </span>
-                            {% endif %}
-                            
-                            <span style="color: #666; font-size: 0.9rem;">
-                                Por <a href="#" style="color: var(--azul-cielo);">{{ obra.artista.nombre }}</a>
-                            </span>
+                    {% endif %}
+                </div>
+                <div style="padding:10px 2px;">
+                    <p style="font-size:13px;font-weight:600;color:#191919;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ obra.titulo }}</p>
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <div style="width:20px;height:20px;border-radius:50%;background:#1769FF;color:white;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">{{ obra.artista.nombre[0]|upper }}</div>
+                            <span style="font-size:12px;color:#6E6E6E;">{{ obra.artista.nombre }}</span>
                         </div>
-                        
-                        <div class="project-stats" style="margin-top: 1rem;">
+                        <div style="display:flex;gap:10px;font-size:11px;color:#B0B0B0;">
                             <span><i class="fas fa-heart"></i> {{ obra.favoritos_count or 0 }}</span>
                             <span><i class="fas fa-eye"></i> {{ obra.vistas_count or 0 }}</span>
                         </div>
-                        
-                        <div style="margin-top: 1.5rem;">
-                            <a href="#" class="btn btn-light btn-sm">
-                                <i class="fas fa-eye"></i> Ver Detalle
-                            </a>
-                            {% if current_user.is_authenticated %}
-                            <button class="btn btn-outline btn-sm" style="margin-left: 0.5rem;">
-                                <i class="fas fa-heart"></i> Favorito
-                            </button>
-                            {% endif %}
-                        </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-            
-            <!-- Paginación -->
-            <div style="text-align: center; margin-top: 2rem;">
-                <div style="display: flex; justify-content: center; gap: 0.5rem;">
-                    <button class="btn btn-outline" disabled>
-                        <i class="fas fa-chevron-left"></i> Anterior
-                    </button>
-                    <button class="btn btn-primary">1</button>
-                    <button class="btn btn-outline">2</button>
-                    <button class="btn btn-outline">3</button>
-                    <button class="btn btn-outline">
-                        Siguiente <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        {% else %}
-            <div style="text-align: center; padding: 4rem; color: #666;">
-                <i class="fas fa-search" style="font-size: 4rem; margin-bottom: 2rem; color: var(--azul-cielo);"></i>
-                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--marron-tierra);">
-                    No se encontraron obras
-                </h3>
-                <p style="font-size: 1.1rem; max-width: 500px; margin: 0 auto;">
-                    {% if termino_busqueda %}
-                        No hay obras que coincidan con "{{ termino_busqueda }}".
-                        Intenta con otros términos o explora todas las categorías.
-                    {% else %}
-                        No hay obras disponibles en este momento.
-                        Sé el primero en compartir tu arte con nuestra comunidad.
-                    {% endif %}
-                </p>
-                <div style="margin-top: 2rem;">
-                    <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">
-                        <i class="fas fa-compass"></i> Explorar todas las obras
-                    </a>
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline" style="margin-left: 1rem;">
-                        <i class="fas fa-plus"></i> Subir obra
-                    </a>
-                </div>
-            </div>
-        {% endif %}
-    </div>
-</section>
-
-<!-- Categories CTA -->
-<section class="section" style="background: linear-gradient(135deg, var(--verde-prado), var(--azul-cielo-claro));">
-    <div class="container">
-        <div style="text-align: center;">
-            <h2 style="font-size: 2.5rem; font-weight: 600; color: white; margin-bottom: 1.5rem;">
-                Explora por Categorías
-            </h2>
-            <p style="font-size: 1.2rem; color: rgba(255,255,255,0.9); margin-bottom: 2rem;">
-                Encuentra exactamente lo que buscas en nuestras colecciones temáticas
-            </p>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                {% for categoria in categorias[:8] %}
-                <div style="background: rgba(255,255,255,0.9); border-radius: 12px; padding: 1.5rem; text-align: center; transition: transform 0.3s;">
-                    <div style="width: 60px; height: 60px; background: var(--azul-cielo); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                        <i class="fas fa-{{ categoria.icono or 'folder' }}" style="font-size: 1.5rem; color: white;"></i>
-                    </div>
-                    <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--marron-tierra); margin-bottom: 0.5rem;">
-                        {{ categoria.nombre }}
-                    </h3>
-                    <p style="font-size: 0.9rem; color: #666;">
-                        {{ categoria.descripcion[:80] }}{% if categoria.descripcion|length > 80 %}...{% endif %}
-                    </p>
-                </div>
-                {% endfor %}
-            </div>
-            
-            <div style="margin-top: 2rem;">
-                <a href="{{ url_for('public.explorar') }}" class="btn btn-light" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
-                    <i class="fas fa-th"></i> Ver todas las categorías
-                </a>
-            </div>
+            {% endfor %}
         </div>
+        {% else %}
+        <div style="text-align:center;padding:64px 0;">
+            <i class="fas fa-search" style="font-size:3rem;color:#DEDEDE;margin-bottom:16px;display:block;"></i>
+            <h3 style="margin-bottom:8px;">No se encontraron obras</h3>
+            <p style="color:#8C8C8C;max-width:400px;margin:0 auto 24px;">
+                {% if termino_busqueda %}No hay resultados para "{{ termino_busqueda }}".{% else %}No hay obras disponibles.{% endif %}
+            </p>
+            <a href="{{ url_for('public.explorar') }}" class="btn btn-primary">Explorar todo</a>
+        </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}
@@ -192,29 +123,8 @@
 {% if current_user.is_authenticated %}
 <script>
 function toggleFavorito(obraId) {
-    fetch('/api/favorito-obra', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            obra_id: obraId,
-            accion: 'agregar'  // Esto debería ser dinámico
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.exitoso) {
-            alert(data.mensaje);
-            location.reload();
-        } else {
-            alert(data.mensaje);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al procesar la solicitud');
-    });
+    fetch('/api/favorito-obra',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({obra_id:obraId,accion:'agregar'})})
+    .then(r=>r.json()).then(d=>{if(d.exitoso){location.reload();}}).catch(()=>{});
 }
 </script>
 {% endif %}

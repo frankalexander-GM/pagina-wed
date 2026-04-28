@@ -1,77 +1,63 @@
 {% extends "base.html" %}
-
-{% block title %}Registrarse - Art Platform{% endblock %}
+{% block title %}Crear Cuenta — Ágora Art{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="text-center">Crear Cuenta</h3>
+<div style="min-height:75vh;display:flex;align-items:center;justify-content:center;background:#FAFAFA;padding:48px 24px;">
+    <div style="width:100%;max-width:520px;">
+        <div style="text-align:center;margin-bottom:32px;">
+            <div style="width:48px;height:48px;background:#1769FF;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                <svg viewBox="0 0 20 20" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2 L17 17 H13.5 L12 13.5 H8 L6.5 17 H3 Z M10 6.5 L9 10.5 H11 Z" fill="white"/>
+                </svg>
             </div>
-            <div class="card-body">
-                <form method="POST">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre Completo</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                                <div class="form-text">Mínimo 3 caracteres, solo letras, números, guiones y guiones bajos</div>
-                            </div>
-                        </div>
+            <h1 style="font-size:1.5rem;margin-bottom:4px;">Crear cuenta</h1>
+            <p style="color:#8C8C8C;font-size:14px;margin:0;">Únete a la comunidad de Ágora Art</p>
+        </div>
+        <div style="background:white;border:1px solid #ECECEC;border-radius:12px;padding:32px;">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px;color:#4A4A4A;">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
                     </div>
-                    
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px;color:#4A4A4A;">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                                <div class="form-text">Mínimo 6 caracteres</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirmar Contraseña</label>
-                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="rol" class="form-label">Tipo de Cuenta</label>
-                        <select class="form-select" id="rol" name="rol" required>
-                            <option value="">Selecciona tu rol</option>
-                            <option value="cliente">Cliente - Quiero comprar y seguir artistas</option>
-                            <option value="artista">Artista - Quiero vender y exhibir mi obra</option>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="biografia" class="form-label">Biografía (Opcional)</label>
-                        <textarea class="form-control" id="biografia" name="biografia" rows="3" placeholder="Cuéntanos sobre ti..."></textarea>
-                    </div>
-                    
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Crear Cuenta</button>
-                    </div>
-                </form>
-                
-                <div class="text-center mt-3">
-                    <p>¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}">Inicia sesión aquí</a></p>
                 </div>
-            </div>
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px;color:#4A4A4A;">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px;color:#4A4A4A;">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="form-text">Mínimo 6 caracteres</div>
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px;color:#4A4A4A;">Confirmar</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                </div>
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px;color:#4A4A4A;">Tipo de cuenta</label>
+                    <select class="form-select" id="rol" name="rol" required>
+                        <option value="">Selecciona tu rol</option>
+                        <option value="cliente">Cliente — Comprar y seguir artistas</option>
+                        <option value="artista">Artista — Vender y exhibir obra</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px;color:#4A4A4A;">Biografía <span style="color:#B0B0B0;">(opcional)</span></label>
+                    <textarea class="form-control" id="biografia" name="biografia" rows="2" placeholder="Cuéntanos sobre ti..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;padding:10px;font-size:14px;">Crear Cuenta</button>
+            </form>
+        </div>
+        <div style="text-align:center;margin-top:20px;">
+            <p style="font-size:13px;color:#8C8C8C;">¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}" style="color:#1769FF;font-weight:600;">Inicia sesión</a></p>
         </div>
     </div>
 </div>
@@ -79,10 +65,7 @@
 {% block scripts %}
 <script>
 document.querySelector('form').addEventListener('submit', function(e) {
-    const password = document.getElementById('password').value;
-    const confirm_password = document.getElementById('confirm_password').value;
-    
-    if (password !== confirm_password) {
+    if (document.getElementById('password').value !== document.getElementById('confirm_password').value) {
         e.preventDefault();
         alert('Las contraseñas no coinciden');
     }
