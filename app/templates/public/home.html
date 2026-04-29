@@ -3,301 +3,235 @@
 
 {% block head %}
 <style>
-/* === HERO === */
-.hero {
-    min-height: 88vh;
-    display: flex;
-    align-items: center;
-    background: linear-gradient(140deg, #FFF8F0 0%, #D0EEF3 40%, #EDE5F5 100%);
+/* Hero Behance style */
+.be-hero {
+    background: linear-gradient(135deg, #0057FF 0%, #1769FF 50%, #4D8DFF 100%);
+    padding: 64px 0;
     position: relative;
     overflow: hidden;
 }
-.hero::before {
+.be-hero::before {
     content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 5% 80%, rgba(27,143,160,0.18) 0%, transparent 48%),
-        radial-gradient(circle at 92% 10%, rgba(138,110,168,0.14) 0%, transparent 48%),
-        radial-gradient(circle at 50% 100%, rgba(240,120,104,0.07) 0%, transparent 40%);
-    pointer-events: none;
+    position: absolute; inset: 0;
+    background: url("{{ url_for('static', filename='img/gif_oveja.gif') }}") no-repeat center center;
+    background-size: cover;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
 }
-.hero-inner {
+.be-hero-inner {
     position: relative;
     z-index: 2;
-    max-width: 640px;
+    max-width: 600px;
 }
-.hero-tag {
+.be-hero-tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    background: var(--turq);
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
     color: white;
-    border-radius: var(--radius-pill);
-    padding: 0.4rem 1.1rem;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    margin-bottom: 1.75rem;
-    box-shadow: 0 4px 16px rgba(27,143,160,0.45);
+    margin-bottom: 20px;
 }
-.hero h1 {
-    font-size: clamp(2.5rem, 5vw, 3.75rem);
-    font-weight: 700;
-    line-height: 1.12;
-    margin-bottom: 1.25rem;
-    color: var(--carbon);
+.be-hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    color: white;
 }
-.hero h1 em {
-    font-style: normal;
-    color: var(--turq-dark);
+.be-hero h1 em {
+    font-style: italic;
     display: block;
+    opacity: 0.9;
 }
-.hero-desc {
-    font-family: 'Lora', serif;
-    font-size: 1.15rem;
-    color: var(--text-secondary);
-    line-height: 1.75;
-    margin-bottom: 2.5rem;
-    max-width: 520px;
+.be-hero-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    max-width: 480px;
 }
-.hero-ctas {
+.be-hero-ctas {
     display: flex;
-    gap: 1rem;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 3.5rem;
+    margin-bottom: 32px;
 }
-.hero-social-proof {
+.be-hero-ctas .be-btn-white {
+    background: white;
+    color: #1769FF;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.be-hero-ctas .be-btn-white:hover {
+    background: #F0F0F0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    text-decoration: none;
+    color: #0D5BDB;
+}
+.be-hero-ctas .be-btn-outline {
+    background: transparent;
+    color: white;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.be-hero-ctas .be-btn-outline:hover {
+    border-color: white;
+    background: rgba(255,255,255,0.1);
+    text-decoration: none;
+    color: white;
+}
+.be-social {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 12px;
 }
-.hero-avatars {
-    display: flex;
-}
-.hero-avatars .mini-av {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--turq), var(--malva));
-    border: 2px solid white;
+.be-social-avatars { display: flex; }
+.be-social-avatars span {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.5);
     margin-left: -8px;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.7rem; font-weight: 700; color: white;
+    font-size: 11px; font-weight: 700; color: white;
 }
-.hero-avatars .mini-av:first-child { margin-left: 0; }
-.hero-social-proof p {
-    font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.4;
-}
-.hero-social-proof strong { color: var(--text-primary); font-weight: 600; }
+.be-social-avatars span:first-child { margin-left: 0; }
+.be-social p { font-size: 13px; color: rgba(255,255,255,0.7); margin: 0; line-height: 1.4; }
+.be-social strong { color: white; }
 
-/* Hero decorative grid */
-.hero-grid {
-    position: absolute;
-    right: -20px; top: 50%;
-    transform: translateY(-50%);
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    z-index: 1;
-    width: 420px;
-    opacity: 0.92;
+/* Stats bar */
+.be-stats {
+    background: white;
+    border-bottom: 1px solid #ECECEC;
+    padding: 24px 0;
 }
-.hero-grid-item {
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    background: var(--salvia-light);
-    aspect-ratio: 3/4;
-    position: relative;
-}
-.hero-grid-item:first-child { margin-top: 40px; }
-.hero-grid-item img { width:100%;height:100%;object-fit:cover; }
-.hero-grid-item .hg-label {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: linear-gradient(transparent, rgba(26,26,46,0.75));
-    padding: 1rem 0.85rem 0.75rem;
-    color: white;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-/* === STATS === */
-.stats-bar {
-    background: var(--blanco);
-    border-top: 1px solid var(--borde-suave);
-    border-bottom: 1px solid var(--borde-suave);
-    padding: 2rem 0;
-}
-.stats-bar-inner {
+.be-stats-inner {
     display: flex;
     justify-content: center;
-    gap: 4rem;
+    gap: 48px;
     flex-wrap: wrap;
 }
-.stat-block { text-align: center; }
-.stat-block .num {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--turq-dark);
-    display: block;
-}
-.stat-block .lbl {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
+.be-stat { text-align: center; }
+.be-stat-num { font-size: 1.5rem; font-weight: 700; color: #191919; display: block; }
+.be-stat-lbl { font-size: 12px; color: #8C8C8C; text-transform: uppercase; letter-spacing: 0.05em; }
 
-/* === HOW IT WORKS === */
-.how-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-}
-.how-card {
-    background: var(--blanco);
-    border: 1px solid var(--borde-suave);
-    border-radius: var(--radius-lg);
-    padding: 2.25rem 2rem;
-    text-align: center;
-    transition: var(--transition);
-}
-.how-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
-.how-icon {
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem;
-    margin: 0 auto 1.5rem;
-}
-.how-icon.salvia  { background: var(--turq-light); color: var(--turq-dark); }
-.how-icon.arcilla { background: var(--malva-light); color: var(--malva-dark); }
-.how-card h4 { font-size: 1.1rem; margin-bottom: 0.75rem; }
-.how-card p  { font-family: 'Lora', serif; font-style: italic; color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
-
-/* === OBRAS GRID === */
-.obras-masonry {
+/* How it works */
+.be-how-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
-
-/* === CATEGORIAS === */
-.cat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1rem;
-}
-.cat-chip {
-    background: var(--blanco);
-    border: 1.5px solid var(--borde);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem 1.25rem;
+.be-how-card {
+    background: white;
+    border: 1px solid #ECECEC;
+    border-radius: 12px;
+    padding: 32px 24px;
     text-align: center;
-    cursor: pointer;
-    transition: var(--transition);
-    text-decoration: none;
-    display: block;
-    color: var(--text-primary);
+    transition: all 0.2s;
 }
-.cat-chip:hover {
-    background: var(--turq);
-    border-color: var(--turq);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(27,143,160,0.4);
-    color: white;
-    text-decoration: none;
+.be-how-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    border-color: #DEDEDE;
+    transform: translateY(-2px);
 }
-.cat-chip-icon { font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--turq-dark); }
-.cat-chip-name { font-family: 'Josefin Sans', sans-serif; font-size: 0.9rem; font-weight: 600; display: block; }
-.cat-chip-count { font-size: 0.78rem; color: var(--text-secondary); }
-
-/* === ARTISTAS CARDS === */
-.artistas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
-}
-.artista-card {
-    background: var(--blanco);
-    border: 1px solid var(--borde-suave);
-    border-radius: var(--radius-lg);
-    padding: 2rem 1.5rem;
-    text-align: center;
-    transition: var(--transition);
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-    color: var(--text-primary);
-}
-.artista-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-5px); text-decoration: none; color: var(--text-primary); }
-.artista-av {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--turq), var(--malva));
+.be-how-icon {
+    width: 52px; height: 52px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 1.5rem; font-weight: 700; color: white;
-    margin: 0 auto 1rem;
-    box-shadow: 0 4px 18px rgba(27,143,160,0.35);
+    font-size: 1.2rem; margin: 0 auto 16px;
 }
-.artista-name { font-family: 'Josefin Sans', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
-.artista-handle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem; }
-.artista-stats { display: flex; justify-content: center; gap: 1.5rem; }
-.artista-stats span { font-size: 0.78rem; color: var(--text-secondary); }
-.artista-stats strong { display: block; font-family: 'Josefin Sans', sans-serif; font-size: 1rem; color: var(--malva-dark); }
+.be-how-icon.blue { background: #E8F0FE; color: #1769FF; }
+.be-how-icon.dark { background: #F5F5F5; color: #4A4A4A; }
+.be-how-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+.be-how-card p { font-size: 13px; color: #8C8C8C; margin: 0; line-height: 1.6; }
 
-/* === CTA FINAL === */
-.cta-section {
-    background: linear-gradient(135deg, #2D2535 0%, #3D3050 60%, #1B4050 100%);
-    border-radius: var(--radius-lg);
-    padding: 5rem 3rem;
-    text-align: center;
-    position: relative;
+/* Obra card */
+.be-card {
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 8px;
     overflow: hidden;
-    margin: 0 2rem;
 }
-.cta-section::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 15% 60%, rgba(27,143,160,0.35) 0%, transparent 50%),
-                radial-gradient(circle at 85% 40%, rgba(138,110,168,0.3) 0%, transparent 50%),
-                radial-gradient(circle at 50% 5%, rgba(240,120,104,0.12) 0%, transparent 40%);
-    pointer-events: none;
+.be-card:hover { transform: translateY(-4px); }
+.be-card:hover .be-card-img img { transform: scale(1.03); }
+.be-card-img {
+    width: 100%; height: 210px; background: #F5F5F5;
+    overflow: hidden; border-radius: 8px; position: relative;
 }
-.cta-section h2 { color: white; font-size: 2.25rem; margin-bottom: 1rem; position: relative; }
-.cta-section p { font-family: 'Lora', serif; font-style: italic; color: rgba(255,255,255,0.65); font-size: 1.05rem; margin-bottom: 2.5rem; position: relative; }
-.cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
-.btn-cta-blanco {
-    background: white; color: var(--carbon);
-    border-radius: var(--radius-pill);
-    padding: 0.9rem 2.25rem;
-    font-family: 'Josefin Sans', sans-serif; font-weight: 700;
-    font-size: 0.875rem; letter-spacing: 0.05em; text-transform: uppercase;
-    text-decoration: none; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.5rem;
+.be-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+.be-card-info { padding: 10px 2px; display: flex; align-items: center; justify-content: space-between; }
+.be-card-author { display: flex; align-items: center; gap: 8px; }
+.be-card-av {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #1769FF; color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
 }
-.btn-cta-blanco:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.2); text-decoration: none; color: var(--carbon); }
-.btn-cta-arcilla {
-    background: var(--arcilla); color: white;
-    border-radius: var(--radius-pill);
-    padding: 0.9rem 2.25rem;
-    font-family: 'Josefin Sans', sans-serif; font-weight: 700;
-    font-size: 0.875rem; letter-spacing: 0.05em; text-transform: uppercase;
-    text-decoration: none; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.5rem;
-}
-.btn-cta-arcilla:hover { background: var(--arcilla-dark); transform: translateY(-2px); text-decoration: none; color: white; }
+.be-card-name { font-size: 12px; color: #6E6E6E; }
 
-@media (max-width: 900px) {
-    .hero { flex-direction: column; min-height: auto; padding: 4rem 0 2rem; }
-    .hero-grid { display: none; }
-    .how-grid, .obras-masonry { grid-template-columns: 1fr; }
-    .stats-bar-inner { gap: 2rem; }
-    .cta-section { margin: 0; border-radius: 0; }
+/* Categoría pills */
+.be-cats { display: flex; gap: 8px; flex-wrap: wrap; }
+.be-cat-pill {
+    padding: 8px 18px;
+    background: #F5F5F5;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4A4A4A;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.be-cat-pill:hover { background: #ECECEC; color: #191919; text-decoration: none; }
+.be-cat-pill .count { font-size: 11px; color: #B0B0B0; }
+
+/* Artist card */
+.be-artist-card {
+    text-align: center; padding: 28px 20px;
+    background: white; border: 1px solid #ECECEC; border-radius: 12px;
+    transition: all 0.2s; text-decoration: none; display: block; color: #191919;
+}
+.be-artist-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); border-color: #DEDEDE; text-decoration: none; color: #191919; }
+.be-artist-av { width: 56px; height: 56px; border-radius: 50%; background: #1769FF; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; margin: 0 auto 10px; }
+
+/* CTA */
+.be-cta {
+    background: #191919;
+    padding: 56px 24px;
+    text-align: center;
+    border-radius: 16px;
+}
+.be-cta h2 { color: white; font-size: 1.75rem; margin-bottom: 8px; }
+.be-cta p { color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 24px; }
+
+@media (max-width: 768px) {
+    .be-hero { padding: 40px 0; }
+    .be-hero h1 { font-size: 1.75rem; }
+    .be-how-grid { grid-template-columns: 1fr; }
+    .be-stats-inner { gap: 24px; }
+    .be-cta { border-radius: 0; }
 }
 </style>
 {% endblock %}
@@ -305,96 +239,81 @@
 {% block content %}
 
 <!-- ===== HERO ===== -->
-<section class="hero">
-    <div class="container" style="width:100%;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:3rem;">
-            <div class="hero-inner fade-up">
-                <div class="hero-tag">
-                    <i class="fas fa-seedling"></i> El refugio del creador
-                </div>
-                <h1>
-                    Arte original,
-                    <em>sin intermediarios.</em>
-                </h1>
-                <p class="hero-desc">
-                    Ágora Art es el espacio donde los artistas exhiben su obra, construyen comunidad y venden sus creaciones. Sin algoritmos. Sin ruido. Solo arte.
-                </p>
-                <div class="hero-ctas">
-                    <a href="{{ url_for('public.explorar') }}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-compass"></i> Explorar obras
-                    </a>
-                    {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">
-                        Únete gratis
-                    </a>
-                    {% endif %}
-                </div>
-                <div class="hero-social-proof">
-                    <div class="hero-avatars">
-                        <div class="mini-av">M</div>
-                        <div class="mini-av">C</div>
-                        <div class="mini-av">L</div>
-                        <div class="mini-av" style="background:var(--arcilla);">+</div>
-                    </div>
-                    <p><strong>Artistas independientes</strong><br>ya comparten su obra aquí</p>
-                </div>
+<section class="be-hero">
+    <div class="container">
+        <div class="be-hero-inner">
+            <div class="be-hero-tag">
+                <i class="fas fa-seedling"></i> El refugio del creador
             </div>
-
-            <!-- Collage decorativo -->
-            <div class="hero-grid" aria-hidden="true">
-                <div class="hero-grid-item">
-                    <div style="width:100%;height:100%;background:linear-gradient(160deg,#EAF0E9,#C5D4C4);"></div>
-                    <div class="hg-label">Pintura · Óleo</div>
+            <h1>
+                Arte original,
+                <em>sin intermediarios.</em>
+            </h1>
+            <p class="be-hero-desc">
+                Ágora Art es el espacio donde los artistas exhiben su obra, construyen comunidad y venden sus creaciones. Sin algoritmos. Sin ruido. Solo arte.
+            </p>
+            <div class="be-hero-ctas">
+                <a href="{{ url_for('public.explorar') }}" class="be-btn-white">
+                    <i class="fas fa-compass"></i> Explorar obras
+                </a>
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register') }}" class="be-btn-outline">
+                    Únete gratis
+                </a>
+                {% endif %}
+            </div>
+            <div class="be-social">
+                <div class="be-social-avatars">
+                    <span>M</span><span>C</span><span>L</span><span>+</span>
                 </div>
-                <div class="hero-grid-item">
-                    <div style="width:100%;height:100%;background:linear-gradient(160deg,#F5EDE3,#D4B89A);"></div>
-                    <div class="hg-label">Fotografía</div>
-                </div>
+                <p><strong>Artistas independientes</strong><br>ya comparten su obra aquí</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- ===== STATS ===== -->
-<div class="stats-bar">
-    <div class="stats-bar-inner">
-        <div class="stat-block">
-            <span class="num">{{ obras_recientes|length if obras_recientes else '0' }}+</span>
-            <span class="lbl">Obras publicadas</span>
+<div class="be-stats">
+    <div class="be-stats-inner">
+        <div class="be-stat">
+            <span class="be-stat-num">{{ obras_recientes|length if obras_recientes else '0' }}+</span>
+            <span class="be-stat-lbl">Obras publicadas</span>
         </div>
-        <div class="stat-block">
-            <span class="num">{{ artistas_destacados|length if artistas_destacados else '0' }}+</span>
-            <span class="lbl">Artistas activos</span>
+        <div class="be-stat">
+            <span class="be-stat-num">{{ artistas_destacados|length if artistas_destacados else '0' }}+</span>
+            <span class="be-stat-lbl">Artistas activos</span>
         </div>
-        <div class="stat-block">
-            <span class="num">{{ categorias_populares|length if categorias_populares else '0' }}</span>
-            <span class="lbl">Categorías</span>
+        <div class="be-stat">
+            <span class="be-stat-num">{{ categorias_populares|length if categorias_populares else '0' }}</span>
+            <span class="be-stat-lbl">Categorías</span>
         </div>
-        <div class="stat-block">
-            <span class="num">100%</span>
-            <span class="lbl">Libres de algoritmos</span>
+        <div class="be-stat">
+            <span class="be-stat-num">100%</span>
+            <span class="be-stat-lbl">Libres de algoritmos</span>
         </div>
     </div>
 </div>
 
 <!-- ===== CÓMO FUNCIONA ===== -->
-<section class="section">
+<section style="padding:48px 0;">
     <div class="container">
-        <p class="section-title">Un espacio para cada rol</p>
-        <p class="section-subtitle">Sin complejidad. Solo lo que necesitas para crear, coleccionar e inspirarte.</p>
-        <div class="how-grid">
-            <div class="how-card">
-                <div class="how-icon salvia"><i class="fas fa-palette"></i></div>
+        <div style="text-align:center;margin-bottom:32px;">
+            <h2 style="font-size:1.5rem;margin-bottom:4px;">Un espacio para cada rol</h2>
+            <p style="color:#8C8C8C;font-size:14px;margin:0;">Sin complejidad. Solo lo que necesitas para crear, coleccionar e inspirarte.</p>
+        </div>
+        <div class="be-how-grid">
+            <div class="be-how-card">
+                <div class="be-how-icon blue"><i class="fas fa-palette"></i></div>
                 <h4>Para artistas</h4>
                 <p>Publica tu portafolio, escribe en tu blog, abre tu tienda. Todo en un solo lugar, sin depender de redes sociales.</p>
             </div>
-            <div class="how-card">
-                <div class="how-icon arcilla"><i class="fas fa-heart"></i></div>
+            <div class="be-how-card">
+                <div class="be-how-icon dark"><i class="fas fa-heart"></i></div>
                 <h4>Para coleccionistas</h4>
                 <p>Sigue artistas, guarda tus favoritos, crea moodboards y compra arte original directamente a su creador.</p>
             </div>
-            <div class="how-card">
-                <div class="how-icon salvia"><i class="fas fa-users"></i></div>
+            <div class="be-how-card">
+                <div class="be-how-icon blue"><i class="fas fa-users"></i></div>
                 <h4>Comunidad real</h4>
                 <p>Recibe newsletters de los artistas que amas. Construye tu gusto sin el ruido de los trending topics.</p>
             </div>
@@ -402,46 +321,40 @@
     </div>
 </section>
 
-<!-- ===== OBRAS DESTACADAS ===== -->
+<!-- ===== OBRAS RECIENTES ===== -->
 {% if obras_recientes %}
-<section class="section" style="background:var(--borde-suave);padding:5rem 0;">
+<section style="padding:32px 0 48px;background:#FAFAFA;">
     <div class="container">
-        <p class="section-title">Obras recientes</p>
-        <p class="section-subtitle">Piezas originales de artistas de nuestra comunidad</p>
-
-        <div class="projects-grid">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h2 style="font-size:1.5rem;margin:0;">Obras recientes</h2>
+            <a href="{{ url_for('public.explorar') }}" style="font-size:13px;color:#1769FF;font-weight:500;">Ver todas →</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">
             {% for obra in obras_recientes[:6] %}
-            <div class="project-card fade-up"
-                 onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}'"
-                 style="animation-delay:{{ loop.index0 * 0.08 }}s">
-                <div class="project-image" style="height:240px;position:relative;">
+            <div class="be-card" onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}'">
+                <div class="be-card-img">
                     {% if obra.imagen %}
-                    <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" style="width:100%;height:100%;object-fit:cover;">
+                    <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}">
                     {% else %}
-                    <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--salvia-light),var(--arcilla-light));display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-image" style="font-size:2rem;color:var(--borde);"></i>
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#F0F0F0,#E0E0E0);display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-image" style="font-size:2rem;color:#CECECE;"></i>
                     </div>
                     {% endif %}
                     {% if obra.categoria %}
-                    <span class="badge primary" style="position:absolute;top:12px;left:12px;">{{ obra.categoria.nombre }}</span>
+                    <span style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.6);color:white;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:500;">{{ obra.categoria.nombre }}</span>
                     {% endif %}
                 </div>
-                <div class="project-content">
-                    <p class="project-title">{{ obra.titulo }}</p>
-                    <div class="project-author">
-                        <div class="author-avatar">{{ obra.artista.nombre[0]|upper }}</div>
-                        <span class="author-name">{{ obra.artista.nombre }}</span>
+                <div class="be-card-info">
+                    <div class="be-card-author">
+                        <div class="be-card-av">{{ obra.artista.nombre[0]|upper }}</div>
+                        <span class="be-card-name">{{ obra.artista.nombre }}</span>
                     </div>
                     {% if obra.precio %}
-                    <p style="font-family:'Josefin Sans',sans-serif;font-weight:700;color:var(--salvia-dark);font-size:0.95rem;margin:0;">${{ obra.precio }}</p>
+                    <span style="color:#1769FF;font-size:13px;font-weight:600;">${{ obra.precio }}</span>
                     {% endif %}
                 </div>
             </div>
             {% endfor %}
-        </div>
-
-        <div class="text-center mt-4">
-            <a href="{{ url_for('public.explorar') }}" class="btn btn-primary btn-lg">Ver todas las obras</a>
         </div>
     </div>
 </section>
@@ -449,16 +362,18 @@
 
 <!-- ===== CATEGORÍAS ===== -->
 {% if categorias_populares %}
-<section class="section">
+<section style="padding:48px 0;">
     <div class="container">
-        <p class="section-title">Explora por disciplina</p>
-        <p class="section-subtitle">Encuentra arte en la categoría que más te inspire</p>
-        <div class="cat-grid">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h2 style="font-size:1.5rem;margin:0;">Explora por disciplina</h2>
+            <a href="{{ url_for('public.categorias') }}" style="font-size:13px;color:#1769FF;font-weight:500;">Ver todas →</a>
+        </div>
+        <div class="be-cats">
             {% for categoria, count in categorias_populares[:8] %}
-            <a href="{{ url_for('public.obras_categoria', categoria_id=categoria.id_categoria) }}" class="cat-chip">
-                <div class="cat-chip-icon"><i class="fas fa-folder-open"></i></div>
-                <span class="cat-chip-name">{{ categoria.nombre }}</span>
-                <span class="cat-chip-count">{{ count }} obra{{ 's' if count != 1 }}</span>
+            <a href="{{ url_for('public.obras_categoria', categoria_id=categoria.id_categoria) }}" class="be-cat-pill">
+                <i class="fas fa-folder-open" style="font-size:12px;"></i>
+                {{ categoria.nombre }}
+                <span class="count">{{ count }}</span>
             </a>
             {% endfor %}
         </div>
@@ -468,51 +383,50 @@
 
 <!-- ===== ARTISTAS ===== -->
 {% if artistas_destacados %}
-<section class="section" style="background:var(--malva-light);padding:5rem 0;">
+<section style="padding:32px 0 48px;background:#FAFAFA;">
     <div class="container">
-        <p class="section-title">Artistas de la comunidad</p>
-        <p class="section-subtitle">Creadores independientes que dan vida a este espacio</p>
-        <div class="artistas-grid">
-            {% for artista in artistas_destacados[:4] %}
-            <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" class="artista-card">
-                <div class="artista-av">{{ artista.nombre[0]|upper }}</div>
-                <p class="artista-name">{{ artista.nombre }}</p>
-                <p class="artista-handle">@{{ artista.username }}</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h2 style="font-size:1.5rem;margin:0;">Artistas de la comunidad</h2>
+            <a href="{{ url_for('public.artistas') }}" style="font-size:13px;color:#1769FF;font-weight:500;">Ver todos →</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+            {% for artista in artistas_destacados[:6] %}
+            <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" class="be-artist-card">
+                <div class="be-artist-av">{{ artista.nombre[0]|upper }}</div>
+                <div style="font-size:14px;font-weight:600;margin-bottom:2px;">{{ artista.nombre }}</div>
+                <div style="font-size:12px;color:#8C8C8C;margin-bottom:8px;">@{{ artista.username }}</div>
                 {% if artista.biografia %}
-                <p style="font-family:'Lora',serif;font-style:italic;font-size:0.82rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.6;">
-                    {{ artista.biografia[:80] }}{% if artista.biografia|length > 80 %}…{% endif %}
-                </p>
+                <p style="font-size:12px;color:#8C8C8C;line-height:1.5;margin-bottom:8px;">{{ artista.biografia[:60] }}{% if artista.biografia|length > 60 %}…{% endif %}</p>
                 {% endif %}
-                <div class="artista-stats">
-                    <span><strong>{{ artista.get_obras_count() }}</strong>obras</span>
-                    <span><strong>{{ artista.get_seguidores_count() }}</strong>seguidores</span>
+                <div style="font-size:12px;color:#8C8C8C;">
+                    <strong style="color:#191919;">{{ artista.get_obras_count() }}</strong> obras ·
+                    <strong style="color:#191919;">{{ artista.get_seguidores_count() }}</strong> seguidores
                 </div>
             </a>
             {% endfor %}
-        </div>
-        <div class="text-center mt-4">
-            <a href="{{ url_for('public.artistas') }}" class="btn btn-secondary">Ver todos los artistas</a>
         </div>
     </div>
 </section>
 {% endif %}
 
-<!-- ===== CTA FINAL ===== -->
-<section class="section">
-    <div class="cta-section">
-        <h2>Tu arte merece un refugio propio</h2>
-        <p>Sin algoritmos que decidan quién te ve. Sin ruido. Solo tu obra y las personas que genuinamente la valoran.</p>
-        <div class="cta-btns">
-            {% if not current_user.is_authenticated %}
-            <a href="{{ url_for('auth.register') }}" class="btn-cta-blanco">
-                <i class="fas fa-seedling"></i> Crear mi espacio
-            </a>
-            {% endif %}
-            <a href="{{ url_for('public.explorar') }}" class="btn-cta-arcilla">
-                <i class="fas fa-compass"></i> Explorar obras
-            </a>
+<!-- ===== CTA ===== -->
+{% if not current_user.is_authenticated %}
+<section style="padding:48px 0;">
+    <div class="container">
+        <div class="be-cta">
+            <h2>Tu arte merece un refugio propio</h2>
+            <p>Sin algoritmos que decidan quién te ve. Sin ruido. Solo tu obra y las personas que genuinamente la valoran.</p>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                <a href="{{ url_for('auth.register') }}" class="be-btn-white" style="background:white;color:#191919;padding:10px 28px;border-radius:100px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;">
+                    <i class="fas fa-seedling"></i> Crear mi espacio
+                </a>
+                <a href="{{ url_for('public.explorar') }}" style="background:transparent;color:white;padding:10px 28px;border-radius:100px;font-weight:600;font-size:14px;text-decoration:none;border:1.5px solid rgba(255,255,255,0.3);display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;">
+                    <i class="fas fa-compass"></i> Explorar obras
+                </a>
+            </div>
         </div>
     </div>
 </section>
+{% endif %}
 
 {% endblock %}

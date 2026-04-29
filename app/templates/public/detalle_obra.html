@@ -1,118 +1,91 @@
 {% extends "base.html" %}
-
-{% block title %}{{ obra.titulo }} - WindMills Art{% endblock %}
+{% block title %}{{ obra.titulo }} — Ágora Art{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url_for('public.explorar') }}">Explorar</a></li>
-            {% if obra.categoria %}
-                <li class="breadcrumb-item"><a href="{{ url_for('public.obras_categoria', categoria_id=obra.categoria.id_categoria) }}">{{ obra.categoria.nombre }}</a></li>
-            {% endif %}
-            <li class="breadcrumb-item active" aria-current="page">{{ obra.titulo }}</li>
-        </ol>
-    </nav>
+<div style="background:#FAFAFA;min-height:80vh;padding:24px 0 48px;">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div style="margin-bottom:20px;font-size:13px;color:#8C8C8C;">
+            <a href="{{ url_for('public.explorar') }}" style="color:#1769FF;">Explorar</a>
+            {% if obra.categoria %} › <a href="{{ url_for('public.obras_categoria', categoria_id=obra.categoria.id_categoria) }}" style="color:#1769FF;">{{ obra.categoria.nombre }}</a>{% endif %}
+            › <span style="color:#4A4A4A;">{{ obra.titulo }}</span>
+        </div>
 
-    <div class="row">
-        <!-- Imagen de la obra -->
-        <div class="col-lg-8 mb-4">
-            <div class="card border-0 shadow-sm bg-light text-center h-100" style="min-height: 500px; display:flex; align-items:center; justify-content:center;">
+        <div style="display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start;">
+            <!-- Imagen -->
+            <div style="background:white;border-radius:12px;overflow:hidden;border:1px solid #ECECEC;">
                 {% if obra.imagen %}
-                    <img src="{{ obra.imagen }}" class="img-fluid rounded" alt="{{ obra.titulo }}" style="max-height: 700px; object-fit: contain;">
+                <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" style="width:100%;display:block;">
                 {% else %}
-                    <i class="fas fa-image fa-6x text-muted opacity-25"></i>
+                <div style="height:500px;display:flex;align-items:center;justify-content:center;background:#F5F5F5;">
+                    <i class="fas fa-image" style="font-size:4rem;color:#DEDEDE;"></i>
+                </div>
                 {% endif %}
             </div>
-        </div>
-        
-        <!-- Detalles de la obra -->
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body p-4">
-                    <h1 class="h2 mb-3">{{ obra.titulo }}</h1>
-                    
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <a href="{{ url_for('public.perfil_artista', artista_id=obra.artista.id_usuario) }}" class="text-decoration-none text-dark d-flex align-items-center">
+
+            <!-- Sidebar -->
+            <div>
+                <div style="background:white;border:1px solid #ECECEC;border-radius:12px;padding:24px;margin-bottom:16px;">
+                    <h1 style="font-size:1.4rem;margin-bottom:16px;">{{ obra.titulo }}</h1>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                        <a href="{{ url_for('public.perfil_artista', artista_id=obra.artista.id_usuario) }}" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#191919;">
                             {% if obra.artista.foto_perfil %}
-                                <img src="{{ obra.artista.foto_perfil }}" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                            <img src="{{ obra.artista.foto_perfil }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
                             {% else %}
-                                <div class="bg-secondary text-white rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-user"></i>
-                                </div>
+                            <div style="width:36px;height:36px;border-radius:50%;background:#1769FF;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">{{ obra.artista.nombre[0]|upper }}</div>
                             {% endif %}
-                            <strong>{{ obra.artista.nombre }}</strong>
+                            <div>
+                                <div style="font-weight:600;font-size:14px;">{{ obra.artista.nombre }}</div>
+                            </div>
                         </a>
-                        
-                        <!-- Botón Favorito -->
                         {% if current_user.is_authenticated %}
-                            <form action="{{ url_for('public.favorito_obra') }}" method="POST">
-                                <input type="hidden" name="obra_id" value="{{ obra.id_obra }}">
-                                <input type="hidden" name="accion" value="{{ 'quitar' if es_favorito else 'agregar' }}">
-                                <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2" title="{% if es_favorito %}Quitar de favoritos{% else %}Añadir a favoritos{% endif %}">
-                                    <i class="fas fa-heart fs-4 {% if es_favorito %}text-danger{% else %}text-muted{% endif %}"></i>
-                                </button>
-                            </form>
-                        {% else %}
-                            <a href="{{ url_for('auth.login') }}" class="btn btn-light rounded-circle shadow-sm p-2" title="Inicia sesión para añadir a favoritos">
-                                <i class="fas fa-heart fs-4 text-muted"></i>
-                            </a>
+                        <form action="{{ url_for('public.favorito_obra') }}" method="POST">
+                            <input type="hidden" name="obra_id" value="{{ obra.id_obra }}">
+                            <input type="hidden" name="accion" value="{{ 'quitar' if es_favorito else 'agregar' }}">
+                            <button type="submit" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:{{ '#1769FF' if es_favorito else '#B0B0B0' }};transition:color 0.2s;">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </form>
                         {% endif %}
                     </div>
-                    
-                    <hr>
-                    
-                    <div class="mb-4">
-                        <h5 class="text-uppercase text-muted small fw-bold mb-2">Descripción</h5>
-                        <p>{{ obra.descripcion or 'Sin descripción proporcionada por el artista.' }}</p>
+                    <hr style="border-color:#ECECEC;margin-bottom:16px;">
+                    <div style="margin-bottom:16px;">
+                        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#8C8C8C;margin-bottom:8px;">Descripción</div>
+                        <p style="font-size:14px;color:#4A4A4A;line-height:1.6;">{{ obra.descripcion or 'Sin descripción.' }}</p>
                     </div>
-                    
-                    <div class="mb-4">
-                        <h5 class="text-uppercase text-muted small fw-bold mb-2">Detalles</h5>
-                        <ul class="list-unstyled">
-                            {% if obra.tecnica %}
-                            <li class="mb-2"><i class="fas fa-paint-brush text-muted me-2"></i> <strong>Técnica:</strong> {{ obra.tecnica }}</li>
-                            {% endif %}
-                            <li class="mb-2"><i class="fas fa-calendar-alt text-muted me-2"></i> <strong>Publicado:</strong> {{ obra.fecha_publicacion.strftime('%B %Y') }}</li>
-                            <li class="mb-2"><i class="fas fa-eye text-muted me-2"></i> <strong>Vistas:</strong> {{ obra.vistas_count or 0 }}</li>
-                            <li><i class="fas fa-heart text-muted me-2"></i> <strong>Favoritos:</strong> {{ obra.favoritos_count or 0 }}</li>
-                        </ul>
+                    <div style="margin-bottom:20px;">
+                        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#8C8C8C;margin-bottom:8px;">Detalles</div>
+                        <div style="font-size:13px;color:#6E6E6E;">
+                            {% if obra.tecnica %}<div style="margin-bottom:6px;"><i class="fas fa-paint-brush" style="width:16px;color:#B0B0B0;"></i> {{ obra.tecnica }}</div>{% endif %}
+                            <div style="margin-bottom:6px;"><i class="fas fa-calendar" style="width:16px;color:#B0B0B0;"></i> {{ obra.fecha_publicacion.strftime('%B %Y') }}</div>
+                            <div style="margin-bottom:6px;"><i class="fas fa-eye" style="width:16px;color:#B0B0B0;"></i> {{ obra.vistas_count or 0 }} vistas</div>
+                            <div><i class="fas fa-heart" style="width:16px;color:#B0B0B0;"></i> {{ obra.favoritos_count or 0 }} favoritos</div>
+                        </div>
                     </div>
-                    
-                    <!-- Botón comprar print (simulado) -->
-                    <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold" disabled>
-                        Comprar Impresión (Próximamente)
-                    </button>
+                    <button class="btn btn-primary" style="width:100%;padding:10px;" disabled>Comprar (Próximamente)</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Obras relacionadas -->
-    {% if obras_relacionadas %}
-    <div class="mt-5 pt-4 border-top">
-        <h3 class="mb-4">Más obras de {{ obra.artista.nombre }}</h3>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for rel_obra in obras_relacionadas %}
-                <div class="col">
-                    <div class="card h-100 border-0 project-card shadow-sm">
-                        <a href="{{ url_for('public.detalle_obra', obra_id=rel_obra.id_obra) }}" class="text-decoration-none">
-                            {% if rel_obra.imagen %}
-                                <img src="{{ rel_obra.imagen }}" class="card-img-top" alt="{{ rel_obra.titulo }}" style="height: 200px; object-fit: cover;">
-                            {% else %}
-                                <div class="bg-light text-center" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-image fa-3x text-muted"></i>
-                                </div>
-                            {% endif %}
-                        </a>
-                        <div class="card-body">
-                            <h6 class="card-title text-dark text-truncate">{{ rel_obra.titulo }}</h6>
-                        </div>
-                    </div>
+        {% if obras_relacionadas %}
+        <div style="margin-top:48px;">
+            <h3 style="font-size:1.25rem;margin-bottom:16px;">Más de {{ obra.artista.nombre }}</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">
+                {% for rel in obras_relacionadas %}
+                <div style="cursor:pointer;border-radius:8px;overflow:hidden;transition:transform 0.2s;"
+                     onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=rel.id_obra) }}'"
+                     onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+                    {% if rel.imagen %}
+                    <img src="{{ rel.imagen }}" alt="{{ rel.titulo }}" style="width:100%;height:160px;object-fit:cover;border-radius:8px;">
+                    {% else %}
+                    <div style="height:160px;background:#F0F0F0;display:flex;align-items:center;justify-content:center;border-radius:8px;"><i class="fas fa-image" style="color:#DEDEDE;font-size:1.5rem;"></i></div>
+                    {% endif %}
+                    <p style="font-size:13px;font-weight:500;margin-top:8px;color:#191919;">{{ rel.titulo }}</p>
                 </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 {% endblock %}
