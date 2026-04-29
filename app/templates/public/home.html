@@ -1,432 +1,553 @@
 {% extends "base.html" %}
-{% block title %}Ágora Art — El refugio del creador{% endblock %}
 
 {% block head %}
 <style>
-/* Hero Behance style */
-.be-hero {
-    background: linear-gradient(135deg, #0057FF 0%, #1769FF 50%, #4D8DFF 100%);
-    padding: 64px 0;
-    position: relative;
-    overflow: hidden;
-}
-.be-hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: url("{{ url_for('static', filename='img/gif_oveja.gif') }}") no-repeat center center;
-    background-size: cover;
-    opacity: 0.08;
-    mix-blend-mode: overlay;
-}
-.be-hero-inner {
-    position: relative;
-    z-index: 2;
-    max-width: 600px;
-}
-.be-hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.15);
-    color: white;
-    border-radius: 100px;
-    padding: 6px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-}
-.be-hero h1 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 16px;
-    color: white;
-}
-.be-hero h1 em {
-    font-style: italic;
-    display: block;
-    opacity: 0.9;
-}
-.be-hero-desc {
-    font-size: 15px;
-    color: rgba(255,255,255,0.8);
-    line-height: 1.7;
-    margin-bottom: 28px;
-    max-width: 480px;
-}
-.be-hero-ctas {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 32px;
-}
-.be-hero-ctas .be-btn-white {
-    background: white;
-    color: #1769FF;
-    padding: 10px 24px;
-    border-radius: 100px;
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-.be-hero-ctas .be-btn-white:hover {
-    background: #F0F0F0;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    text-decoration: none;
-    color: #0D5BDB;
-}
-.be-hero-ctas .be-btn-outline {
-    background: transparent;
-    color: white;
-    padding: 10px 24px;
-    border-radius: 100px;
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    border: 1.5px solid rgba(255,255,255,0.4);
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-.be-hero-ctas .be-btn-outline:hover {
-    border-color: white;
-    background: rgba(255,255,255,0.1);
-    text-decoration: none;
-    color: white;
-}
-.be-social {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.be-social-avatars { display: flex; }
-.be-social-avatars span {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: rgba(255,255,255,0.25);
-    border: 2px solid rgba(255,255,255,0.5);
-    margin-left: -8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: white;
-}
-.be-social-avatars span:first-child { margin-left: 0; }
-.be-social p { font-size: 13px; color: rgba(255,255,255,0.7); margin: 0; line-height: 1.4; }
-.be-social strong { color: white; }
+    /* === BEHANCE REPLICA UI === */
+    :root {
+        --be-blue: #0057ff;
+        --be-bg: #ffffff;
+        --be-border: #e8e8e8;
+        --be-text: #191919;
+    }
 
-/* Stats bar */
-.be-stats {
-    background: white;
-    border-bottom: 1px solid #ECECEC;
-    padding: 24px 0;
-}
-.be-stats-inner {
-    display: flex;
-    justify-content: center;
-    gap: 48px;
-    flex-wrap: wrap;
-}
-.be-stat { text-align: center; }
-.be-stat-num { font-size: 1.5rem; font-weight: 700; color: #191919; display: block; }
-.be-stat-lbl { font-size: 12px; color: #8C8C8C; text-transform: uppercase; letter-spacing: 0.05em; }
+    body {
+        background-color: var(--be-bg) !important;
+        color: var(--be-text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-/* How it works */
-.be-how-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-.be-how-card {
-    background: white;
-    border: 1px solid #ECECEC;
-    border-radius: 12px;
-    padding: 32px 24px;
-    text-align: center;
-    transition: all 0.2s;
-}
-.be-how-card:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-    border-color: #DEDEDE;
-    transform: translateY(-2px);
-}
-.be-how-icon {
-    width: 52px; height: 52px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; margin: 0 auto 16px;
-}
-.be-how-icon.blue { background: #E8F0FE; color: #1769FF; }
-.be-how-icon.dark { background: #F5F5F5; color: #4A4A4A; }
-.be-how-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
-.be-how-card p { font-size: 13px; color: #8C8C8C; margin: 0; line-height: 1.6; }
+    /* 1. HERO SECTION */
+    .be-hero-replica {
+        padding: 100px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-/* Obra card */
-.be-card {
-    cursor: pointer;
-    transition: all 0.2s;
-    border-radius: 8px;
-    overflow: hidden;
-}
-.be-card:hover { transform: translateY(-4px); }
-.be-card:hover .be-card-img img { transform: scale(1.03); }
-.be-card-img {
-    width: 100%; height: 210px; background: #F5F5F5;
-    overflow: hidden; border-radius: 8px; position: relative;
-}
-.be-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-.be-card-info { padding: 10px 2px; display: flex; align-items: center; justify-content: space-between; }
-.be-card-author { display: flex; align-items: center; gap: 8px; }
-.be-card-av {
-    width: 24px; height: 24px; border-radius: 50%;
-    background: #1769FF; color: white;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700;
-}
-.be-card-name { font-size: 12px; color: #6E6E6E; }
+    .hero-content-pro {
+        max-width: 800px;
+        z-index: 5;
+    }
 
-/* Categoría pills */
-.be-cats { display: flex; gap: 8px; flex-wrap: wrap; }
-.be-cat-pill {
-    padding: 8px 18px;
-    background: #F5F5F5;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #4A4A4A;
-    text-decoration: none;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.be-cat-pill:hover { background: #ECECEC; color: #191919; text-decoration: none; }
-.be-cat-pill .count { font-size: 11px; color: #B0B0B0; }
+    .hero-content-pro h1 {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        color: var(--be-text);
+    }
 
-/* Artist card */
-.be-artist-card {
-    text-align: center; padding: 28px 20px;
-    background: white; border: 1px solid #ECECEC; border-radius: 12px;
-    transition: all 0.2s; text-decoration: none; display: block; color: #191919;
-}
-.be-artist-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); border-color: #DEDEDE; text-decoration: none; color: #191919; }
-.be-artist-av { width: 56px; height: 56px; border-radius: 50%; background: #1769FF; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; margin: 0 auto 10px; }
+    .hero-content-pro h1 span {
+        color: var(--be-blue);
+    }
 
-/* CTA */
-.be-cta {
-    background: #191919;
-    padding: 56px 24px;
-    text-align: center;
-    border-radius: 16px;
-}
-.be-cta h2 { color: white; font-size: 1.75rem; margin-bottom: 8px; }
-.be-cta p { color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 24px; }
+    .hero-content-pro p {
+        font-size: 18px;
+        color: #696969;
+        margin-bottom: 32px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-@media (max-width: 768px) {
-    .be-hero { padding: 40px 0; }
-    .be-hero h1 { font-size: 1.75rem; }
-    .be-how-grid { grid-template-columns: 1fr; }
-    .be-stats-inner { gap: 24px; }
-    .be-cta { border-radius: 0; }
-}
+    /* Floating images around hero */
+    .floating-art {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border-radius: 8px;
+        object-fit: cover;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        z-index: 1;
+        opacity: 0.85;
+    }
+
+    .art-1 { top: 10%; left: 5%; transform: rotate(-5deg); }
+    .art-2 { top: 15%; right: 10%; transform: rotate(8deg); width: 140px; height: 180px; }
+    .art-3 { bottom: 15%; left: 8%; transform: rotate(12deg); width: 160px; height: 120px; }
+    .art-4 { bottom: 20%; right: 5%; transform: rotate(-10deg); width: 100px; height: 100px; }
+    .art-5 { top: 40%; left: 15%; transform: rotate(5deg); width: 80px; height: 80px; }
+    .art-6 { bottom: 40%; right: 15%; transform: rotate(-3deg); width: 90px; height: 130px; }
+
+    .hero-btns-pro {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .btn-be-primary {
+        background: var(--be-blue);
+        color: white;
+        border: none;
+        border-radius: 100px;
+        padding: 12px 28px;
+        font-weight: 700;
+        font-size: 15px;
+        transition: 0.2s;
+    }
+
+    .btn-be-secondary {
+        background: transparent;
+        color: var(--be-blue);
+        border: 1px solid #e8e8e8;
+        border-radius: 100px;
+        padding: 12px 28px;
+        font-weight: 700;
+        font-size: 15px;
+        transition: 0.2s;
+    }
+
+    /* 2. DISCOVERY BAR */
+    .discovery-bar-pro {
+        background: white;
+        border-top: 1px solid var(--be-border);
+        border-bottom: 1px solid var(--be-border);
+        padding: 12px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .discovery-inner {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .filter-btn-pro {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 13px;
+        border: 1px solid var(--be-border);
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .search-group-pro {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        background: #f9f9f9;
+        border: 1px solid var(--be-border);
+        border-radius: 100px;
+        padding: 0 20px;
+    }
+
+    .search-group-pro i { color: #959595; margin-right: 12px; }
+    .search-group-pro input {
+        border: none;
+        background: transparent;
+        padding: 10px 0;
+        width: 100%;
+        outline: none;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .search-types-pro {
+        display: flex;
+        gap: 15px;
+        margin-left: 20px;
+    }
+
+    .search-type-item {
+        font-size: 12px;
+        font-weight: 700;
+        color: #959595;
+        cursor: pointer;
+        padding: 5px 0;
+    }
+
+    .search-type-item.active {
+        color: var(--be-text);
+        border-bottom: 2px solid var(--be-text);
+    }
+
+    /* 3. CATEGORY MENU */
+    .category-menu-pro {
+        padding: 20px 0;
+        position: relative;
+    }
+
+    .category-scroll-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .category-list-pro {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        scroll-behavior: smooth;
+        padding: 10px 5px;
+    }
+
+    .category-list-pro::-webkit-scrollbar { display: none; }
+
+    .category-btn-pro {
+        flex: 0 0 160px;
+        height: 48px;
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: 0.2s;
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .cat-img-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.5);
+        transition: 0.3s;
+    }
+
+    .category-btn-pro:hover .cat-img-bg { filter: brightness(0.7); transform: scale(1.05); }
+
+    .cat-name-pro {
+        position: relative;
+        z-index: 2;
+        color: white;
+        font-weight: 800;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .arrow-pro {
+        width: 32px;
+        height: 32px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        cursor: pointer;
+        z-index: 10;
+        position: absolute;
+        border: 1px solid var(--be-border);
+    }
+
+    .arrow-left { left: -16px; }
+    .arrow-right { right: -16px; }
+
+    /* 4. PROJECT GRID */
+    .project-grid-replica {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+        padding-bottom: 50px;
+    }
+
+    .project-card-replica {
+        cursor: pointer;
+    }
+
+    .project-thumb {
+        width: 100%;
+        aspect-ratio: 4/3;
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+        background: #f0f0f0;
+    }
+
+    .project-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .project-meta {
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .project-author-info { display: flex; align-items: center; gap: 8px; }
+    .project-author-av { width: 24px; height: 24px; border-radius: 50%; background: #ccc; }
+    .project-title-pro { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+    .project-author-name { font-size: 12px; color: #696969; font-weight: 600; }
+    
+    .project-actions-pro {
+        display: flex;
+        gap: 12px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #696969;
+    }
+
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- ===== HERO ===== -->
-<section class="be-hero">
-    <div class="container">
-        <div class="be-hero-inner">
-            <div class="be-hero-tag">
-                <i class="fas fa-seedling"></i> El refugio del creador
+<!-- 1. HERO SECTION REPLICA -->
+<section class="be-hero-replica">
+    <!-- Floating Art Decor -->
+    <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200" class="floating-art art-1">
+    <img src="https://images.unsplash.com/photo-1460661419201-fd4ce186860d?w=200" class="floating-art art-2">
+    <img src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200" class="floating-art art-3">
+    <img src="https://images.unsplash.com/photo-1541462608141-ad60397d5873?w=200" class="floating-art art-4">
+    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200" class="floating-art art-5">
+    <img src="https://images.unsplash.com/photo-1459908276235-d436e447a2a6?w=200" class="floating-art art-6">
+
+    <div class="hero-content-pro">
+        <h1>Los mejores <span>creadores del mundo</span> están en Ágora Art</h1>
+        <p>Una plataforma integral para ayudar a coleccionistas y creadores a navegar por el mundo creativo, desde la inspiración hasta la comunicación.</p>
+        <div class="hero-btns-pro">
+            <button class="btn-be-primary">Explorar talentos</button>
+            <button class="btn-be-secondary">Unirse a la comunidad</button>
+        </div>
+    </div>
+</section>
+
+<!-- 2. DISCOVERY BAR REPLICA -->
+<nav class="discovery-bar-pro">
+    <div class="container-fluid px-4">
+        <div class="discovery-inner">
+            <div class="filter-btn-pro">
+                <i class="fas fa-sliders-h"></i>
+                Filtro
             </div>
-            <h1>
-                Arte original,
-                <em>sin intermediarios.</em>
-            </h1>
-            <p class="be-hero-desc">
-                Ágora Art es el espacio donde los artistas exhiben su obra, construyen comunidad y venden sus creaciones. Sin algoritmos. Sin ruido. Solo arte.
-            </p>
-            <div class="be-hero-ctas">
-                <a href="{{ url_for('public.explorar') }}" class="be-btn-white">
-                    <i class="fas fa-compass"></i> Explorar obras
-                </a>
-                {% if not current_user.is_authenticated %}
-                <a href="{{ url_for('auth.register') }}" class="be-btn-outline">
-                    Únete gratis
-                </a>
-                {% endif %}
-            </div>
-            <div class="be-social">
-                <div class="be-social-avatars">
-                    <span>M</span><span>C</span><span>L</span><span>+</span>
+            
+            <div class="search-group-pro">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar en Ágora Art...">
+                <div class="search-types-pro d-none d-md-flex">
+                    <span class="search-type-item active">Proyectos</span>
+                    <span class="search-type-item">Personas</span>
+                    <span class="search-type-item">Archivos</span>
+                    <span class="search-type-item">Imágenes</span>
                 </div>
-                <p><strong>Artistas independientes</strong><br>ya comparten su obra aquí</p>
             </div>
+
+            <div class="d-none d-lg-block">
+                <div class="dropdown">
+                    <button class="btn btn-sm fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Recomendado
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item active" href="#">Recomendado</a></li>
+                        <li><a class="dropdown-item" href="#">Más reciente</a></li>
+                        <li><a class="dropdown-item" href="#">Más valorado</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 3. CATEGORY MENU REPLICA -->
+<section class="category-menu-pro">
+    <div class="container-fluid px-4">
+        <div class="category-scroll-container">
+            <div class="arrow-pro arrow-left" onclick="scrollCats(-200)"><i class="fas fa-chevron-left"></i></div>
+            
+            <div class="category-list-pro" id="cat-scroll">
+                {% set cat_placeholders = [
+                    'https://images.unsplash.com/photo-1549490349-8643362247b5?w=300',
+                    'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=300',
+                    'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=300',
+                    'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=300',
+                    'https://images.unsplash.com/photo-1460661419201-fd4ce186860d?w=300',
+                    'https://images.unsplash.com/photo-1459908276235-d436e447a2a6?w=300'
+                ] %}
+                
+                <!-- For You Item -->
+                <a href="#" class="category-btn-pro">
+                    <div class="cat-img-bg" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=300')"></div>
+                    <span class="cat-name-pro">Para ti</span>
+                </a>
+
+                {% for cat in categorias %}
+                <a href="{{ url_for('public.obras_categoria', categoria_id=cat.id_categoria) }}" class="category-btn-pro">
+                    <div class="cat-img-bg" style="background-image: url('{{ cat_placeholders[loop.index0 % cat_placeholders|length] }}')"></div>
+                    <span class="cat-name-pro">{{ cat.nombre }}</span>
+                </a>
+                {% endfor %}
+            </div>
+
+            <div class="arrow-pro arrow-right" onclick="scrollCats(200)"><i class="fas fa-chevron-right"></i></div>
         </div>
     </div>
 </section>
-
-<!-- ===== STATS ===== -->
-<div class="be-stats">
-    <div class="be-stats-inner">
-        <div class="be-stat">
-            <span class="be-stat-num">{{ obras_recientes|length if obras_recientes else '0' }}+</span>
-            <span class="be-stat-lbl">Obras publicadas</span>
-        </div>
-        <div class="be-stat">
-            <span class="be-stat-num">{{ artistas_destacados|length if artistas_destacados else '0' }}+</span>
-            <span class="be-stat-lbl">Artistas activos</span>
-        </div>
-        <div class="be-stat">
-            <span class="be-stat-num">{{ categorias_populares|length if categorias_populares else '0' }}</span>
-            <span class="be-stat-lbl">Categorías</span>
-        </div>
-        <div class="be-stat">
-            <span class="be-stat-num">100%</span>
-            <span class="be-stat-lbl">Libres de algoritmos</span>
-        </div>
-    </div>
-</div>
-
-<!-- ===== CÓMO FUNCIONA ===== -->
-<section style="padding:48px 0;">
-    <div class="container">
-        <div style="text-align:center;margin-bottom:32px;">
-            <h2 style="font-size:1.5rem;margin-bottom:4px;">Un espacio para cada rol</h2>
-            <p style="color:#8C8C8C;font-size:14px;margin:0;">Sin complejidad. Solo lo que necesitas para crear, coleccionar e inspirarte.</p>
-        </div>
-        <div class="be-how-grid">
-            <div class="be-how-card">
-                <div class="be-how-icon blue"><i class="fas fa-palette"></i></div>
-                <h4>Para artistas</h4>
-                <p>Publica tu portafolio, escribe en tu blog, abre tu tienda. Todo en un solo lugar, sin depender de redes sociales.</p>
-            </div>
-            <div class="be-how-card">
-                <div class="be-how-icon dark"><i class="fas fa-heart"></i></div>
-                <h4>Para coleccionistas</h4>
-                <p>Sigue artistas, guarda tus favoritos, crea moodboards y compra arte original directamente a su creador.</p>
-            </div>
-            <div class="be-how-card">
-                <div class="be-how-icon blue"><i class="fas fa-users"></i></div>
-                <h4>Comunidad real</h4>
-                <p>Recibe newsletters de los artistas que amas. Construye tu gusto sin el ruido de los trending topics.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===== OBRAS RECIENTES ===== -->
-{% if obras_recientes %}
-<section style="padding:32px 0 48px;background:#FAFAFA;">
-    <div class="container">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-            <h2 style="font-size:1.5rem;margin:0;">Obras recientes</h2>
-            <a href="{{ url_for('public.explorar') }}" style="font-size:13px;color:#1769FF;font-weight:500;">Ver todas →</a>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">
-            {% for obra in obras_recientes[:6] %}
-            <div class="be-card" onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}'">
-                <div class="be-card-img">
-                    {% if obra.imagen %}
-                    <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}">
-                    {% else %}
-                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#F0F0F0,#E0E0E0);display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-image" style="font-size:2rem;color:#CECECE;"></i>
+<!-- 4. PROJECT GRID REPLICA -->
+<section class="py-4">
+    <div class="container-fluid px-4">
+        <div class="project-grid-replica">
+            {% if obras_recientes %}
+                {% for obra in obras_recientes %}
+                <div class="project-card-replica" onclick="window.location.href='{{ url_for('public.detalle_obra', obra_id=obra.id_obra) }}'">
+                    <div class="project-thumb">
+                        {% if obra.imagen %}
+                            <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}">
+                        {% else %}
+                            <div class="w-100 h-100 bg-light d-flex align-items-center justify-content-center text-muted">
+                                <i class="fas fa-image fa-2x"></i>
+                            </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                    {% if obra.categoria %}
-                    <span style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.6);color:white;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:500;">{{ obra.categoria.nombre }}</span>
-                    {% endif %}
-                </div>
-                <div class="be-card-info">
-                    <div class="be-card-author">
-                        <div class="be-card-av">{{ obra.artista.nombre[0]|upper }}</div>
-                        <span class="be-card-name">{{ obra.artista.nombre }}</span>
+                    <div class="project-meta">
+                        <div class="project-author-info">
+                            <div class="project-author-av" style="background-image: url('https://ui-avatars.com/api/?name={{ obra.artista.nombre }}&background=0057ff&color=fff'); background-size: cover;"></div>
+                            <div class="author-text">
+                                <div class="project-title-pro">{{ obra.titulo }}</div>
+                                <div class="project-author-name">{{ obra.artista.nombre }}</div>
+                            </div>
+                        </div>
+                        <div class="project-actions-pro">
+                            <span><i class="fas fa-thumbs-up me-1"></i> {{ (range(10, 500)|random) }}</span>
+                            <span><i class="fas fa-eye me-1"></i> {{ (range(100, 5000)|random) }}</span>
+                        </div>
                     </div>
-                    {% if obra.precio %}
-                    <span style="color:#1769FF;font-size:13px;font-weight:600;">${{ obra.precio }}</span>
-                    {% endif %}
                 </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- ===== STATS BAR (Un solo renglón) ===== -->
+<section style="background: white; border-top: 1px solid #ECECEC; border-bottom: 1px solid #ECECEC; padding: 40px 0;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-around; text-align: center; flex-wrap: nowrap; gap: 10px;">
+            <div style="flex: 1;">
+                <h2 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; color: #1B8FA0; margin-bottom: 5px; font-size: clamp(1.2rem, 3vw, 2rem);">{{ obras_recientes|length if obras_recientes else '0' }}+</h2>
+                <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8C8C8C; font-weight: 600; white-space: nowrap;">Obras Publicadas</p>
             </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- ===== CATEGORÍAS ===== -->
-{% if categorias_populares %}
-<section style="padding:48px 0;">
-    <div class="container">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-            <h2 style="font-size:1.5rem;margin:0;">Explora por disciplina</h2>
-            <a href="{{ url_for('public.categorias') }}" style="font-size:13px;color:#1769FF;font-weight:500;">Ver todas →</a>
-        </div>
-        <div class="be-cats">
-            {% for categoria, count in categorias_populares[:8] %}
-            <a href="{{ url_for('public.obras_categoria', categoria_id=categoria.id_categoria) }}" class="be-cat-pill">
-                <i class="fas fa-folder-open" style="font-size:12px;"></i>
-                {{ categoria.nombre }}
-                <span class="count">{{ count }}</span>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- ===== ARTISTAS ===== -->
-{% if artistas_destacados %}
-<section style="padding:32px 0 48px;background:#FAFAFA;">
-    <div class="container">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-            <h2 style="font-size:1.5rem;margin:0;">Artistas de la comunidad</h2>
-            <a href="{{ url_for('public.artistas') }}" style="font-size:13px;color:#1769FF;font-weight:500;">Ver todos →</a>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
-            {% for artista in artistas_destacados[:6] %}
-            <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" class="be-artist-card">
-                <div class="be-artist-av">{{ artista.nombre[0]|upper }}</div>
-                <div style="font-size:14px;font-weight:600;margin-bottom:2px;">{{ artista.nombre }}</div>
-                <div style="font-size:12px;color:#8C8C8C;margin-bottom:8px;">@{{ artista.username }}</div>
-                {% if artista.biografia %}
-                <p style="font-size:12px;color:#8C8C8C;line-height:1.5;margin-bottom:8px;">{{ artista.biografia[:60] }}{% if artista.biografia|length > 60 %}…{% endif %}</p>
-                {% endif %}
-                <div style="font-size:12px;color:#8C8C8C;">
-                    <strong style="color:#191919;">{{ artista.get_obras_count() }}</strong> obras ·
-                    <strong style="color:#191919;">{{ artista.get_seguidores_count() }}</strong> seguidores
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- ===== CTA ===== -->
-{% if not current_user.is_authenticated %}
-<section style="padding:48px 0;">
-    <div class="container">
-        <div class="be-cta">
-            <h2>Tu arte merece un refugio propio</h2>
-            <p>Sin algoritmos que decidan quién te ve. Sin ruido. Solo tu obra y las personas que genuinamente la valoran.</p>
-            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-                <a href="{{ url_for('auth.register') }}" class="be-btn-white" style="background:white;color:#191919;padding:10px 28px;border-radius:100px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;">
-                    <i class="fas fa-seedling"></i> Crear mi espacio
-                </a>
-                <a href="{{ url_for('public.explorar') }}" style="background:transparent;color:white;padding:10px 28px;border-radius:100px;font-weight:600;font-size:14px;text-decoration:none;border:1.5px solid rgba(255,255,255,0.3);display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;">
-                    <i class="fas fa-compass"></i> Explorar obras
-                </a>
+            <div style="flex: 1;">
+                <h2 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; color: #1B8FA0; margin-bottom: 5px; font-size: clamp(1.2rem, 3vw, 2rem);">{{ artistas_destacados|length if artistas_destacados else '0' }}+</h2>
+                <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8C8C8C; font-weight: 600; white-space: nowrap;">Artistas Activos</p>
+            </div>
+            <div style="flex: 1;">
+                <h2 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; color: #1B8FA0; margin-bottom: 5px; font-size: clamp(1.2rem, 3vw, 2rem);">{{ categorias|length if categorias else '0' }}</h2>
+                <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8C8C8C; font-weight: 600; white-space: nowrap;">Categorías</p>
+            </div>
+            <div style="flex: 1;">
+                <h2 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; color: #1B8FA0; margin-bottom: 5px; font-size: clamp(1.2rem, 3vw, 2rem);">100%</h2>
+                <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8C8C8C; font-weight: 600; white-space: nowrap;">Libres de Algoritmos</p>
             </div>
         </div>
     </div>
 </section>
-{% endif %}
 
+<!-- ===== UN ESPACIO PARA CADA ROL (Un solo renglón) ===== -->
+<section style="padding: 80px 0; background: white;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h2 style="font-family: 'Josefin Sans', sans-serif; font-size: 32px; font-weight: 700; color: #191919; margin-bottom: 15px;">Un espacio para cada rol</h2>
+            <p style="font-family: 'Josefin Sans', sans-serif; font-size: 16px; color: #8C8C8C; font-style: italic;">Sin complejidad. Solo lo que necesitas para crear, coleccionar e inspirarte.</p>
+        </div>
+        
+        <div style="display: flex; gap: 24px; justify-content: center; flex-wrap: nowrap;">
+            <!-- Artistas -->
+            <div style="flex: 1; min-width: 0;">
+                <div style="background: #fff; padding: 40px 20px; border-radius: 20px; border: 1px solid #ECECEC; transition: 0.3s; height: 100%; text-align: center;">
+                    <div style="width: 60px; height: 60px; background: #E8F6F8; color: #1B8FA0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 20px;">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h4 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Para artistas</h4>
+                    <p style="font-family: 'Josefin Sans', sans-serif; color: #696969; line-height: 1.5; font-size: 13px;">Publica tu portafolio, escribe en tu blog, abre tu tienda.</p>
+                </div>
+            </div>
+            <!-- Coleccionistas -->
+            <div style="flex: 1; min-width: 0;">
+                <div style="background: #fff; padding: 40px 20px; border-radius: 20px; border: 1px solid #ECECEC; transition: 0.3s; height: 100%; text-align: center;">
+                    <div style="width: 60px; height: 60px; background: #F4F0F9; color: #8A6EA8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 20px;">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Para coleccionistas</h4>
+                    <p style="font-family: 'Josefin Sans', sans-serif; color: #696969; line-height: 1.5; font-size: 13px;">Sigue artistas, guarda tus favoritos, crea moodboards.</p>
+                </div>
+            </div>
+            <!-- Comunidad -->
+            <div style="flex: 1; min-width: 0;">
+                <div style="background: #fff; padding: 40px 20px; border-radius: 20px; border: 1px solid #ECECEC; transition: 0.3s; height: 100%; text-align: center;">
+                    <div style="width: 60px; height: 60px; background: #E8F6F8; color: #1B8FA0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 20px;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Comunidad real</h4>
+                    <p style="font-family: 'Josefin Sans', sans-serif; color: #696969; line-height: 1.5; font-size: 13px;">Recibe newsletters de los artistas que amas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ARTISTAS DE LA COMUNIDAD ===== -->
+<section style="padding: 80px 0; background: #F4F0F9;">
+    <div class="container text-center">
+        <h2 style="font-family: 'Josefin Sans', sans-serif; font-size: 32px; font-weight: 700; color: #191919; margin-bottom: 15px;">Artistas de la comunidad</h2>
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 16px; color: #8C8C8C; font-style: italic; margin-bottom: 60px;">Creadores independientes que dan vida a este espacio</p>
+        
+        <div style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px;">
+            {% if artistas_destacados %}
+                {% for artista in artistas_destacados[:4] %}
+                <div style="flex: 0 0 260px;">
+                    <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" style="text-decoration: none; color: inherit;">
+                        <div style="background: #fff; padding: 40px 25px; border-radius: 25px; border: 1px solid #ECECEC; transition: 0.3s; height: 100%; display: flex; flex-direction: column; align-items: center;">
+                            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #1B8FA0, #8A6EA8); color: white; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 32px; font-weight: 700; box-shadow: 0 8px 20px rgba(27, 143, 160, 0.2);">
+                                {{ artista.nombre[0]|upper }}
+                            </div>
+                            <h5 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; margin-bottom: 5px; font-size: 18px;">{{ artista.nombre }}</h5>
+                            <p style="font-size: 12px; color: #8C8C8C; margin-bottom: 15px;">@{{ artista.username }}</p>
+                            <p style="font-family: 'Josefin Sans', sans-serif; font-size: 13px; color: #696969; line-height: 1.5; margin-bottom: 25px;">{{ artista.biografia[:80] + '...' if artista.biografia else 'Creador independiente en Ágora Art' }}</p>
+                            <div style="display: flex; gap: 30px; border-top: 1px solid #F5F5F5; padding-top: 20px; width: 100%; justify-content: center;">
+                                <div style="text-align: center;">
+                                    <div style="font-weight: 700; color: #191919; font-size: 16px;">{{ (range(1, 20)|random) }}</div>
+                                    <div style="font-size: 10px; color: #8C8C8C; text-transform: uppercase; font-weight: 600;">obras</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-weight: 700; color: #191919; font-size: 16px;">{{ (range(5, 100)|random) }}</div>
+                                    <div style="font-size: 10px; color: #8C8C8C; text-transform: uppercase; font-weight: 600;">seguidores</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <a href="{{ url_for('public.artistas') }}" style="display: inline-block; padding: 12px 35px; background: white; border: 1px solid #ECECEC; border-radius: 100px; color: #1B8FA0; font-family: 'Josefin Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            VER TODOS LOS ARTISTAS
+        </a>
+    </div>
+</section>
+
+<!-- ===== CTA BANNER (Antes del footer) ===== -->
+<section style="padding: 60px 0; background: white;">
+    <div class="container">
+        <div style="background: linear-gradient(135deg, #1B2B3A 0%, #1B8FA0 50%, #8A6EA8 100%); padding: 100px 40px; border-radius: 30px; text-align: center; color: white; box-shadow: 0 20px 40px rgba(0,0,0,0.15); position: relative; overflow: hidden;">
+            <h2 style="font-family: 'Josefin Sans', sans-serif; font-size: 38px; font-weight: 700; margin-bottom: 20px;">Tu arte merece un refugio propio</h2>
+            <p style="font-family: 'Josefin Sans', sans-serif; font-size: 18px; opacity: 0.9; font-style: italic; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto;">Sin algoritmos que decidan quién te ve. Sin ruido. Solo tu obra y las personas que genuinamente la valoran.</p>
+            <a href="{{ url_for('public.explorar') }}" style="display: inline-flex; align-items: center; gap: 10px; background: white; color: #1B2B3A; padding: 15px 35px; border-radius: 100px; text-decoration: none; font-family: 'Josefin Sans', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                <i class="fas fa-compass"></i>
+                EXPLORAR OBRAS
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function scrollCats(amount) {
+        const el = document.getElementById('cat-scroll');
+        el.scrollLeft += amount;
+    }
+</script>
 {% endblock %}

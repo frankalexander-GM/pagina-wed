@@ -13,15 +13,16 @@ def home():
     service_factory = get_service_factory()
     obra_service = service_factory.get_obra_service()
     categoria_service = service_factory.get_categoria_service()
+    usuario_service = service_factory.get_usuario_service()
     
     # Obtener datos para la página de inicio
-    obras_recientes = obra_service.get_obras_recientes(limit=6)
-    categorias_populares = categoria_service.get_populares(limit=6)
-    artistas_destacados = obra_service.get_artistas_con_obras(limit=6)
+    obras_recientes = obra_service.get_all(limit=24)
+    categorias = categoria_service.get_all()
+    artistas_destacados = usuario_service.get_artistas_activos(limit=10)
 
     return render_template('public/home.html', 
                          obras_recientes=obras_recientes,
-                         categorias_populares=categorias_populares,
+                         categorias=categorias,
                          artistas_destacados=artistas_destacados)
 
 @public_bp.route('/explorar')
