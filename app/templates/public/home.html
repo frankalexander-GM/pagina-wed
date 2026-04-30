@@ -11,8 +11,8 @@
     }
 
     body {
-        background-color: #0D0B21 !important; /* Indigo Profundo Cosmico */
-        color: #FFFFFF;
+        background-color: var(--bg-color) !important; /* Indigo Profundo Cosmico */
+        color: #FFFFFF !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
     }
 
@@ -29,7 +29,7 @@
         display: flex;
         align-items: center;
         overflow: hidden;
-        color: white;
+        color: #FFFFFF !important;
     }
 
     .hero-cosmic::before {
@@ -62,7 +62,7 @@
         font-weight: 800;
         line-height: 1.1;
         margin-bottom: 20px;
-        color: white;
+        color: #FFFFFF !important; /* Siempre blanco por la imagen oscura */
     }
 
     .hero-text-side h1 span {
@@ -86,7 +86,7 @@
         align-items: center;
         gap: 10px;
         background: #FF2D95;
-        color: white;
+        color: #FFFFFF !important;
         padding: 14px 35px;
         border-radius: 100px;
         font-weight: 700;
@@ -100,12 +100,12 @@
         background: #e62283;
         transform: translateY(-3px);
         box-shadow: 0 12px 25px rgba(255, 45, 149, 0.35);
-        color: white;
+        color: #FFFFFF !important;
     }
 
     /* 2. DISCOVERY BAR */
     .discovery-bar-pro {
-        background: rgba(13, 11, 33, 0.8);
+        background: var(--bg-color); opacity: 0.95;
         backdrop-filter: blur(10px);
         border-top: 1px solid rgba(255, 45, 149, 0.2);
         border-bottom: 1px solid rgba(255, 45, 149, 0.2);
@@ -135,7 +135,7 @@
         padding: 8px 16px;
         border-radius: 4px;
         cursor: pointer;
-        color: white;
+        color: #FFFFFF !important;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -151,7 +151,7 @@
         flex-grow: 1;
         display: flex;
         align-items: center;
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--bg-secondary); border: 1px solid var(--border-color);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 100px;
         padding: 0 20px;
@@ -173,7 +173,7 @@
         outline: none;
         font-weight: 600;
         font-size: 14px;
-        color: white;
+        color: #FFFFFF !important;
         border: none;
         background: transparent;
         padding: 10px 0;
@@ -204,7 +204,7 @@
 
     /* 3. CATEGORY MENU */
     .category-menu-pro {
-        background: #0D0B21;
+        background: var(--bg-color);
         padding: 40px 0;
         padding: 20px 0;
         position: relative;
@@ -255,7 +255,7 @@
     .cat-name-pro {
         position: relative;
         z-index: 2;
-        color: white;
+        color: #FFFFFF !important;
         font-weight: 800;
         font-size: 12px;
         text-transform: uppercase;
@@ -265,8 +265,8 @@
     .arrow-pro {
         width: 32px;
         height: 32px;
-        background: #1A1738;
-        color: white;
+        background: var(--card-bg);
+        color: #FFFFFF !important;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -311,7 +311,7 @@
         border-radius: 12px;
         overflow: hidden;
         position: relative;
-        background: #1A1738;
+        background: var(--card-bg);
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         width: 100%;
         aspect-ratio: 4/3;
@@ -336,7 +336,7 @@
         font-weight: 700;
         font-size: 14px;
         margin-bottom: 2px;
-        color: white; font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+        color: #FFFFFF !important; font-weight: 700; font-size: 14px; margin-bottom: 2px; }
     .project-author-name { font-size: 12px; color: #696969; font-weight: 600; }
     
     .project-actions-pro {
@@ -478,7 +478,7 @@
 </section>
 
 <!-- ===== STATS BAR (Un solo renglón) ===== -->
-<section style="background: #12102B; border-top: 1px solid rgba(255, 45, 149, 0.1); border-bottom: 1px solid rgba(255, 45, 149, 0.1); padding: 60px 0;">
+<section style="background: var(--bg-secondary); border-top: 1px solid rgba(255, 45, 149, 0.1); border-bottom: 1px solid rgba(255, 45, 149, 0.1); padding: 60px 0;">
     <div class="container">
         <div style="display: flex; justify-content: space-around; text-align: center; flex-wrap: nowrap; gap: 10px;">
             <div style="flex: 1;">
@@ -502,41 +502,41 @@
 </section>
 
 <!-- ===== UN ESPACIO PARA CADA ROL (Un solo renglón) ===== -->
-<section style="padding: 80px 0; background: #0D0B21;">
+<section style="padding: 80px 0; background: var(--bg-color);">
     <div class="container">
         <div style="text-align: center; margin-bottom: 60px;">
-            <h2 style="font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 700; color: #FFFFFF; margin-bottom: 15px;">Un espacio para cada rol</h2>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 700; color: #FFFFFF !important; margin-bottom: 15px;">Un espacio para cada rol</h2>
             <p style="font-family: 'Josefin Sans', sans-serif; font-size: 16px; color: #8C8C8C; font-style: italic;">Sin complejidad. Solo lo que necesitas para crear, coleccionar e inspirarte.</p>
         </div>
         
         <div style="display: flex; gap: 24px; justify-content: center; flex-wrap: nowrap;">
             <!-- Artistas -->
             <div style="flex: 1; min-width: 0;">
-                <div style="background: #1A1738; padding: 40px 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; height: 100%; text-align: center;">
+                <div style="background: var(--card-bg); padding: 40px 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; height: 100%; text-align: center;">
                     <div style="width: 60px; height: 60px; background: #E8F6F8; color: #1B8FA0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 20px;">
                         <i class="fas fa-palette"></i>
                     </div>
-                    <h4 style="font-family: 'Outfit', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 18px; color: white;">Para artistas</h4>
+                    <h4 style="font-family: 'Outfit', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 18px; color: #FFFFFF !important;">Para artistas</h4>
                     <p style="font-family: 'Josefin Sans', sans-serif; color: #696969; line-height: 1.5; font-size: 13px;">Publica tu portafolio, escribe en tu blog, abre tu tienda.</p>
                 </div>
             </div>
             <!-- Coleccionistas -->
             <div style="flex: 1; min-width: 0;">
-                <div style="background: #1A1738; padding: 40px 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; height: 100%; text-align: center;">
+                <div style="background: var(--card-bg); padding: 40px 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; height: 100%; text-align: center;">
                     <div style="width: 60px; height: 60px; background: #F4F0F9; color: #8A6EA8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 20px;">
                         <i class="fas fa-heart"></i>
                     </div>
-                    <h4 style="font-family: 'Outfit', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 18px; color: white;">Para coleccionistas</h4>
+                    <h4 style="font-family: 'Outfit', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 18px; color: #FFFFFF !important;">Para coleccionistas</h4>
                     <p style="font-family: 'Josefin Sans', sans-serif; color: #696969; line-height: 1.5; font-size: 13px;">Sigue artistas, guarda tus favoritos, crea moodboards.</p>
                 </div>
             </div>
             <!-- Comunidad -->
             <div style="flex: 1; min-width: 0;">
-                <div style="background: #1A1738; padding: 40px 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; height: 100%; text-align: center;">
+                <div style="background: var(--card-bg); padding: 40px 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; height: 100%; text-align: center;">
                     <div style="width: 60px; height: 60px; background: #E8F6F8; color: #1B8FA0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 20px;">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h4 style="font-family: 'Outfit', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 18px; color: white;">Comunidad real</h4>
+                    <h4 style="font-family: 'Outfit', sans-serif; font-weight: 700; margin-bottom: 12px; font-size: 18px; color: #FFFFFF !important;">Comunidad real</h4>
                     <p style="font-family: 'Josefin Sans', sans-serif; color: #696969; line-height: 1.5; font-size: 13px;">Recibe newsletters de los artistas que amas.</p>
                 </div>
             </div>
@@ -545,9 +545,9 @@
 </section>
 
 <!-- ===== ARTISTAS DE LA COMUNIDAD ===== -->
-<section style="padding: 80px 0; background: #12102B;">
+<section style="padding: 80px 0; background: var(--bg-secondary);">
     <div class="container text-center">
-        <h2 style="font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 700; color: #FFFFFF; margin-bottom: 15px;">Artistas de la comunidad</h2>
+        <h2 style="font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 700; color: #FFFFFF !important; margin-bottom: 15px;">Artistas de la comunidad</h2>
         <p style="font-family: 'Josefin Sans', sans-serif; font-size: 16px; color: #8C8C8C; font-style: italic; margin-bottom: 60px;">Creadores independientes que dan vida a este espacio</p>
         
         <div style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px;">
@@ -555,8 +555,8 @@
                 {% for artista in artistas_destacados[:4] %}
                 <div style="flex: 0 0 260px;">
                     <a href="{{ url_for('public.perfil_artista', artista_id=artista.id_usuario) }}" style="text-decoration: none; color: inherit;">
-                        <div style="background: #1A1738; padding: 40px 25px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; height: 100%; display: flex; flex-direction: column; align-items: center;">
-                            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #1B8FA0, #8A6EA8); color: white; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 32px; font-weight: 700; box-shadow: 0 8px 20px rgba(27, 143, 160, 0.2);">
+                        <div style="background: var(--card-bg); padding: 40px 25px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; height: 100%; display: flex; flex-direction: column; align-items: center;">
+                            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #1B8FA0, #8A6EA8); color: #FFFFFF !important; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 32px; font-weight: 700; box-shadow: 0 8px 20px rgba(27, 143, 160, 0.2);">
                                 {{ artista.nombre[0]|upper }}
                             </div>
                             <h5 style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; margin-bottom: 5px; font-size: 18px;">{{ artista.nombre }}</h5>
@@ -564,11 +564,11 @@
                             <p style="font-family: 'Josefin Sans', sans-serif; font-size: 13px; color: #696969; line-height: 1.5; margin-bottom: 25px;">{{ artista.biografia[:80] + '...' if artista.biografia else 'Creador independiente en Ágora Art' }}</p>
                             <div style="display: flex; gap: 30px; border-top: 1px solid #F5F5F5; padding-top: 20px; width: 100%; justify-content: center;">
                                 <div style="text-align: center;">
-                                    <div style="font-weight: 700; color: #191919; font-size: 16px;">{{ (range(1, 20)|random) }}</div>
+                                    <div style="font-weight: 700; color: #FFFFFF !important; font-size: 16px;">{{ (range(1, 20)|random) }}</div>
                                     <div style="font-size: 10px; color: #8C8C8C; text-transform: uppercase; font-weight: 600;">obras</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-weight: 700; color: #191919; font-size: 16px;">{{ (range(5, 100)|random) }}</div>
+                                    <div style="font-weight: 700; color: #FFFFFF !important; font-size: 16px;">{{ (range(5, 100)|random) }}</div>
                                     <div style="font-size: 10px; color: #8C8C8C; text-transform: uppercase; font-weight: 600;">seguidores</div>
                                 </div>
                             </div>
@@ -578,16 +578,16 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <a href="{{ url_for('public.artistas') }}" style="display: inline-block; padding: 12px 35px; background: white; border: 1px solid #ECECEC; border-radius: 100px; color: #1B8FA0; font-family: 'Josefin Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <a href="{{ url_for('public.artistas') }}" style="display: inline-block; padding: 12px 35px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 100px; color: var(--accent-cyan); font-family: 'Josefin Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
             VER TODOS LOS ARTISTAS
         </a>
     </div>
 </section>
 
 <!-- ===== CTA BANNER (Antes del footer) ===== -->
-<section style="padding: 60px 0; background: white;">
+<section style="padding: 60px 0; background: var(--bg-color);">
     <div class="container">
-        <div style="background: linear-gradient(135deg, #1B2B3A 0%, #1B8FA0 50%, #8A6EA8 100%); padding: 100px 40px; border-radius: 30px; text-align: center; color: white; box-shadow: 0 20px 40px rgba(0,0,0,0.15); position: relative; overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #1B2B3A 0%, #1B8FA0 50%, #8A6EA8 100%); padding: 100px 40px; border-radius: 30px; text-align: center; color: #FFFFFF !important; box-shadow: 0 20px 40px rgba(0,0,0,0.15); position: relative; overflow: hidden;">
             <h2 style="font-family: 'Josefin Sans', sans-serif; font-size: 38px; font-weight: 700; margin-bottom: 20px;">Tu arte merece un refugio propio</h2>
             <p style="font-family: 'Josefin Sans', sans-serif; font-size: 18px; opacity: 0.9; font-style: italic; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto;">Sin algoritmos que decidan quién te ve. Sin ruido. Solo tu obra y las personas que genuinamente la valoran.</p>
             <a href="{{ url_for('public.explorar') }}" style="display: inline-flex; align-items: center; gap: 10px; background: white; color: #1B2B3A; padding: 15px 35px; border-radius: 100px; text-decoration: none; font-family: 'Josefin Sans', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
