@@ -25,16 +25,72 @@
         font-family: 'Outfit', sans-serif !important;
         font-weight: 700;
     }
+    /* === THEME VARIABLES === */
+    :root {
+        /* Default: Dark Theme */
+        --bg-color: #0D0B21;
+        --bg-secondary: #1A1738;
+        --text-color: #FFFFFF;
+        --text-muted: rgba(255, 255, 255, 0.7);
+        --accent-magenta: #FF2D95;
+        --accent-cyan: #FF2D95;
+        --nav-bg: #0D0B21;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --card-bg: rgba(255, 255, 255, 0.03);
+    }
+
+    [data-theme="light"] {
+        --bg-color: #FFFFFF;
+        --bg-secondary: #F8F8F8;
+        --text-color: #191919;
+        --text-muted: #696969;
+        --accent-magenta: #0057FF; /* Azul Behance para modo claro */
+        --accent-cyan: #FF2D95;
+        --nav-bg: #191919; /* Mantenemos nav oscura en modo claro para contraste */
+        --border-color: #ECECEC;
+        --card-bg: #FFFFFF;
+    }
+
+    body {
+        background-color: var(--bg-color) !important;
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+
     /* === BEHANCE NAVBAR === */
     .be-header {
-        background: #0D0B21; /* Indigo Cosmico */
-        border-bottom: 1px solid rgba(255, 45, 149, 0.15);
+        background: var(--nav-bg);
+        border-bottom: 1px solid var(--border-color);
         height: 56px;
         display: flex;
         align-items: center;
         position: sticky;
         top: 0;
         z-index: 1000;
+        transition: background-color 0.3s;
+    }
+    
+    /* Theme Toggle Button */
+    .theme-toggle {
+        background: rgba(255,255,255,0.1);
+        border: none;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-right: 8px;
+    }
+    .theme-toggle:hover {
+        background: rgba(255,255,255,0.2);
+    }
+    [data-theme="light"] .theme-toggle {
+        color: white; /* Icono blanco sobre nav negra */
     }
     .be-header-inner {
         max-width: 1260px;
@@ -56,7 +112,7 @@
     }
     .be-logo-icon {
         width: 28px; height: 28px;
-        background: #00D2FF; /* Cian Cosmico */
+        background: #FF2D95; /* Cian Cosmico */
         border-radius: 6px;
         display: flex; align-items: center; justify-content: center;
     }
@@ -65,7 +121,7 @@
         font-weight: 700; font-size: 15px; color: white;
         letter-spacing: -0.01em;
     }
-    .be-logo-text span { color: #1769FF; }
+    .be-logo-text span { color: #FF2D95; }
 
     /* Nav links en la barra negra */
     .be-nav {
@@ -97,7 +153,7 @@
         left: 16px;
         right: 16px;
         height: 2px;
-        background: #1769FF;
+        background: #FF2D95;
         transform: scaleX(0);
         transition: transform 0.2s;
     }
@@ -169,7 +225,7 @@
         color: white;
         text-decoration: none;
         border-radius: 100px;
-        background: #1769FF;
+        background: #FF2D95;
         transition: background 0.2s;
         border: none;
         cursor: pointer;
@@ -177,7 +233,7 @@
     .be-btn-blue:hover { background: #0D5BDB; color: white; }
     .be-avatar {
         width: 32px; height: 32px; border-radius: 50%;
-        background: #1769FF; color: white;
+        background: #FF2D95; color: white;
         display: flex; align-items: center; justify-content: center;
         font-weight: 700; font-size: 13px;
         cursor: pointer; transition: opacity 0.2s;
@@ -255,6 +311,11 @@
 
         <!-- Actions -->
         <div class="be-actions">
+            <!-- Theme Toggle -->
+            <button class="theme-toggle" id="theme-switcher" title="Cambiar tema">
+                <i class="fas fa-moon"></i>
+            </button>
+
             {% if current_user.is_authenticated %}
                 {% if current_user.is_cliente() %}
                 <a href="{{ url_for('cliente.carrito') }}" class="be-btn-ghost"><i class="fas fa-bag-shopping"></i></a>
@@ -316,13 +377,13 @@
                 <p class="footer-tagline">El refugio donde el arte encuentra su espacio.</p>
             </div>
             <div>
-                <h5>Explorar</h5>
+                <h5 style="font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--text-color);">Explorar</h5>
                 <a href="{{ url_for('public.explorar') }}">Obras</a>
                 <a href="{{ url_for('public.artistas') }}">Artistas</a>
                 <a href="{{ url_for('public.categorias') }}">Categorías</a>
             </div>
             <div>
-                <h5>Comunidad</h5>
+                <h5 style="font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--text-color);">Comunidad</h5>
                 <a href="{{ url_for('auth.register') }}">Crear cuenta</a>
                 {% if current_user.is_authenticated and current_user.is_artista() %}
                 <a href="{{ url_for('artista.dashboard') }}">Mi Estudio</a>
@@ -336,6 +397,28 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// Theme Management
+const themeSwitcher = document.getElementById('theme-switcher');
+const currentTheme = localStorage.getItem('theme') || 'dark';
+
+if (currentTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    themeSwitcher.innerHTML = '<i class="fas fa-sun"></i>';
+}
+
+themeSwitcher.addEventListener('click', () => {
+    let theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        themeSwitcher.innerHTML = '<i class="fas fa-moon"></i>';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        themeSwitcher.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+});
+
 // Dropdown toggle
 document.addEventListener('click', function(e) {
     const dd = document.getElementById('user-dropdown');
