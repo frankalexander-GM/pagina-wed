@@ -351,7 +351,48 @@
         -webkit-text-fill-color: transparent;
     }
 
+
+    /* Discovery Bar Theme Fix */
+    .discovery-bar-pro {
+        background: var(--bg-color);
+        border-bottom: 1px solid var(--border-color);
+        transition: 0.3s;
+    }
+    .search-group-pro {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+    }
+    .search-group-pro input {
+        background: transparent;
+        color: var(--text-color);
+    }
+    .search-type-item {
+        color: var(--text-muted);
+    }
+    .search-type-item.active {
+        color: var(--text-color);
+        border-bottom: 2px solid var(--accent-purple);
+    }
+    .filter-btn-pro {
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        background: var(--card-bg);
+    }
+    .discovery-inner .btn {
+        color: var(--text-color);
+    }
+
 </style>
+
+<script>
+document.querySelectorAll('.search-type-item').forEach(item => {
+    item.addEventListener('click', function() {
+        document.querySelectorAll('.search-type-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+</script>
+
 {% endblock %}
 
 {% block content %}
@@ -400,12 +441,13 @@
                     <button class="btn btn-sm fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         Recomendado
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item active" href="#">Recomendado</a></li>
-                        <li><a class="dropdown-item" href="#">Más reciente</a></li>
-                        <li><a class="dropdown-item" href="#">Más valorado</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="background: var(--bg-secondary); color: var(--text-color);">
+                        <li><a class="dropdown-item active" href="#" style="color: var(--text-color);">Recomendado</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: var(--text-color);">Más recientes</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: var(--text-color);">Más valorados</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: var(--text-color);">Siguiendo</a></li>
                     </ul>
-                </div>
+</div>
             </div>
         </div>
     </div>
@@ -602,6 +644,16 @@
     </div>
 </section>
 
+
+<script>
+document.querySelectorAll('.search-type-item').forEach(item => {
+    item.addEventListener('click', function() {
+        document.querySelectorAll('.search-type-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+</script>
+
 {% endblock %}
 
 {% block scripts %}
@@ -611,4 +663,14 @@
         el.scrollLeft += amount;
     }
 </script>
+
+<script>
+document.querySelectorAll('.search-type-item').forEach(item => {
+    item.addEventListener('click', function() {
+        document.querySelectorAll('.search-type-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+</script>
+
 {% endblock %}
