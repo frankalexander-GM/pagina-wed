@@ -16,89 +16,100 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* 1. HERO SECTION */
-    .be-hero-replica {
-        padding: 100px 0;
-        text-align: center;
+    /* === COSMIC HERO SECTION (Layout 2 Col) === */
+    .hero-cosmic {
         position: relative;
-        overflow: hidden;
-        min-height: 500px;
+        width: 100%;
+        height: 80vh;
+        min-height: 600px;
+        background-color: #0d0b21; /* Color base de la imagen */
+        background-image: url('/static/img/hero_inidie.png');
+        background-size: cover;
+        background-position: center;
         display: flex;
         align-items: center;
-        justify-content: center;
+        overflow: hidden;
+        color: white;
     }
 
-    .hero-content-pro {
-        max-width: 800px;
-        z-index: 5;
+    .hero-cosmic::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(13,11,33,0.9) 0%, rgba(13,11,33,0.4) 50%, rgba(13,11,33,0) 100%);
+        z-index: 1;
     }
 
-    .hero-content-pro h1 {
-        font-size: 64px;
+    .hero-container {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr; /* 2 Columnas */
+        gap: 40px;
+    }
+
+    .hero-text-side {
+        text-align: left;
+    }
+
+    .hero-text-side h1 {
+        font-family: 'Josefin Sans', sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
         font-weight: 800;
         line-height: 1.1;
         margin-bottom: 24px;
-        color: var(--be-text);
-    }
-
-    .hero-content-pro h1 span {
-        color: var(--be-blue);
-    }
-
-    .hero-content-pro p {
-        font-size: 18px;
-        color: #696969;
-        margin-bottom: 32px;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    /* Floating images around hero */
-    .floating-art {
-        position: absolute;
-        width: 120px;
-        height: 120px;
-        border-radius: 8px;
-        object-fit: cover;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        z-index: 1;
-        opacity: 0.85;
-    }
-
-    .art-1 { top: 10%; left: 5%; transform: rotate(-5deg); }
-    .art-2 { top: 15%; right: 10%; transform: rotate(8deg); width: 140px; height: 180px; }
-    .art-3 { bottom: 15%; left: 8%; transform: rotate(12deg); width: 160px; height: 120px; }
-    .art-4 { bottom: 20%; right: 5%; transform: rotate(-10deg); width: 100px; height: 100px; }
-    .art-5 { top: 40%; left: 15%; transform: rotate(5deg); width: 80px; height: 80px; }
-    .art-6 { bottom: 40%; right: 15%; transform: rotate(-3deg); width: 90px; height: 130px; }
-
-    .hero-btns-pro {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-    }
-
-    .btn-be-primary {
-        background: var(--be-blue);
         color: white;
-        border: none;
-        border-radius: 100px;
-        padding: 12px 28px;
-        font-weight: 700;
-        font-size: 15px;
-        transition: 0.2s;
     }
 
-    .btn-be-secondary {
-        background: transparent;
-        color: var(--be-blue);
-        border: 1px solid #e8e8e8;
+    .hero-text-side h1 span {
+        display: block;
+        background: linear-gradient(90deg, #00D2FF 0%, #FF2D95 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-text-side p {
+        font-family: 'Josefin Sans', sans-serif;
+        font-size: 1.25rem;
+        line-height: 1.6;
+        color: rgba(255,255,255,0.8);
+        margin-bottom: 40px;
+        max-width: 550px;
+    }
+
+    .btn-cosmic-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: #FF2D95;
+        color: white;
+        padding: 16px 40px;
         border-radius: 100px;
-        padding: 12px 28px;
         font-weight: 700;
-        font-size: 15px;
-        transition: 0.2s;
+        font-size: 16px;
+        text-decoration: none;
+        transition: 0.3s;
+        box-shadow: 0 10px 25px rgba(255, 45, 149, 0.3);
+        border: 2px solid transparent;
+    }
+
+    .btn-cosmic-cta:hover {
+        background: transparent;
+        border-color: #FF2D95;
+        color: #FF2D95;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(255, 45, 149, 0.4);
+    }
+
+    /* Columna derecha vacía para mostrar el OVNI de la imagen */
+    .hero-action-side {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     /* 2. DISCOVERY BAR */
@@ -294,22 +305,21 @@
 
 {% block content %}
 
-<!-- 1. HERO SECTION REPLICA -->
-<section class="be-hero-replica">
-    <!-- Floating Art Decor -->
-    <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200" class="floating-art art-1">
-    <img src="https://images.unsplash.com/photo-1460661419201-fd4ce186860d?w=200" class="floating-art art-2">
-    <img src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200" class="floating-art art-3">
-    <img src="https://images.unsplash.com/photo-1541462608141-ad60397d5873?w=200" class="floating-art art-4">
-    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200" class="floating-art art-5">
-    <img src="https://images.unsplash.com/photo-1459908276235-d436e447a2a6?w=200" class="floating-art art-6">
-
-    <div class="hero-content-pro">
-        <h1>Los mejores <span>creadores del mundo</span> están en Ágora Art</h1>
-        <p>Una plataforma integral para ayudar a coleccionistas y creadores a navegar por el mundo creativo, desde la inspiración hasta la comunicación.</p>
-        <div class="hero-btns-pro">
-            <button class="btn-be-primary">Explorar talentos</button>
-            <button class="btn-be-secondary">Unirse a la comunidad</button>
+<!-- 1. COSMIC HERO SECTION -->
+<section class="hero-cosmic">
+    <div class="hero-container">
+        <div class="hero-text-side">
+            <h1 data-aos="fade-right">Ágora Art: Donde el Talento Encuentra su <span>Impulso Cósmico.</span></h1>
+            <p data-aos="fade-right" data-aos-delay="200">Una comunidad de artistas contemporáneos y coleccionistas visionarios, unidos en un Refugio Creativo.</p>
+            <div data-aos="fade-up" data-aos-delay="400">
+                <a href="{{ url_for('public.explorar') }}" class="btn-cosmic-cta">
+                    <i class="fas fa-rocket"></i>
+                    Impulsa tu Arte
+                </a>
+            </div>
+        </div>
+        <div class="hero-action-side">
+            <!-- Espacio para el OVNI de la imagen de fondo -->
         </div>
     </div>
 </section>
