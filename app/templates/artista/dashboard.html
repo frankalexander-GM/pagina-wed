@@ -270,7 +270,7 @@
                     <img src="{{ current_user.foto_perfil }}" class="artist-profile-img">
                 {% else %}
                     <div class="artist-profile-img d-flex align-items-center justify-content-center bg-malva text-white fs-1 fw-bold">
-                        {{ current_user.nombre[0]|upper }}
+                        {{ (current_user.nombre or 'U')[0]|upper }}
                     </div>
                 {% endif %}
 

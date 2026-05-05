@@ -254,9 +254,9 @@
         <!-- Avatar -->
         <div class="pro-avatar">
             {% if current_user.foto_perfil %}
-                <img src="{{ current_user.foto_perfil }}" alt="{{ current_user.nombre }}">
+                <img src="{{ current_user.foto_perfil }}" alt="{{ current_user.nombre or 'Usuario' }}">
             {% else %}
-                {{ current_user.nombre[0]|upper }}
+                {{ (current_user.nombre or 'U')[0]|upper }}
             {% endif %}
         </div>
 
