@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+
+{% block title %}Notificaciones — Ágora Art{% endblock %}
+
+{% block head %}
+<style>
+    :root {
+        --ep-bg:       #0D0B21;
+        --ep-white:    #12102B;
+        --ep-text:     #ffffff;
+        --ep-muted:    #a0a0a0;
+        --ep-border:   #232141;
+        --ep-border-hover: #343161;
+        --ep-hover:    #1A183A;
+        --ep-red:      #a78bfa;
+        --ep-red-soft: rgba(167, 139, 250, 0.15);
+        --ep-cyan:     #00e5ff;
+        --ep-radius:   14px;
+        --sidebar-w:   210px;
+    }
+
+    [data-theme="light"] {
+        --ep-bg:       #f4f4f6;
+        --ep-white:    #ffffff;
+        --ep-text:     #1a1a2e;
+        --ep-muted:    #8a8a9a;
+        --ep-border:   #e2e2ea;
+        --ep-border-hover: #c0c0d0;
+        --ep-hover:    #ececf3;
+        --ep-red:      #8b5cf6;
+        --ep-red-soft: rgba(139, 92, 246, 0.12);
+        --ep-cyan:     #00e5ff;
+    }
+
+    /* --- SOBRESCRIBIR NAVBAR ELIMINADO PARA QUE SEA NEGRO SIEMPRE --- */
+
+    body {
+        background: var(--ep-bg) !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        color: var(--ep-text) !important;
+        height: calc(100vh - 56px);
+        overflow: hidden;
+    }
+
+    /* ── SHELL ── */
+    .ep-shell {
+        display: flex;
+        height: calc(100vh - 56px);
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 32px;
+        gap: 24px;
+        box-sizing: border-box;
+    }
+
+    /* ── SIDEBAR ── */
+    .ep-sidebar {
+        width: var(--sidebar-w);
+        flex-shrink: 0;
+        background: var(--ep-white);
+        border-radius: var(--ep-radius);
+        padding: 20px 0;
+        box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .ep-sidebar-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--ep-muted);
+        padding: 0 20px 12px;
+        border-bottom: 1px solid var(--ep-border);
+        margin-bottom: 8px;
+    }
+    .ep-sidebar a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ep-muted);
+        text-decoration: none;
+        border-left: 3px solid transparent;
+        transition: all 0.15s;
+    }
+    .ep-sidebar a:hover {
+        background: var(--ep-hover);
+        color: var(--ep-text);
+    }
+    .ep-sidebar a.active {
+        color: var(--ep-red);
+        background: var(--ep-red-soft);
+        border-left-color: var(--ep-red);
+    }
+    .ep-sidebar a i { width: 16px; text-align: center; font-size: 13px; }
+
+    /* ── PANEL PRINCIPAL ── */
+    .ep-panel {
+        flex: 1;
+        background: var(--ep-white);
+        border-radius: var(--ep-radius);
+        box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* Cabecera del panel */
+    .ep-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 28px;
+        border-bottom: 1px solid var(--ep-border);
+        flex-shrink: 0;
+    }
+    .ep-panel-header h2 {
+        font-size: 17px;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .notif-badge {
+        background: var(--ep-red);
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 12px;
+        min-width: 20px;
+        text-align: center;
+    }
+    .btn-mark-all {
+        background: none;
+        border: 1px solid var(--ep-border);
+        color: var(--ep-muted);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-mark-all:hover {
+        background: var(--ep-hover);
+        color: var(--ep-text);
+        border-color: #c0c0d0;
+    }
+
+    /* Cuerpo: lista de notificaciones */
+    .ep-panel-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    /* ── NOTIFICACIÓN ── */
+    .notif-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px 28px;
+        border-bottom: 1px solid var(--ep-border);
+        cursor: pointer;
+        transition: background 0.15s;
+        position: relative;
+    }
+    .notif-item:hover {
+        background: #f9f9fb;
+    }
+    .notif-item:last-child {
+        border-bottom: none;
+    }
+
+    /* No leída */
+    .notif-item.unread {
+        background: rgba(128,0,32,0.03);
+        border-left: 3px solid var(--ep-red);
+    }
+    .notif-item.unread .notif-dot {
+        display: block;
+    }
+
+    /* Leída */
+    .notif-item.read {
+        opacity: 0.7;
+        border-left: 3px solid transparent;
+    }
+    .notif-item.read .notif-dot {
+        display: none;
+    }
+
+    /* Icono */
+    .notif-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+    }
+    .notif-icon.compra {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+    .notif-icon.favorito {
+        background: #fff3e0;
+        color: #e65100;
+    }
+    .notif-icon.sistema {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+    .notif-icon.seguridad {
+        background: #fce4ec;
+        color: #c62828;
+    }
+
+    /* Contenido */
+    .notif-content {
+        flex: 1;
+        min-width: 0;
+    }
+    .notif-content p {
+        margin: 0 0 4px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ep-text);
+        line-height: 1.4;
+    }
+    .notif-item.unread .notif-content p {
+        font-weight: 600;
+    }
+    .notif-content p strong {
+        font-weight: 700;
+    }
+    .notif-time {
+        font-size: 11px;
+        color: var(--ep-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* Punto indicador */
+    .notif-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--ep-red);
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: none;
+        margin-top: 6px;
+    }
+
+    /* Estado vacío */
+    .notif-empty {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        text-align: center;
+        color: var(--ep-muted);
+    }
+    .notif-empty i {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.3;
+    }
+    .notif-empty p {
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .notif-empty span {
+        font-size: 12px;
+    }
+
+    /* Animación de lectura */
+    .notif-item.reading {
+        animation: fadeRead 0.3s ease forwards;
+    }
+    @keyframes fadeRead {
+        0% { background: rgba(128,0,32,0.03); }
+        100% { background: transparent; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ep-shell">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="ep-sidebar">
+        <div class="ep-sidebar-title">Configuración</div>
+        <a href="{{ url_for('cliente.editar_perfil') }}"><i class="fas fa-user"></i> Gestión de cuenta</a>
+        <a href="{{ url_for('cliente.obras_favoritas') }}"><i class="fas fa-heart"></i> Mis Favoritos</a>
+        <a href="{{ url_for('cliente.notificaciones') }}" class="active"><i class="fas fa-bell"></i> Notificaciones</a>
+        <a href="{{ url_for('cliente.privacidad') }}"><i class="fas fa-shield-halved"></i> Privacidad</a>
+        <a href="{{ url_for('cliente.seguridad') }}"><i class="fas fa-lock"></i> Seguridad</a>
+    </nav>
+
+    <!-- ── PANEL PRINCIPAL ── -->
+    <div class="ep-panel">
+
+        <!-- Cabecera -->
+        <div class="ep-panel-header">
+            <h2>
+                <i class="fas fa-bell" style="color: var(--ep-red);"></i>
+                Notificaciones
+                <span class="notif-badge" id="notifBadge">4</span>
+            </h2>
+            <button class="btn-mark-all" id="markAllBtn" title="Marcar todas como leídas">
+                <i class="fas fa-check-double"></i> Marcar todas como leídas
+            </button>
+        </div>
+
+        <!-- Lista de notificaciones -->
+        <div class="ep-panel-body" id="notifList">
+
+            <!-- 1. Compra -->
+            <div class="notif-item unread" data-id="1">
+                <div class="notif-icon compra">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="notif-content">
+                    <p>Tu pago por la obra <strong>"Atardecer en Vélez"</strong> ha sido procesado con éxito.</p>
+                    <span class="notif-time"><i class="far fa-clock"></i> Hace 2 horas</span>
+                </div>
+                <div class="notif-dot"></div>
+            </div>
+
+            <!-- 2. Favorito -->
+            <div class="notif-item unread" data-id="2">
+                <div class="notif-icon favorito">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <div class="notif-content">
+                    <p>El artista que sigues ha subido una <strong>nueva obra</strong>. ¡Echa un vistazo!</p>
+                    <span class="notif-time"><i class="far fa-clock"></i> Hace 5 horas</span>
+                </div>
+                <div class="notif-dot"></div>
+            </div>
+
+            <!-- 3. Sistema -->
+            <div class="notif-item unread" data-id="3">
+                <div class="notif-icon sistema">
+                    <i class="fas fa-circle-info"></i>
+                </div>
+                <div class="notif-content">
+                    <p><strong>Completa tu perfil</strong> para recibir mejores recomendaciones de obras.</p>
+                    <span class="notif-time"><i class="far fa-clock"></i> Hace 1 día</span>
+                </div>
+                <div class="notif-dot"></div>
+            </div>
+
+            <!-- 4. Seguridad -->
+            <div class="notif-item unread" data-id="4">
+                <div class="notif-icon seguridad">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <div class="notif-content">
+                    <p>Se ha detectado un <strong>inicio de sesión</strong> desde un nuevo dispositivo.</p>
+                    <span class="notif-time"><i class="far fa-clock"></i> Hace 2 días</span>
+                </div>
+                <div class="notif-dot"></div>
+            </div>
+
+        </div><!-- /ep-panel-body -->
+
+        <!-- Estado vacío (se muestra cuando no hay notificaciones sin leer) -->
+        <div class="notif-empty" id="notifEmpty">
+            <i class="far fa-bell-slash"></i>
+            <p>No tienes notificaciones nuevas</p>
+            <span>¡Estás al día! Te avisaremos cuando haya algo nuevo.</span>
+        </div>
+
+    </div><!-- /ep-panel -->
+</div><!-- /ep-shell -->
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const notifList  = document.getElementById('notifList');
+    const notifBadge = document.getElementById('notifBadge');
+    const markAllBtn = document.getElementById('markAllBtn');
+    const notifEmpty = document.getElementById('notifEmpty');
+
+    // Contar no leídas
+    function updateCount() {
+        const unread = notifList.querySelectorAll('.notif-item.unread').length;
+        notifBadge.textContent = unread;
+
+        if (unread === 0) {
+            notifBadge.style.display = 'none';
+            markAllBtn.style.display = 'none';
+            notifEmpty.style.display = 'flex';
+        } else {
+            notifBadge.style.display = 'inline-block';
+            markAllBtn.style.display = 'inline-flex';
+            notifEmpty.style.display = 'none';
+        }
+
+        // Actualizar campana en la barra de nav (si existe)
+        const navBell = document.querySelector('.nav-notif-count');
+        if (navBell) {
+            navBell.textContent = unread;
+            navBell.style.display = unread > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    // Clic en notificación → marcar como leída
+    notifList.addEventListener('click', function(e) {
+        const item = e.target.closest('.notif-item');
+        if (!item || item.classList.contains('read')) return;
+
+        item.classList.add('reading');
+        item.classList.remove('unread');
+
+        setTimeout(() => {
+            item.classList.remove('reading');
+            item.classList.add('read');
+            updateCount();
+        }, 300);
+    });
+
+    // Marcar todas como leídas
+    markAllBtn.addEventListener('click', function() {
+        const items = notifList.querySelectorAll('.notif-item.unread');
+        items.forEach((item, i) => {
+            setTimeout(() => {
+                item.classList.add('reading');
+                item.classList.remove('unread');
+                setTimeout(() => {
+                    item.classList.remove('reading');
+                    item.classList.add('read');
+                    updateCount();
+                }, 300);
+            }, i * 100); // efecto cascada
+        });
+    });
+
+    updateCount();
+});
+</script>
+{% endblock %}

@@ -590,3 +590,45 @@ def convertirse_en_artista():
         print(f"Error al convertir en artista: {e}")
         flash('Error al procesar la solicitud.', 'error')
         return redirect(url_for('cliente.dashboard'))
+
+
+@cliente_bp.route('/notificaciones')
+@login_required
+@requiere_cliente
+def notificaciones():
+    """Vista de notificaciones del cliente"""
+    return render_template('cliente/notificaciones.html')
+
+
+@cliente_bp.route('/privacidad')
+@login_required
+@requiere_cliente
+def privacidad():
+    """Vista de configuración de privacidad del cliente"""
+    return render_template('cliente/privacidad.html')
+
+
+@cliente_bp.route('/seguridad', methods=['GET', 'POST'])
+@login_required
+@requiere_cliente
+def seguridad():
+    """Vista de configuración de seguridad del cliente"""
+    if request.method == 'POST':
+        password_actual = request.form.get('current_password')
+        password_nueva = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if not password_actual or not password_nueva or not confirm_password:
+            return jsonify({'success': False, 'message': 'Todos los campos son requeridos'})
+
+        if password_nueva != confirm_password:
+            return jsonify({'success': False, 'message': 'Las contraseñas nuevas no coinciden'})
+
+        service_factory = get_service_factory()
+        auth_service = service_factory.get_auth_service()
+        
+        exitoso, mensaje = auth_service.cambiar_password(current_user.id_usuario, password_actual, password_nueva)
+        
+        return jsonify({'success': exitoso, 'message': mensaje})
+
+    return render_template('cliente/seguridad.html')

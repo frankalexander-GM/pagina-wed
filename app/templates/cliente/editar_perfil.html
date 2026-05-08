@@ -5,17 +5,34 @@
 {% block head %}
 <style>
     :root {
+        --ep-bg:       #0D0B21;
+        --ep-white:    #12102B;
+        --ep-text:     #ffffff;
+        --ep-muted:    #a0a0a0;
+        --ep-border:   #232141;
+        --ep-border-hover: #343161;
+        --ep-hover:    #1A183A;
+        --ep-red:      #a78bfa;
+        --ep-red-soft: rgba(167, 139, 250, 0.15);
+        --ep-cyan:     #00e5ff;
+        --ep-radius:   14px;
+        --sidebar-w:   210px;
+    }
+
+    [data-theme="light"] {
         --ep-bg:       #f4f4f6;
         --ep-white:    #ffffff;
         --ep-text:     #1a1a2e;
         --ep-muted:    #8a8a9a;
         --ep-border:   #e2e2ea;
+        --ep-border-hover: #c0c0d0;
         --ep-hover:    #ececf3;
-        --ep-red:      #800020;
-        --ep-red-soft: rgba(128,0,32,0.08);
-        --ep-radius:   14px;
-        --sidebar-w:   210px;
+        --ep-red:      #8b5cf6;
+        --ep-red-soft: rgba(139, 92, 246, 0.12);
+        --ep-cyan:     #00e5ff;
     }
+
+    /* --- SOBRESCRIBIR NAVBAR ELIMINADO PARA QUE SEA NEGRO SIEMPRE --- */
 
     body {
         background: var(--ep-bg) !important;
@@ -243,11 +260,11 @@
         width: 100%;
         box-sizing: border-box;
     }
-    .ep-input:hover { border-color: #c0c0d0; background: #f9f9fb; }
+    .ep-input:hover { border-color: var(--ep-border-hover); background: var(--ep-hover); }
     .ep-input:focus {
         border-color: var(--ep-red);
         box-shadow: 0 0 0 3px var(--ep-red-soft);
-        background: white;
+        background: var(--ep-bg);
     }
     .ep-field-hint {
         font-size: 10px;
@@ -340,9 +357,9 @@
             <div class="ep-sidebar-title">Configuración</div>
             <a href="#" class="active"><i class="fas fa-user"></i> Gestión de cuenta</a>
             <a href="{{ url_for('cliente.obras_favoritas') }}"><i class="fas fa-heart"></i> Mis Favoritos</a>
-            <a href="#"><i class="fas fa-bell"></i> Notificaciones</a>
-            <a href="#"><i class="fas fa-shield-halved"></i> Privacidad</a>
-            <a href="#"><i class="fas fa-lock"></i> Seguridad</a>
+            <a href="{{ url_for('cliente.notificaciones') }}"><i class="fas fa-bell"></i> Notificaciones</a>
+            <a href="{{ url_for('cliente.privacidad') }}"><i class="fas fa-shield-halved"></i> Privacidad</a>
+            <a href="{{ url_for('cliente.seguridad') }}"><i class="fas fa-lock"></i> Seguridad</a>
         </nav>
 
         <!-- ── PANEL PRINCIPAL ── -->

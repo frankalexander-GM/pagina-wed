@@ -4,16 +4,28 @@
 <style>
     /* === ÁGORA ART PREMIUM PINTEREST DASHBOARD === */
     :root {
+        --pin-bg: #12102B;
+        --agora-burgundy: #a78bfa;
+        --agora-dark-primary: #8b5cf6;
+        --agora-gold: #a78bfa;
+        --agora-cream: #0D0B21; 
+        --agora-dark: #ffffff;
+        --agora-gray: #232141;
+        --agora-text-muted: #a0a0a0;
+    }
+
+    [data-theme="light"] {
         --pin-bg: #ffffff;
-        --pin-radius: 20px;
-        --agora-burgundy: #800020;
-        --agora-dark-primary: #4a0012;
-        --agora-gold: #800020; /* Ring color */
-        --agora-cream: #ffffff; /* Pinterest uses stark white background */
+        --agora-burgundy: #8b5cf6;
+        --agora-dark-primary: #7c3aed;
+        --agora-gold: #8b5cf6;
+        --agora-cream: #f4f4f6; 
         --agora-dark: #111111;
         --agora-gray: #e9e9e9;
         --agora-text-muted: #767676;
     }
+
+    /* --- SOBRESCRIBIR NAVBAR ELIMINADO PARA QUE SEA NEGRO SIEMPRE --- */
 
     body {
         background-color: var(--agora-cream) !important;
@@ -373,6 +385,93 @@
         background-color: var(--agora-gray);
         color: var(--agora-dark);
     }
+
+    /* ── MENÚ DE CONFIGURACIÓN (ENGRANAJE) ── */
+    .settings-gear {
+        position: relative;
+    }
+    .gear-btn {
+        padding: 12px 20px;
+        border-radius: 30px;
+        background-color: var(--agora-gray);
+        color: var(--agora-dark);
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .gear-btn .gear-icon {
+        transition: transform 0.3s ease;
+        font-size: 16px;
+    }
+    .gear-btn:hover {
+        background-color: var(--agora-burgundy);
+        color: white;
+    }
+    .gear-btn:hover .gear-icon {
+        transform: rotate(45deg);
+    }
+    .gear-dropdown {
+        position: absolute;
+        top: 52px;
+        right: 0;
+        background: var(--pin-bg);
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.14);
+        padding: 8px;
+        min-width: 230px;
+        z-index: 200;
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+        pointer-events: none;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .gear-dropdown.open {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+    .gear-dropdown-title {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--agora-text-muted);
+        padding: 8px 14px 6px;
+    }
+    .gear-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--agora-dark);
+        text-decoration: none;
+        border-radius: 10px;
+        transition: background 0.15s;
+    }
+    .gear-dropdown a:hover {
+        background: var(--agora-gray);
+    }
+    .gear-dropdown a i {
+        width: 18px;
+        text-align: center;
+        font-size: 14px;
+        color: var(--agora-text-muted);
+    }
+    .gear-dropdown a:hover i {
+        color: var(--agora-burgundy);
+    }
+    .gear-divider {
+        height: 1px;
+        background: var(--agora-gray);
+        margin: 4px 10px;
+    }
 </style>
 {% endblock %}
 
@@ -435,10 +534,21 @@
             </ul>
         </div>
         
-        <!-- Editar Perfil -->
-        <a href="{{ url_for('cliente.editar_perfil') }}" class="btn-pin btn-pin-secondary">
-            <i class="fas fa-pen me-2"></i> Editar perfil
-        </a>
+        <!-- Engranaje de Configuración -->
+        <div class="settings-gear">
+            <button class="gear-btn" id="gearBtn" title="Configuración">
+                <i class="fas fa-gear gear-icon"></i> Configuración
+            </button>
+            <div class="gear-dropdown" id="gearDropdown">
+                <div class="gear-dropdown-title">Configuración</div>
+                <a href="{{ url_for('cliente.editar_perfil') }}"><i class="fas fa-user-pen"></i> Gestión de cuenta</a>
+                <a href="{{ url_for('cliente.obras_favoritas') }}"><i class="fas fa-heart"></i> Mis Favoritos</a>
+                <a href="{{ url_for('cliente.notificaciones') }}"><i class="fas fa-bell"></i> Notificaciones</a>
+                <div class="gear-divider"></div>
+                <a href="{{ url_for('cliente.privacidad') }}"><i class="fas fa-shield-halved"></i> Privacidad y datos</a>
+                <a href="{{ url_for('cliente.seguridad') }}"><i class="fas fa-lock"></i> Seguridad</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -525,41 +635,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Definición de temas incluyendo colores para Modo Nocturno
-    const themes = {
-        burgundy: { burgundy: '#a52a42', dark: '#6b1326', gold: '#a52a42', bg: '#ffffff', cardBg: '#ffffff', text: '#111111', textMuted: '#767676', grayBtn: '#e9e9e9' },
-        navy: { burgundy: '#2a4b8c', dark: '#1a3366', gold: '#2a4b8c', bg: '#ffffff', cardBg: '#ffffff', text: '#111111', textMuted: '#767676', grayBtn: '#e9e9e9' },
-        forest: { burgundy: '#3a6b42', dark: '#234a29', gold: '#3a6b42', bg: '#ffffff', cardBg: '#ffffff', text: '#111111', textMuted: '#767676', grayBtn: '#e9e9e9' }
-    };
 
-    function setTheme(themeName) {
-        const theme = themes[themeName];
-        if (theme) {
-            document.documentElement.style.setProperty('--agora-burgundy', theme.burgundy);
-            document.documentElement.style.setProperty('--agora-dark-primary', theme.dark);
-            document.documentElement.style.setProperty('--agora-gold', theme.gold);
-            
-            // Colores del Modo Nocturno / Día
-            document.documentElement.style.setProperty('--agora-cream', theme.bg);
-            document.documentElement.style.setProperty('--pin-bg', theme.cardBg);
-            document.documentElement.style.setProperty('--agora-dark', theme.text);
-            document.documentElement.style.setProperty('--agora-text-muted', theme.textMuted);
-            document.documentElement.style.setProperty('--agora-gray', theme.grayBtn);
-            
-            localStorage.setItem('agora_pin_theme', themeName);
-        }
-    }
-
-    const savedTheme = localStorage.getItem('agora_pin_theme');
-    if (savedTheme) {
-        setTheme(savedTheme);
-    }
-
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            setTheme(btn.dataset.theme);
-        });
-    });
 
     // Mostrar localización si está activada en Editar Perfil
     const showLocation = localStorage.getItem('agora_show_location');
@@ -570,6 +646,22 @@ document.addEventListener("DOMContentLoaded", function() {
             locEl.style.display = 'inline-block';
             locEl.querySelector('span').textContent = ' ' + userCity;
         }
+    }
+
+    // ── Menú Engranaje ──
+    const gearBtn = document.getElementById('gearBtn');
+    const gearDropdown = document.getElementById('gearDropdown');
+    if (gearBtn && gearDropdown) {
+        gearBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            gearDropdown.classList.toggle('open');
+        });
+        document.addEventListener('click', function() {
+            gearDropdown.classList.remove('open');
+        });
+        gearDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
     }
 });
 </script>

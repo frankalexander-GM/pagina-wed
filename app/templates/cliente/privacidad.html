@@ -1,0 +1,650 @@
+{% extends "base.html" %}
+
+{% block title %}Privacidad — Ágora Art{% endblock %}
+
+{% block head %}
+<style>
+    :root {
+        --ep-bg:       #0D0B21;
+        --ep-white:    #12102B;
+        --ep-text:     #ffffff;
+        --ep-muted:    #a0a0a0;
+        --ep-border:   #232141;
+        --ep-border-hover: #343161;
+        --ep-hover:    #1A183A;
+        --ep-red:      #a78bfa;
+        --ep-red-soft: rgba(167, 139, 250, 0.15);
+        --ep-cyan:     #00e5ff;
+        --ep-green:    #4caf50;
+        --ep-radius:   14px;
+        --sidebar-w:   210px;
+    }
+
+    [data-theme="light"] {
+        --ep-bg:       #f4f4f6;
+        --ep-white:    #ffffff;
+        --ep-text:     #1a1a2e;
+        --ep-muted:    #8a8a9a;
+        --ep-border:   #e2e2ea;
+        --ep-border-hover: #c0c0d0;
+        --ep-hover:    #ececf3;
+        --ep-red:      #8b5cf6;
+        --ep-red-soft: rgba(139, 92, 246, 0.12);
+        --ep-cyan:     #00e5ff;
+        --ep-green:    #2e7d32;
+    }
+
+    /* --- SOBRESCRIBIR NAVBAR ELIMINADO PARA QUE SEA NEGRO SIEMPRE --- */
+
+    body {
+        background: var(--ep-bg) !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        color: var(--ep-text) !important;
+        height: calc(100vh - 56px);
+        overflow: hidden;
+    }
+
+    /* ── SHELL ── */
+    .ep-shell {
+        display: flex;
+        height: calc(100vh - 56px);
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 32px;
+        gap: 24px;
+        box-sizing: border-box;
+    }
+
+    /* ── SIDEBAR ── */
+    .ep-sidebar {
+        width: var(--sidebar-w);
+        flex-shrink: 0;
+        background: var(--ep-white);
+        border-radius: var(--ep-radius);
+        padding: 20px 0;
+        box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .ep-sidebar-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--ep-muted);
+        padding: 0 20px 12px;
+        border-bottom: 1px solid var(--ep-border);
+        margin-bottom: 8px;
+    }
+    .ep-sidebar a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ep-muted);
+        text-decoration: none;
+        border-left: 3px solid transparent;
+        transition: all 0.15s;
+    }
+    .ep-sidebar a:hover {
+        background: var(--ep-hover);
+        color: var(--ep-text);
+    }
+    .ep-sidebar a.active {
+        color: var(--ep-red);
+        background: var(--ep-red-soft);
+        border-left-color: var(--ep-red);
+    }
+    .ep-sidebar a i { width: 16px; text-align: center; font-size: 13px; }
+
+    /* ── PANEL PRINCIPAL ── */
+    .ep-panel {
+        flex: 1;
+        background: var(--ep-white);
+        border-radius: var(--ep-radius);
+        box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: visible;
+    }
+
+    /* Cabecera del panel */
+    .ep-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 28px;
+        border-bottom: 1px solid var(--ep-border);
+        flex-shrink: 0;
+    }
+    .ep-panel-header h2 {
+        font-size: 17px;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Botón Hamburguesa → abre modal de acciones rápidas */
+    .priv-hamburger {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid var(--ep-border);
+        background: var(--ep-white);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: all 0.2s;
+        position: relative;
+    }
+    .priv-hamburger:hover {
+        background: var(--ep-hover);
+        border-color: #c0c0d0;
+    }
+    .priv-hamburger span {
+        width: 16px;
+        height: 2px;
+        background: var(--ep-text);
+        border-radius: 2px;
+        transition: all 0.3s;
+    }
+    .priv-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(3px, 4px); }
+    .priv-hamburger.open span:nth-child(2) { opacity: 0; }
+    .priv-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(3px, -4px); }
+
+    /* Dropdown del hamburguesa */
+    .priv-dropdown {
+        position: absolute;
+        top: 44px;
+        right: 0;
+        background: var(--ep-white);
+        border: 1px solid var(--ep-border);
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        padding: 6px;
+        min-width: 200px;
+        z-index: 100;
+        opacity: 0;
+        transform: translateY(-8px) scale(0.96);
+        pointer-events: none;
+        transition: all 0.2s ease;
+    }
+    .priv-dropdown.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+    .priv-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ep-text);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background 0.15s;
+    }
+    .priv-dropdown a:hover { background: var(--ep-hover); }
+    .priv-dropdown a i {
+        width: 16px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--ep-muted);
+    }
+    .priv-dropdown-divider {
+        height: 1px;
+        background: var(--ep-border);
+        margin: 4px 8px;
+    }
+
+    /* Cuerpo del panel */
+    .ep-panel-body {
+        flex: 1;
+        padding: 24px 28px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Sección de privacidad */
+    .priv-section {
+        margin-bottom: 28px;
+    }
+    .priv-section-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        color: var(--ep-muted);
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .priv-section-label i { font-size: 12px; }
+
+    /* Cada opción de privacidad */
+    .priv-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        background: var(--ep-bg);
+        border-radius: 12px;
+        margin-bottom: 10px;
+        transition: background 0.15s, box-shadow 0.15s;
+        border: 1px solid transparent;
+    }
+    .priv-option:hover {
+        background: #eeeef2;
+        border-color: var(--ep-border);
+    }
+    .priv-option-info {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+    .priv-option-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        flex-shrink: 0;
+    }
+    .priv-option-icon.shield { background: #e3f2fd; color: #1565c0; }
+    .priv-option-icon.heart  { background: #fff3e0; color: #e65100; }
+    .priv-option-icon.lock   { background: #fce4ec; color: #c62828; }
+    .priv-option-icon.eye    { background: #f3e5f5; color: #7b1fa2; }
+    .priv-option-icon.cookie { background: #e8f5e9; color: #2e7d32; }
+
+    .priv-option-text h4 {
+        font-size: 13px;
+        font-weight: 700;
+        margin: 0 0 2px;
+        color: var(--ep-text);
+    }
+    .priv-option-text p {
+        font-size: 11px;
+        color: var(--ep-muted);
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    /* ── TOGGLE SWITCH ── */
+    .toggle-switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .toggle-slider {
+        position: absolute;
+        inset: 0;
+        background: #d0d0d8;
+        border-radius: 24px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .toggle-slider::before {
+        content: '';
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border-radius: 50%;
+        top: 3px;
+        left: 3px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .toggle-switch input:checked + .toggle-slider {
+        background: var(--ep-red);
+        box-shadow: 0 2px 8px rgba(128,0,32,0.3);
+    }
+    .toggle-switch input:checked + .toggle-slider::before {
+        transform: translateX(20px);
+    }
+    .toggle-switch input:focus + .toggle-slider {
+        box-shadow: 0 0 0 3px var(--ep-red-soft);
+    }
+
+    /* Estado visual del toggle en la opción */
+    .priv-option.active {
+        border-color: rgba(128,0,32,0.15);
+        background: rgba(128,0,32,0.03);
+    }
+
+    /* Footer con botón aplicar */
+    .ep-panel-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 28px;
+        border-top: 1px solid var(--ep-border);
+        flex-shrink: 0;
+    }
+    .priv-status {
+        font-size: 12px;
+        color: var(--ep-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .priv-status.saved {
+        color: var(--ep-green);
+    }
+    .priv-status i { font-size: 13px; }
+
+    .btn-apply {
+        background: var(--ep-hover);
+        color: var(--ep-muted);
+        border: none;
+        padding: 9px 22px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.25s;
+    }
+    .btn-apply.active {
+        background: var(--ep-red);
+        color: white;
+        box-shadow: 0 4px 12px rgba(128,0,32,0.25);
+    }
+    .btn-apply.active:hover {
+        box-shadow: 0 6px 18px rgba(128,0,32,0.35);
+        transform: translateY(-1px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ep-shell">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="ep-sidebar">
+        <div class="ep-sidebar-title">Configuración</div>
+        <a href="{{ url_for('cliente.editar_perfil') }}"><i class="fas fa-user"></i> Gestión de cuenta</a>
+        <a href="{{ url_for('cliente.obras_favoritas') }}"><i class="fas fa-heart"></i> Mis Favoritos</a>
+        <a href="{{ url_for('cliente.notificaciones') }}"><i class="fas fa-bell"></i> Notificaciones</a>
+        <a href="{{ url_for('cliente.privacidad') }}" class="active"><i class="fas fa-shield-halved"></i> Privacidad</a>
+        <a href="{{ url_for('cliente.seguridad') }}"><i class="fas fa-lock"></i> Seguridad</a>
+    </nav>
+
+    <!-- ── PANEL PRINCIPAL ── -->
+    <div class="ep-panel">
+
+        <!-- Cabecera con hamburguesa -->
+        <div class="ep-panel-header">
+            <h2>
+                <i class="fas fa-shield-halved" style="color: var(--ep-red);"></i>
+                Configuración de Privacidad
+            </h2>
+            <button class="priv-hamburger" id="hamburgerBtn" title="Acciones rápidas">
+                <span></span>
+                <span></span>
+                <span></span>
+                <!-- Dropdown -->
+                <div class="priv-dropdown" id="hamburgerMenu">
+                    <a href="#" id="enableAll"><i class="fas fa-toggle-on"></i> Activar todo</a>
+                    <a href="#" id="disableAll"><i class="fas fa-toggle-off"></i> Desactivar todo</a>
+                    <div class="priv-dropdown-divider"></div>
+                    <a href="#" id="resetDefaults"><i class="fas fa-arrow-rotate-left"></i> Restaurar predeterminados</a>
+                </div>
+            </button>
+        </div>
+
+        <!-- Cuerpo -->
+        <div class="ep-panel-body">
+
+            <!-- Sección: Visibilidad -->
+            <div class="priv-section">
+                <div class="priv-section-label">
+                    <i class="fas fa-eye"></i> Visibilidad del perfil
+                </div>
+
+                <div class="priv-option" data-key="perfil_publico">
+                    <div class="priv-option-info">
+                        <div class="priv-option-icon shield"><i class="fas fa-user-shield"></i></div>
+                        <div class="priv-option-text">
+                            <h4>Perfil Público</h4>
+                            <p>Permite que otros usuarios vean tu perfil y colecciones.</p>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" data-key="perfil_publico">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="priv-option" data-key="mostrar_favoritos">
+                    <div class="priv-option-info">
+                        <div class="priv-option-icon heart"><i class="fas fa-heart"></i></div>
+                        <div class="priv-option-text">
+                            <h4>Mostrar mis Favoritos</h4>
+                            <p>Otros usuarios podrán ver las obras que has guardado como favoritas.</p>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" data-key="mostrar_favoritos">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="priv-option" data-key="ocultar_ubicacion">
+                    <div class="priv-option-info">
+                        <div class="priv-option-icon lock"><i class="fas fa-location-dot"></i></div>
+                        <div class="priv-option-text">
+                            <h4>Ocultar mi Ubicación</h4>
+                            <p>Tu ciudad y país no se mostrarán en tu perfil público.</p>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" data-key="ocultar_ubicacion" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Sección: Datos -->
+            <div class="priv-section">
+                <div class="priv-section-label">
+                    <i class="fas fa-database"></i> Gestión de datos
+                </div>
+
+                <div class="priv-option" data-key="actividad_visible">
+                    <div class="priv-option-info">
+                        <div class="priv-option-icon eye"><i class="fas fa-chart-line"></i></div>
+                        <div class="priv-option-text">
+                            <h4>Actividad Visible</h4>
+                            <p>Muestra tu actividad reciente (compras, favoritos) en tu perfil.</p>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" data-key="actividad_visible">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="priv-option" data-key="cookies_analiticas">
+                    <div class="priv-option-info">
+                        <div class="priv-option-icon cookie"><i class="fas fa-cookie-bite"></i></div>
+                        <div class="priv-option-text">
+                            <h4>Cookies Analíticas</h4>
+                            <p>Permite recopilar datos de uso para mejorar tu experiencia en la plataforma.</p>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" data-key="cookies_analiticas" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+        </div><!-- /ep-panel-body -->
+
+        <!-- Footer con estado + botón aplicar -->
+        <div class="ep-panel-footer">
+            <div class="priv-status" id="privStatus">
+                <i class="fas fa-circle-info"></i>
+                <span>Sin cambios pendientes</span>
+            </div>
+            <button class="btn-apply" id="applyBtn" disabled>
+                <i class="fas fa-check"></i> Aplicar cambios
+            </button>
+        </div>
+
+    </div><!-- /ep-panel -->
+</div><!-- /ep-shell -->
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const STORAGE_KEY   = 'agora_privacy_settings';
+    const applyBtn      = document.getElementById('applyBtn');
+    const privStatus    = document.getElementById('privStatus');
+    const hamburgerBtn  = document.getElementById('hamburgerBtn');
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    const toggles       = document.querySelectorAll('.toggle-switch input');
+
+    // Valores predeterminados
+    const DEFAULTS = {
+        perfil_publico:    false,
+        mostrar_favoritos: false,
+        ocultar_ubicacion: true,
+        actividad_visible: false,
+        cookies_analiticas: true
+    };
+
+    // ── Cargar estado guardado ──
+    function loadSettings() {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || DEFAULTS;
+        toggles.forEach(toggle => {
+            const key = toggle.dataset.key;
+            if (key in saved) {
+                toggle.checked = saved[key];
+            }
+            updateOptionStyle(toggle);
+        });
+    }
+
+    // ── Actualizar estilo visual de la opción ──
+    function updateOptionStyle(toggle) {
+        const option = toggle.closest('.priv-option');
+        if (toggle.checked) {
+            option.classList.add('active');
+        } else {
+            option.classList.remove('active');
+        }
+    }
+
+    // ── Marcar que hay cambios pendientes ──
+    function markDirty() {
+        applyBtn.classList.add('active');
+        applyBtn.disabled = false;
+        privStatus.classList.remove('saved');
+        privStatus.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #e65100;"></i><span style="color: #e65100;">Cambios sin guardar</span>';
+    }
+
+    // ── Guardar en localStorage ──
+    function saveSettings() {
+        const settings = {};
+        toggles.forEach(toggle => {
+            settings[toggle.dataset.key] = toggle.checked;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+
+        // Feedback visual
+        applyBtn.classList.remove('active');
+        applyBtn.disabled = true;
+        privStatus.classList.add('saved');
+        privStatus.innerHTML = '<i class="fas fa-check-circle"></i><span>Cambios guardados correctamente</span>';
+
+        // Limpiar estado después de 3s
+        setTimeout(() => {
+            privStatus.classList.remove('saved');
+            privStatus.innerHTML = '<i class="fas fa-circle-info"></i><span>Sin cambios pendientes</span>';
+        }, 3000);
+    }
+
+    // ── Event Listeners ──
+    toggles.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            updateOptionStyle(this);
+            markDirty();
+        });
+    });
+
+    applyBtn.addEventListener('click', saveSettings);
+
+    // ── Menú Hamburguesa ──
+    hamburgerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        this.classList.toggle('open');
+        hamburgerMenu.classList.toggle('show');
+    });
+
+    // Cerrar al clic fuera
+    document.addEventListener('click', function() {
+        hamburgerBtn.classList.remove('open');
+        hamburgerMenu.classList.remove('show');
+    });
+
+    hamburgerMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Activar todo
+    document.getElementById('enableAll').addEventListener('click', function(e) {
+        e.preventDefault();
+        toggles.forEach(t => { t.checked = true; updateOptionStyle(t); });
+        markDirty();
+        hamburgerBtn.classList.remove('open');
+        hamburgerMenu.classList.remove('show');
+    });
+
+    // Desactivar todo
+    document.getElementById('disableAll').addEventListener('click', function(e) {
+        e.preventDefault();
+        toggles.forEach(t => { t.checked = false; updateOptionStyle(t); });
+        markDirty();
+        hamburgerBtn.classList.remove('open');
+        hamburgerMenu.classList.remove('show');
+    });
+
+    // Restaurar predeterminados
+    document.getElementById('resetDefaults').addEventListener('click', function(e) {
+        e.preventDefault();
+        toggles.forEach(t => {
+            t.checked = DEFAULTS[t.dataset.key] || false;
+            updateOptionStyle(t);
+        });
+        markDirty();
+        hamburgerBtn.classList.remove('open');
+        hamburgerMenu.classList.remove('show');
+    });
+
+    // Cargar al iniciar
+    loadSettings();
+});
+</script>
+{% endblock %}

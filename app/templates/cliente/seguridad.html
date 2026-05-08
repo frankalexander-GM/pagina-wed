@@ -1,0 +1,714 @@
+{% extends "base.html" %}
+
+{% block title %}Seguridad — Ágora Art{% endblock %}
+
+{% block head %}
+<style>
+    :root {
+        --ep-bg:       #0D0B21;
+        --ep-white:    #12102B;
+        --ep-text:     #ffffff;
+        --ep-muted:    #a0a0a0;
+        --ep-border:   #232141;
+        --ep-border-hover: #343161;
+        --ep-hover:    #1A183A;
+        --ep-red:      #a78bfa;
+        --ep-red-soft: rgba(167, 139, 250, 0.15);
+        --ep-cyan:     #00e5ff;
+        --ep-green:    #4caf50;
+        --ep-radius:   14px;
+        --sidebar-w:   210px;
+    }
+
+    [data-theme="light"] {
+        --ep-bg:       #f4f4f6;
+        --ep-white:    #ffffff;
+        --ep-text:     #1a1a2e;
+        --ep-muted:    #8a8a9a;
+        --ep-border:   #e2e2ea;
+        --ep-border-hover: #c0c0d0;
+        --ep-hover:    #ececf3;
+        --ep-red:      #8b5cf6;
+        --ep-red-soft: rgba(139, 92, 246, 0.12);
+        --ep-cyan:     #00e5ff;
+        --ep-green:    #2e7d32;
+    }
+
+    /* --- SOBRESCRIBIR NAVBAR ELIMINADO PARA QUE SEA NEGRO SIEMPRE --- */
+
+    body {
+        background: var(--ep-bg) !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        color: var(--ep-text) !important;
+        height: calc(100vh - 56px);
+        overflow: hidden;
+    }
+
+    .ep-shell {
+        display: flex;
+        height: calc(100vh - 56px);
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 32px;
+        gap: 24px;
+        box-sizing: border-box;
+    }
+
+    /* ── SIDEBAR ── */
+    .ep-sidebar {
+        width: var(--sidebar-w);
+        flex-shrink: 0;
+        background: var(--ep-white);
+        border-radius: var(--ep-radius);
+        padding: 20px 0;
+        box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+    }
+    .ep-sidebar-title {
+        font-size: 11px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.8px; color: var(--ep-muted);
+        padding: 0 20px 12px; border-bottom: 1px solid var(--ep-border); margin-bottom: 8px;
+    }
+    .ep-sidebar a {
+        display: flex; align-items: center; gap: 10px;
+        padding: 10px 20px; font-size: 13px; font-weight: 600;
+        color: var(--ep-muted); text-decoration: none;
+        border-left: 3px solid transparent; transition: all 0.15s;
+    }
+    .ep-sidebar a:hover { background: var(--ep-hover); color: var(--ep-text); }
+    .ep-sidebar a.active { color: var(--ep-red); background: var(--ep-red-soft); border-left-color: var(--ep-red); }
+    .ep-sidebar a i { width: 16px; text-align: center; font-size: 13px; }
+
+    /* ── PANEL ── */
+    .ep-panel {
+        flex: 1;
+        background: var(--ep-white);
+        border-radius: var(--ep-radius);
+        box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .ep-panel-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 18px 28px; border-bottom: 1px solid var(--ep-border); flex-shrink: 0;
+    }
+    .ep-panel-header h2 {
+        font-size: 17px; font-weight: 700; margin: 0;
+        display: flex; align-items: center; gap: 10px;
+    }
+    .ep-panel-body {
+        flex: 1; padding: 24px 28px; overflow-y: auto;
+    }
+
+    /* ── SECCIONES ── */
+    .sec-block {
+        margin-bottom: 28px;
+    }
+    .sec-label {
+        font-size: 11px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.7px; color: var(--ep-muted);
+        margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .sec-label i { font-size: 12px; }
+    .sec-card {
+        background: var(--ep-bg); border-radius: 12px; padding: 18px 20px;
+        border: 1px solid transparent; transition: border-color 0.15s;
+    }
+    .sec-card:hover { border-color: var(--ep-border); }
+
+    /* ── INPUTS DE CONTRASEÑA ── */
+    .pwd-field {
+        margin-bottom: 14px;
+    }
+    .pwd-field label {
+        font-size: 11px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.5px; color: var(--ep-muted); display: block; margin-bottom: 5px;
+    }
+    .pwd-input-wrap {
+        position: relative;
+    }
+    .pwd-input {
+        width: 100%; padding: 10px 42px 10px 14px;
+        border: 1.5px solid var(--ep-border); border-radius: 10px;
+        font-size: 13px; font-family: inherit; color: var(--ep-text);
+        background: var(--ep-bg); outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s; box-sizing: border-box;
+    }
+    .pwd-input:hover { border-color: var(--ep-border-hover); background: var(--ep-hover); }
+    .pwd-input:focus {
+        border-color: var(--ep-red);
+        box-shadow: 0 0 0 3px var(--ep-red-soft);
+        background: var(--ep-bg);
+    }
+    .pwd-toggle {
+        position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+        background: none; border: none; color: var(--ep-muted);
+        cursor: pointer; font-size: 14px; padding: 4px;
+        transition: color 0.2s;
+    }
+    .pwd-toggle:hover { color: var(--ep-text); }
+
+    /* Barra de fuerza de contraseña */
+    .pwd-strength-bar {
+        height: 4px; border-radius: 4px; background: var(--ep-border);
+        margin-top: 8px; overflow: hidden;
+    }
+    .pwd-strength-fill {
+        height: 100%; border-radius: 4px; width: 0;
+        transition: width 0.3s ease, background 0.3s ease;
+    }
+    .pwd-strength-text {
+        font-size: 10px; font-weight: 600; margin-top: 4px;
+        color: var(--ep-muted); transition: color 0.3s;
+    }
+
+    /* Validaciones de contraseña */
+    .pwd-rules {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 3px 12px;
+        margin-top: 8px;
+    }
+    .pwd-rule {
+        font-size: 10px; color: var(--ep-muted); display: flex; align-items: center; gap: 5px;
+        transition: color 0.2s;
+    }
+    .pwd-rule.pass { color: var(--ep-green); }
+    .pwd-rule i { font-size: 9px; width: 12px; text-align: center; }
+
+    .pwd-match-error {
+        font-size: 10px; color: #e53e3e; margin-top: 4px; display: none;
+    }
+
+    .btn-update-pwd {
+        background: var(--ep-hover); color: var(--ep-muted);
+        border: none; padding: 10px 24px; border-radius: 10px;
+        font-weight: 700; font-size: 13px; cursor: pointer;
+        transition: all 0.25s; margin-top: 6px;
+    }
+    .btn-update-pwd.active {
+        background: var(--ep-red); color: white;
+        box-shadow: 0 4px 12px rgba(128,0,32,0.25);
+    }
+
+    /* ── 2FA TOGGLE ── */
+    .twofa-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 16px 20px; background: var(--ep-bg); border-radius: 12px;
+    }
+    .twofa-info { display: flex; align-items: center; gap: 14px; }
+    .twofa-icon {
+        width: 40px; height: 40px; border-radius: 10px;
+        background: #e8f5e9; color: #2e7d32;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 16px; flex-shrink: 0;
+    }
+    .twofa-text h4 { font-size: 13px; font-weight: 700; margin: 0 0 2px; }
+    .twofa-text p { font-size: 11px; color: var(--ep-muted); margin: 0; line-height: 1.4; }
+
+    .toggle-switch {
+        position: relative; width: 44px; height: 24px; flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+        position: absolute; inset: 0; background: #d0d0d8; border-radius: 24px;
+        cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .toggle-slider::before {
+        content: ''; position: absolute; width: 18px; height: 18px;
+        background: white; border-radius: 50%; top: 3px; left: 3px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .toggle-switch input:checked + .toggle-slider {
+        background: var(--ep-green); box-shadow: 0 2px 8px rgba(46,125,50,0.3);
+    }
+    .toggle-switch input:checked + .toggle-slider::before {
+        transform: translateX(20px);
+    }
+
+    /* ── QR CONTAINER (2FA) ── */
+    #qr-container {
+        display: none;
+        background: var(--ep-hover);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 15px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    #qr-container.show {
+        display: block;
+    }
+    #qr-container h4 {
+        font-size: 13px;
+        color: var(--ep-text);
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    #qr-code {
+        background: white;
+        padding: 10px;
+        border-radius: 8px;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+    .qr-input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    #qr-code-input {
+        width: 150px;
+        text-align: center;
+        letter-spacing: 5px;
+        font-size: 18px;
+        font-weight: 700;
+    }
+    .btn-verify-qr {
+        background: var(--ep-red);
+        color: white;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        opacity: 0.5;
+        pointer-events: none;
+        transition: all 0.2s;
+    }
+    .btn-verify-qr.active {
+        opacity: 1;
+        pointer-events: auto;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+    }
+
+    /* ── SESIONES ACTIVAS ── */
+    .session-item {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 12px 0; border-bottom: 1px solid var(--ep-border);
+    }
+    .session-item:last-child { border-bottom: none; }
+    .session-info { display: flex; align-items: center; gap: 12px; }
+    .session-icon {
+        width: 36px; height: 36px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 15px; flex-shrink: 0;
+    }
+    .session-icon.current { background: #e8f5e9; color: #2e7d32; }
+    .session-icon.other   { background: var(--ep-hover); color: var(--ep-muted); }
+    .session-details h4 { font-size: 12px; font-weight: 700; margin: 0 0 2px; }
+    .session-details p { font-size: 10px; color: var(--ep-muted); margin: 0; }
+    .session-badge {
+        font-size: 9px; font-weight: 700; padding: 2px 8px;
+        border-radius: 10px; background: #e8f5e9; color: #2e7d32;
+    }
+    .btn-close-session {
+        font-size: 11px; color: #e53e3e; background: none; border: none;
+        cursor: pointer; font-weight: 600; padding: 4px 10px;
+        border-radius: 6px; transition: background 0.15s;
+    }
+    .btn-close-session:hover { background: rgba(229,62,62,0.08); }
+    .btn-close-all {
+        width: 100%; margin-top: 12px; padding: 10px;
+        background: rgba(229,62,62,0.06); color: #c62828;
+        border: 1px solid rgba(229,62,62,0.15); border-radius: 10px;
+        font-size: 12px; font-weight: 700; cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-close-all:hover {
+        background: #c62828; color: white; border-color: #c62828;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ep-shell">
+
+    <nav class="ep-sidebar">
+        <div class="ep-sidebar-title">Configuración</div>
+        <a href="{{ url_for('cliente.editar_perfil') }}"><i class="fas fa-user"></i> Gestión de cuenta</a>
+        <a href="{{ url_for('cliente.obras_favoritas') }}"><i class="fas fa-heart"></i> Mis Favoritos</a>
+        <a href="{{ url_for('cliente.notificaciones') }}"><i class="fas fa-bell"></i> Notificaciones</a>
+        <a href="{{ url_for('cliente.privacidad') }}"><i class="fas fa-shield-halved"></i> Privacidad</a>
+        <a href="{{ url_for('cliente.seguridad') }}" class="active"><i class="fas fa-lock"></i> Seguridad</a>
+    </nav>
+
+    <div class="ep-panel">
+
+        <div class="ep-panel-header">
+            <h2>
+                <i class="fas fa-lock" style="color: var(--ep-red);"></i>
+                Seguridad de la Cuenta
+            </h2>
+        </div>
+
+        <div class="ep-panel-body">
+            <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
+
+            <!-- ═══ CAMBIO DE CONTRASEÑA ═══ -->
+            <div class="sec-block">
+                <div class="sec-label"><i class="fas fa-key"></i> Cambiar contraseña</div>
+                <div class="sec-card">
+
+                    <div class="pwd-field">
+                        <label>Contraseña actual</label>
+                        <div class="pwd-input-wrap">
+                            <input type="password" class="pwd-input" id="currentPwd" placeholder="••••••••" autocomplete="current-password">
+                            <button type="button" class="pwd-toggle" data-target="currentPwd"><i class="far fa-eye"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="pwd-field">
+                        <label>Nueva contraseña</label>
+                        <div class="pwd-input-wrap">
+                            <input type="password" class="pwd-input" id="newPwd" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                            <button type="button" class="pwd-toggle" data-target="newPwd"><i class="far fa-eye"></i></button>
+                        </div>
+                        <!-- Barra de fuerza -->
+                        <div class="pwd-strength-bar"><div class="pwd-strength-fill" id="strengthFill"></div></div>
+                        <div class="pwd-strength-text" id="strengthText"></div>
+                        <!-- Reglas -->
+                        <div class="pwd-rules">
+                            <span class="pwd-rule" id="ruleLen"><i class="fas fa-circle"></i> 8+ caracteres</span>
+                            <span class="pwd-rule" id="ruleUpper"><i class="fas fa-circle"></i> Mayúscula</span>
+                            <span class="pwd-rule" id="ruleLower"><i class="fas fa-circle"></i> Minúscula</span>
+                            <span class="pwd-rule" id="ruleNum"><i class="fas fa-circle"></i> Número</span>
+                            <span class="pwd-rule" id="ruleSpecial"><i class="fas fa-circle"></i> Carácter especial</span>
+                        </div>
+                    </div>
+
+                    <div class="pwd-field">
+                        <label>Confirmar nueva contraseña</label>
+                        <div class="pwd-input-wrap">
+                            <input type="password" class="pwd-input" id="confirmPwd" placeholder="Repite la contraseña" autocomplete="new-password">
+                            <button type="button" class="pwd-toggle" data-target="confirmPwd"><i class="far fa-eye"></i></button>
+                        </div>
+                        <div class="pwd-match-error" id="matchError"><i class="fas fa-exclamation-circle"></i> Las contraseñas no coinciden</div>
+                    </div>
+
+                    <button class="btn-update-pwd" id="updatePwdBtn" disabled>
+                        <i class="fas fa-check"></i> Actualizar Contraseña
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- ═══ AUTENTICACIÓN EN DOS PASOS ═══ -->
+            <div class="sec-block">
+                <div class="sec-label"><i class="fas fa-mobile-screen"></i> Autenticación</div>
+                <div class="twofa-row">
+                    <div class="twofa-info">
+                        <div class="twofa-icon"><i class="fas fa-shield-check"></i></div>
+                        <div class="twofa-text">
+                            <h4>Autenticación en dos pasos</h4>
+                            <p>Añade una capa extra de protección. Te pediremos un código además de tu contraseña al iniciar sesión.</p>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle2fa">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <!-- Contenedor QR Oculto -->
+                <div id="qr-container">
+                    <h4>Escanea este código con tu app de autenticación</h4>
+                    <div id="qr-code"></div>
+                    <div class="qr-input-group">
+                        <input type="text" class="pwd-input" id="qr-code-input" maxlength="6" placeholder="000000" autocomplete="off">
+                        <button class="btn-verify-qr" id="btn-verify-qr">Verificar y Activar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SESIONES ACTIVAS ═══ -->
+            <div class="sec-block">
+                <div class="sec-label"><i class="fas fa-desktop"></i> Sesiones activas</div>
+                <div class="sec-card" style="padding: 14px 20px;">
+
+                    <div class="session-item">
+                        <div class="session-info">
+                            <div class="session-icon current"><i class="fas fa-laptop"></i></div>
+                            <div class="session-details">
+                                <h4>Windows — Chrome <span class="session-badge">Actual</span></h4>
+                                <p><i class="fas fa-map-pin"></i> Bucaramanga, Colombia · Hace 10 min</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="session-item" data-session="2">
+                        <div class="session-info">
+                            <div class="session-icon other"><i class="fas fa-mobile-alt"></i></div>
+                            <div class="session-details">
+                                <h4>iPhone — Safari</h4>
+                                <p><i class="fas fa-map-pin"></i> Bucaramanga, Colombia · Hace 3 horas</p>
+                            </div>
+                        </div>
+                        <button class="btn-close-session" data-session="2">Cerrar</button>
+                    </div>
+
+                    <div class="session-item" data-session="3">
+                        <div class="session-info">
+                            <div class="session-icon other"><i class="fas fa-tablet-alt"></i></div>
+                            <div class="session-details">
+                                <h4>iPad — Chrome</h4>
+                                <p><i class="fas fa-map-pin"></i> Bogotá, Colombia · Hace 2 días</p>
+                            </div>
+                        </div>
+                        <button class="btn-close-session" data-session="3">Cerrar</button>
+                    </div>
+
+                    <button class="btn-close-all" id="closeAllSessions">
+                        <i class="fas fa-right-from-bracket"></i> Cerrar todas las demás sesiones
+                    </button>
+                </div>
+            </div>
+
+        </div><!-- /ep-panel-body -->
+    </div><!-- /ep-panel -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // ── MOSTRAR/OCULTAR CONTRASEÑA ──
+    document.querySelectorAll('.pwd-toggle').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = document.getElementById(this.dataset.target);
+            const icon  = this.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+    });
+
+    // ── FUERZA DE CONTRASEÑA ──
+    const newPwd       = document.getElementById('newPwd');
+    const confirmPwd   = document.getElementById('confirmPwd');
+    const strengthFill = document.getElementById('strengthFill');
+    const strengthText = document.getElementById('strengthText');
+    const updateBtn    = document.getElementById('updatePwdBtn');
+    const matchError   = document.getElementById('matchError');
+    const currentPwd   = document.getElementById('currentPwd');
+
+    const rules = {
+        ruleLen:     v => v.length >= 8,
+        ruleUpper:   v => /[A-Z]/.test(v),
+        ruleLower:   v => /[a-z]/.test(v),
+        ruleNum:     v => /[0-9]/.test(v),
+        ruleSpecial: v => /[^A-Za-z0-9]/.test(v),
+    };
+
+    const strengthLevels = [
+        { max: 1, label: 'Muy débil',  color: '#e53e3e', width: '20%' },
+        { max: 2, label: 'Débil',      color: '#e65100', width: '40%' },
+        { max: 3, label: 'Regular',    color: '#f9a825', width: '60%' },
+        { max: 4, label: 'Fuerte',     color: '#66bb6a', width: '80%' },
+        { max: 5, label: 'Muy fuerte', color: '#2e7d32', width: '100%' },
+    ];
+
+    function checkStrength() {
+        const val = newPwd.value;
+        let score = 0;
+
+        for (const [id, fn] of Object.entries(rules)) {
+            const el = document.getElementById(id);
+            const pass = fn(val);
+            if (pass) {
+                score++;
+                el.classList.add('pass');
+                el.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                el.classList.remove('pass');
+                el.querySelector('i').className = 'fas fa-circle';
+            }
+        }
+
+        if (!val) {
+            strengthFill.style.width = '0';
+            strengthFill.style.background = '';
+            strengthText.textContent = '';
+            return;
+        }
+
+        const level = strengthLevels[Math.min(score, 5) - 1] || strengthLevels[0];
+        strengthFill.style.width      = level.width;
+        strengthFill.style.background = level.color;
+        strengthText.textContent      = level.label;
+        strengthText.style.color      = level.color;
+
+        validateForm();
+    }
+
+    function checkMatch() {
+        const match = confirmPwd.value && newPwd.value !== confirmPwd.value;
+        matchError.style.display = match ? 'block' : 'none';
+        confirmPwd.style.borderColor = match ? '#e53e3e' : '';
+        validateForm();
+    }
+
+    function validateForm() {
+        const isValidLen   = newPwd.value.length >= 8;
+        const matching     = newPwd.value === confirmPwd.value && confirmPwd.value.length > 0;
+        const hasCurrent   = currentPwd.value.length > 0;
+
+        if (isValidLen && matching && hasCurrent) {
+            updateBtn.classList.add('active');
+            updateBtn.disabled = false;
+        } else {
+            updateBtn.classList.remove('active');
+            updateBtn.disabled = true;
+        }
+    }
+
+    newPwd.addEventListener('input', () => { checkStrength(); checkMatch(); });
+    confirmPwd.addEventListener('input', checkMatch);
+    currentPwd.addEventListener('input', validateForm);
+
+    updateBtn.addEventListener('click', function() {
+        const btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
+        
+        const formData = new FormData();
+        formData.append('csrf_token', document.getElementById('csrf_token').value);
+        formData.append('current_password', currentPwd.value);
+        formData.append('new_password', newPwd.value);
+        formData.append('confirm_password', confirmPwd.value);
+
+        fetch("{{ url_for('cliente.seguridad') }}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                alert('✅ ' + data.message);
+                newPwd.value = '';
+                confirmPwd.value = '';
+                currentPwd.value = '';
+                strengthFill.style.width = '0';
+                strengthText.textContent = '';
+                matchError.style.display = 'none';
+                document.querySelectorAll('.pwd-rule').forEach(r => {
+                    r.classList.remove('pass');
+                    r.querySelector('i').className = 'fas fa-circle';
+                });
+                btn.classList.remove('active');
+                btn.disabled = true;
+            } else {
+                alert('❌ Error: ' + data.message);
+                btn.disabled = false;
+            }
+            btn.innerHTML = '<i class="fas fa-check"></i> Actualizar Contraseña';
+        })
+        .catch(err => {
+            alert('❌ Ocurrió un error en la conexión.');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check"></i> Actualizar Contraseña';
+        });
+    });
+
+    // ── 2FA TOGGLE & QR LOGIC ──
+    const toggle2fa   = document.getElementById('toggle2fa');
+    const qrContainer = document.getElementById('qr-container');
+    const qrCodeDiv   = document.getElementById('qr-code');
+    const qrInput     = document.getElementById('qr-code-input');
+    const btnVerifyQr = document.getElementById('btn-verify-qr');
+    let qrGenerated   = false;
+
+    // URL dinámica para el QR usando la librería
+    toggle2fa.addEventListener('change', function() {
+        if (this.checked) {
+            qrContainer.classList.add('show');
+            setTimeout(() => { qrContainer.style.opacity = '1'; }, 10);
+            
+            if (!qrGenerated) {
+                // Simulación de la URL de autenticación (OTP)
+                const userEmail = "usuario@agoraart.com";
+                const secretKey = "JBSWY3DPEHPK3PXP"; 
+                const otpAuthUrl = `otpauth://totp/AgoraArt:${userEmail}?secret=${secretKey}&issuer=AgoraArt`;
+                
+                new QRCode(qrCodeDiv, {
+                    text: otpAuthUrl,
+                    width: 140,
+                    height: 140,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+                qrGenerated = true;
+            }
+        } else {
+            qrContainer.style.opacity = '0';
+            setTimeout(() => { qrContainer.classList.remove('show'); }, 300);
+            qrInput.value = '';
+            btnVerifyQr.classList.remove('active');
+        }
+    });
+
+    qrInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Permitir solo números
+        if (this.value.length === 6) {
+            btnVerifyQr.classList.add('active');
+        } else {
+            btnVerifyQr.classList.remove('active');
+        }
+    });
+
+    btnVerifyQr.addEventListener('click', function() {
+        if (qrInput.value.length === 6) {
+            // Aquí iría el POST al backend para validar el código TOTP
+            alert('✅ Código verificado exitosamente.\nLa autenticación de dos pasos ha sido activada.');
+            qrContainer.style.opacity = '0';
+            setTimeout(() => { qrContainer.classList.remove('show'); }, 300);
+            
+            // Simular estado guardado
+            localStorage.setItem('agora_2fa', 'true');
+        }
+    });
+
+    // Restaurar el switch si estaba guardado
+    const saved2fa = localStorage.getItem('agora_2fa');
+    if (saved2fa === 'true') {
+        toggle2fa.checked = true;
+        // Opcional: mostrar un indicador de que ya está activo
+    }
+
+    // ── CERRAR SESIONES ──
+    document.querySelectorAll('.btn-close-session').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const item = this.closest('.session-item');
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(30px)';
+            item.style.transition = 'all 0.3s ease';
+            setTimeout(() => item.remove(), 300);
+        });
+    });
+
+    document.getElementById('closeAllSessions').addEventListener('click', function() {
+        const items = document.querySelectorAll('.session-item[data-session]');
+        items.forEach((item, i) => {
+            setTimeout(() => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(30px)';
+                item.style.transition = 'all 0.3s ease';
+                setTimeout(() => item.remove(), 300);
+            }, i * 150);
+        });
+        setTimeout(() => { this.style.display = 'none'; }, items.length * 150 + 300);
+    });
+});
+</script>
+{% endblock %}

@@ -15,6 +15,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <script>
+        // Evitar el "flash" aplicando el tema antes de renderizar
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
     <style>
     /* === THEME VARIABLES === */
     :root {
@@ -497,11 +506,12 @@ document.addEventListener("DOMContentLoaded", function() {
 {% block scripts %}{% endblock %}
 <script>
 const themeSwitcher = document.getElementById('theme-switcher');
-const currentTheme = localStorage.getItem('theme') || 'dark';
-if (currentTheme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
+if (document.documentElement.getAttribute('data-theme') === 'light') {
     themeSwitcher.innerHTML = '<i class="fas fa-sun"></i>';
+} else {
+    themeSwitcher.innerHTML = '<i class="fas fa-moon"></i>';
 }
+
 themeSwitcher.addEventListener('click', () => {
     let theme = document.documentElement.getAttribute('data-theme');
     if (theme === 'light') {
