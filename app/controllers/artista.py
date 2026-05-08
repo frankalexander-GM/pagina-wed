@@ -307,3 +307,28 @@ def toggle_visibilidad_obra():
             'exitoso': False,
             'mensaje': 'Error al actualizar visibilidad'
         })
+
+@artista_bp.route('/volver-a-cliente', methods=['GET'])
+@login_required
+@requiere_artista
+def volver_a_cliente():
+    """
+    Convierte la cuenta actual de artista de vuelta a cliente
+    """
+    from app.factories.app_factory import db
+    try:
+        service_factory = get_service_factory(db.session)
+        usuario_service = service_factory.get_usuario_service()
+        
+        exitoso, _ = usuario_service.actualizar_usuario(current_user.id_usuario, {'rol': 'cliente'})
+        
+        if exitoso:
+            flash('Tu cuenta ha regresado al perfil de Cliente.', 'success')
+            return redirect(url_for('cliente.dashboard'))
+        else:
+            flash('Hubo un error al actualizar tu cuenta.', 'error')
+            return redirect(url_for('artista.dashboard'))
+    except Exception as e:
+        print(f"Error al volver a cliente: {e}")
+        flash('Error al procesar la solicitud.', 'error')
+        return redirect(url_for('artista.dashboard'))

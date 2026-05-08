@@ -150,10 +150,7 @@ def editar_perfil():
                 if not _allowed_file(foto_perfil.filename):
                     errores.append('Formato de foto de perfil no válido. Usa JPG, PNG, GIF o WebP.')
             
-            foto_banner = request.files.get('foto_banner')
-            if foto_banner and foto_banner.filename:
-                if not _allowed_file(foto_banner.filename):
-                    errores.append('Formato de foto de portada no válido. Usa JPG, PNG, GIF o WebP.')
+
             
             if not errores:
                 service_factory = get_service_factory(db.session)
@@ -171,10 +168,7 @@ def editar_perfil():
                     if url_perfil:
                         data['foto_perfil'] = url_perfil
                 
-                if foto_banner and foto_banner.filename:
-                    url_banner = _save_upload(foto_banner, 'banners')
-                    if url_banner:
-                        data['foto_banner'] = url_banner
+
                 
                 usuario_service = service_factory.get_usuario_service()
                 exitoso, usuario_actualizado = usuario_service.actualizar_usuario(current_user.id_usuario, data)
@@ -572,3 +566,27 @@ def quitar_carrito():
         'exitoso': exitoso,
         'mensaje': 'Producto quitado del carrito' if exitoso else 'Error al quitar'
     })
+
+@cliente_bp.route('/convertirse-en-artista', methods=['GET'])
+@login_required
+@requiere_cliente
+def convertirse_en_artista():
+    """
+    Convierte la cuenta actual de cliente en una cuenta de artista
+    """
+    try:
+        service_factory = get_service_factory(db.session)
+        usuario_service = service_factory.get_usuario_service()
+        
+        exitoso, _ = usuario_service.actualizar_usuario(current_user.id_usuario, {'rol': 'artista'})
+        
+        if exitoso:
+            flash('¡Felicidades! Tu cuenta ha sido actualizada a Artista. Ahora puedes subir y vender tus obras.', 'success')
+            return redirect(url_for('artista.dashboard'))
+        else:
+            flash('Hubo un error al actualizar tu cuenta.', 'error')
+            return redirect(url_for('cliente.dashboard'))
+    except Exception as e:
+        print(f"Error al convertir en artista: {e}")
+        flash('Error al procesar la solicitud.', 'error')
+        return redirect(url_for('cliente.dashboard'))

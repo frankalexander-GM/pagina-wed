@@ -5,253 +5,323 @@
 {% block head %}
 <style>
     :root {
-        --pin-bg: #ffffff;
-        --pin-text: #111111;
-        --pin-muted: #767676;
-        --pin-border: #cdcdcd;
-        --pin-hover: #e9e9e9;
-        --agora-burgundy: #800020;
-        --agora-dark-primary: #4a0012;
+        --ep-bg:       #f4f4f6;
+        --ep-white:    #ffffff;
+        --ep-text:     #1a1a2e;
+        --ep-muted:    #8a8a9a;
+        --ep-border:   #e2e2ea;
+        --ep-hover:    #ececf3;
+        --ep-red:      #800020;
+        --ep-red-soft: rgba(128,0,32,0.08);
+        --ep-radius:   14px;
+        --sidebar-w:   210px;
     }
 
     body {
-        background-color: var(--pin-bg) !important;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-        color: var(--pin-text) !important;
-        padding-bottom: 80px; /* Space for footer */
+        background: var(--ep-bg) !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        color: var(--ep-text) !important;
+        /* Evitar scroll en el body */
+        height: calc(100vh - 56px);
+        overflow: hidden;
     }
 
-    /* Layout */
-    .settings-container {
+    /* ── SHELL: ocupa toda la altura disponible ── */
+    .ep-shell {
         display: flex;
-        max-width: 1000px;
-        margin: 40px auto;
-        padding: 0 20px;
-        gap: 60px;
+        height: calc(100vh - 56px);
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 32px;
+        gap: 24px;
+        box-sizing: border-box;
     }
 
-    /* Sidebar */
-    .settings-sidebar {
-        width: 240px;
+    /* ── SIDEBAR ── */
+    .ep-sidebar {
+        width: var(--sidebar-w);
+        flex-shrink: 0;
+        background: var(--ep-white);
+        border-radius: var(--ep-radius);
+        padding: 20px 0;
+        box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .ep-sidebar-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--ep-muted);
+        padding: 0 20px 12px;
+        border-bottom: 1px solid var(--ep-border);
+        margin-bottom: 8px;
+    }
+    .ep-sidebar a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ep-muted);
+        text-decoration: none;
+        border-left: 3px solid transparent;
+        transition: all 0.15s;
+    }
+    .ep-sidebar a:hover {
+        background: var(--ep-hover);
+        color: var(--ep-text);
+    }
+    .ep-sidebar a.active {
+        color: var(--ep-red);
+        background: var(--ep-red-soft);
+        border-left-color: var(--ep-red);
+    }
+    .ep-sidebar a i { width: 16px; text-align: center; font-size: 13px; }
+
+    /* ── PANEL PRINCIPAL ── */
+    .ep-panel {
+        flex: 1;
+        background: var(--ep-white);
+        border-radius: var(--ep-radius);
+        box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* Cabecera del panel */
+    .ep-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 28px;
+        border-bottom: 1px solid var(--ep-border);
         flex-shrink: 0;
     }
-    
-    .settings-sidebar ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        position: sticky;
-        top: 100px;
-    }
-    
-    .settings-sidebar a {
-        display: block;
-        padding: 12px 16px;
-        font-weight: 700;
-        font-size: 16px;
-        text-decoration: none;
-        border-radius: 8px;
-        transition: background 0.2s;
-    }
-    
-    .settings-sidebar a.active {
-        color: var(--pin-text);
-        position: relative;
-    }
-    
-    .settings-sidebar a.active::before {
-        content: '';
-        position: absolute;
-        left: -8px;
-        top: 10%;
-        height: 80%;
-        width: 4px;
-        background-color: var(--pin-text);
-        border-radius: 4px;
-    }
-
-    .settings-sidebar a:not(.active) {
-        color: var(--pin-muted);
-    }
-    
-    .settings-sidebar a:hover {
-        background-color: var(--pin-hover);
-        color: var(--pin-text);
-    }
-
-    /* Content */
-    .settings-content {
-        flex-grow: 1;
-        max-width: 500px;
-    }
-
-    .settings-title {
-        font-size: 28px;
-        font-weight: 600;
-        margin: 0 0 8px 0;
-        color: var(--pin-text);
-        letter-spacing: -0.5px;
-    }
-
-    .settings-subtitle {
-        font-size: 16px;
-        color: var(--pin-text);
-        line-height: 1.5;
-        margin-bottom: 40px;
-    }
-
-    /* Photo Section */
-    .photo-section {
-        margin-bottom: 30px;
-    }
-    
-    .photo-label {
-        font-size: 12px;
-        color: var(--pin-text);
-        margin-bottom: 8px;
-        display: block;
-    }
-    
-    .photo-controls {
+    .ep-panel-header-left {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 14px;
     }
-
-    .avatar-preview-box {
-        width: 75px;
-        height: 75px;
+    .ep-avatar {
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
-        background-color: var(--pin-hover);
-        overflow: hidden;
+        background: linear-gradient(135deg, var(--ep-red), #4a0012);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        color: var(--pin-text);
+        color: white;
+        font-size: 28px;
+        font-weight: 800;
+        overflow: hidden;
+        flex-shrink: 0;
+        cursor: pointer;
+        position: relative;
+        transition: opacity 0.2s;
+        box-shadow: 0 4px 14px rgba(128,0,32,0.25);
     }
-    
-    .avatar-preview-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    .ep-avatar:hover { opacity: 0.85; }
+    .ep-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .ep-avatar-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+        font-size: 14px;
+        color: white;
+    }
+    .ep-avatar:hover .ep-avatar-overlay { opacity: 1; }
+    .ep-user-info h2 {
+        font-size: 15px;
+        font-weight: 700;
+        margin: 0 0 2px;
+        color: var(--ep-text);
+    }
+    .ep-user-info span {
+        font-size: 12px;
+        color: var(--ep-muted);
     }
 
-    .btn-modificar {
-        background-color: var(--pin-hover);
-        color: var(--pin-text);
+    /* Footer del panel con botones */
+    .ep-panel-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 14px 28px;
+        border-top: 1px solid var(--ep-border);
+        flex-shrink: 0;
+        background: var(--ep-white);
+        border-radius: 0 0 var(--ep-radius) var(--ep-radius);
+    }
+    .ep-btn-reset {
+        background: var(--ep-hover);
+        color: var(--ep-text);
         border: none;
-        padding: 10px 16px;
-        border-radius: 24px;
+        padding: 8px 18px;
+        border-radius: 8px;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 13px;
         cursor: pointer;
         transition: background 0.2s;
     }
-    .btn-modificar:hover {
-        background-color: #d0d0d0;
+    .ep-btn-reset:hover { background: #dcdce8; }
+    .ep-btn-save {
+        background: var(--ep-hover);
+        color: var(--ep-muted);
+        border: none;
+        padding: 8px 22px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .ep-btn-save.active {
+        background: var(--ep-red);
+        color: white;
+        box-shadow: 0 4px 12px rgba(128,0,32,0.25);
     }
 
-    /* Input Groups */
-    .pin-input-group {
-        position: relative;
-        margin-bottom: 24px;
+    /* Cuerpo del formulario */
+    .ep-panel-body {
+        flex: 1;
+        padding: 24px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        overflow: hidden;
     }
 
-    .pin-input-group label {
-        position: absolute;
-        top: 8px;
-        left: 16px;
-        font-size: 12px;
-        color: var(--pin-text);
-        z-index: 10;
-        pointer-events: none;
+    .ep-section-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        color: var(--ep-muted);
+        margin-bottom: 14px;
     }
 
-    .pin-input {
+    /* Grid 2 columnas para los campos */
+    .ep-fields-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 24px;
+    }
+
+    /* Campo individual */
+    .ep-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .ep-field label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--ep-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .ep-input {
+        padding: 9px 12px;
+        border: 1.5px solid var(--ep-border);
+        border-radius: 9px;
+        font-size: 13px;
+        font-family: inherit;
+        color: var(--ep-text);
+        background: var(--ep-bg);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
         width: 100%;
-        padding: 26px 16px 10px;
-        border: 1px solid var(--pin-border);
-        border-radius: 16px;
-        font-size: 16px;
+        box-sizing: border-box;
+    }
+    .ep-input:hover { border-color: #c0c0d0; background: #f9f9fb; }
+    .ep-input:focus {
+        border-color: var(--ep-red);
+        box-shadow: 0 0 0 3px var(--ep-red-soft);
+        background: white;
+    }
+    .ep-field-hint {
+        font-size: 10px;
+        color: var(--ep-muted);
+        margin-top: 1px;
+    }
+    .ep-field-error {
+        font-size: 10px;
+        color: #e53e3e;
+        margin-top: 1px;
+        display: none;
+    }
+
+    /* Tags de intereses — ocupa las 2 columnas */
+    .ep-field-full { grid-column: 1 / -1; }
+
+    .ep-tags-box {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        align-items: center;
+        padding: 7px 10px;
+        border: 1.5px solid var(--ep-border);
+        border-radius: 9px;
+        background: var(--ep-bg);
+        min-height: 38px;
+        cursor: text;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .ep-tags-box:focus-within {
+        border-color: var(--ep-red);
+        box-shadow: 0 0 0 3px var(--ep-red-soft);
+        background: white;
+    }
+    .ep-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 9px;
+        background: var(--ep-red-soft);
+        color: var(--ep-red);
+        border: 1px solid rgba(128,0,32,0.2);
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+    .ep-tag-rm {
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: inherit;
+        padding: 0;
+        font-size: 12px;
+        opacity: 0.6;
+        line-height: 1;
+    }
+    .ep-tag-rm:hover { opacity: 1; }
+    .ep-tag-input {
+        border: none;
         outline: none;
         background: transparent;
-        color: var(--pin-text);
-        transition: box-shadow 0.2s;
-        font-family: inherit;
-    }
-
-    .pin-input:hover {
-        border-color: #a3a3a3;
-    }
-
-    .pin-input:focus {
-        box-shadow: 0 0 0 4px rgba(0, 116, 232, 0.2);
-        border-color: transparent;
-    }
-
-    .pin-textarea {
-        resize: vertical;
-        min-height: 100px;
-    }
-
-    .pin-hint {
         font-size: 12px;
-        color: var(--pin-muted);
-        margin-top: 8px;
-        padding-left: 4px;
-        display: block;
+        font-family: inherit;
+        color: var(--ep-text);
+        min-width: 120px;
+        flex: 1;
     }
 
-    /* Footer */
-    .settings-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: white;
-        box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
-        padding: 16px 0;
-        display: flex;
-        justify-content: center;
-        z-index: 100;
-    }
-
-    .footer-content {
-        max-width: 1000px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-    }
-
-    .btn-reset {
-        background-color: var(--pin-hover);
-        color: var(--pin-text);
-        border: none;
-        padding: 12px 20px;
-        border-radius: 24px;
-        font-weight: 600;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    .btn-save {
-        background-color: var(--pin-hover); /* Gray by default like Pinterest until changed */
-        color: var(--pin-text);
-        border: none;
-        padding: 12px 20px;
-        border-radius: 24px;
-        font-weight: 600;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    
-    .btn-save.active {
-        background-color: var(--agora-burgundy);
-        color: white;
+    /* Divider entre secciones */
+    .ep-divider {
+        height: 1px;
+        background: var(--ep-border);
+        margin: 16px 0;
+        flex-shrink: 0;
     }
 
     .hidden-input { display: none; }
@@ -261,108 +331,101 @@
 {% block content %}
 <form method="POST" action="{{ url_for('cliente.editar_perfil') }}" enctype="multipart/form-data" id="editForm">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    
-    <!-- File Inputs Ocultos -->
     <input type="file" name="foto_perfil" id="foto_perfil" class="hidden-input" accept="image/png,image/jpeg,image/webp">
-    <input type="file" name="foto_banner" id="foto_banner" class="hidden-input" accept="image/png,image/jpeg,image/webp">
 
-    <div class="settings-container">
-        
-        <!-- Sidebar -->
-        <div class="settings-sidebar">
-            <ul>
-                <li><a href="#" class="active">Editar perfil</a></li>
-                <li><a href="#">Gestión de la cuenta</a></li>
-                <li><a href="#">Visibilidad del perfil</a></li>
-                <li><a href="#">Refina tus recomendaciones</a></li>
-                <li><a href="#">Permisos sociales</a></li>
-                <li><a href="#">Notificaciones</a></li>
-                <li><a href="#">Privacidad y datos</a></li>
-                <li><a href="#">Seguridad</a></li>
-            </ul>
-            <div style="padding: 16px; margin-top: 20px; font-size: 11px; color: var(--pin-muted); line-height: 1.4; border-top: 1px solid var(--pin-border);">
-                <strong>Barra Lateral:</strong> La organización de secciones (Seguridad, Notificaciones, Visibilidad) hace que la configuración no sature la pantalla principal.
-            </div>
-        </div>
+    <div class="ep-shell">
 
-        <!-- Main Content -->
-        <div class="settings-content">
-            <h1 class="settings-title">Editar perfil</h1>
-            <p class="settings-subtitle">Mantén la privacidad de tus datos personales. Cualquier usuario que pueda ver tu perfil puede ver la información que añades aquí.</p>
+        <!-- ── SIDEBAR ── -->
+        <nav class="ep-sidebar">
+            <div class="ep-sidebar-title">Configuración</div>
+            <a href="#" class="active"><i class="fas fa-user"></i> Gestión de cuenta</a>
+            <a href="{{ url_for('cliente.obras_favoritas') }}"><i class="fas fa-heart"></i> Mis Favoritos</a>
+            <a href="#"><i class="fas fa-bell"></i> Notificaciones</a>
+            <a href="#"><i class="fas fa-shield-halved"></i> Privacidad</a>
+            <a href="#"><i class="fas fa-lock"></i> Seguridad</a>
+        </nav>
 
-            <!-- Foto de Perfil -->
-            <div class="photo-section">
-                <span class="photo-label">Foto de Perfil</span>
-                <div class="photo-controls">
-                    <div class="avatar-preview-box">
+        <!-- ── PANEL PRINCIPAL ── -->
+        <div class="ep-panel">
+
+            <!-- Cabecera: avatar + nombre + botones -->
+            <div class="ep-panel-header">
+                <div class="ep-panel-header-left">
+                    <div class="ep-avatar" onclick="document.getElementById('foto_perfil').click()" title="Cambiar foto">
                         {% if current_user.foto_perfil %}
                             <img src="{{ current_user.foto_perfil }}" id="avatarPreview">
                         {% else %}
                             <span id="avatarLetter">{{ current_user.nombre[0]|upper }}</span>
                             <img src="" id="avatarPreview" style="display:none;">
                         {% endif %}
+                        <div class="ep-avatar-overlay"><i class="fas fa-camera"></i></div>
                     </div>
-                    <button type="button" class="btn-modificar" onclick="document.getElementById('foto_perfil').click()">Modificar</button>
+                    <div class="ep-user-info">
+                        <h2>{{ current_user.nombre }}</h2>
+                        <span>@{{ current_user.username }}</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Foto de Portada -->
-            <div class="photo-section">
-                <span class="photo-label">Foto de Portada</span>
-                <div class="photo-controls" style="flex-direction: column; align-items: flex-start; gap: 12px;">
-                    <div class="banner-preview-box" style="width: 100%; height: 120px; border-radius: 16px; background-color: var(--pin-hover); overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                        {% if current_user.foto_banner %}
-                            <img src="{{ current_user.foto_banner }}" id="bannerPreview" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% else %}
-                            <span id="bannerPlaceholder" style="color: var(--pin-muted); font-size: 14px;">Sin portada</span>
-                            <img src="" id="bannerPreview" style="display:none; width: 100%; height: 100%; object-fit: cover;">
-                        {% endif %}
+            <!-- Cuerpo del formulario -->
+            <div class="ep-panel-body">
+
+                <div class="ep-section-label">Información personal</div>
+
+                <div class="ep-fields-grid">
+
+                    <!-- Nombre -->
+                    <div class="ep-field">
+                        <label>Nombre completo</label>
+                        <input type="text" name="nombre" class="ep-input ep-track" value="{{ current_user.nombre }}" required maxlength="100">
                     </div>
-                    <button type="button" class="btn-modificar" onclick="document.getElementById('foto_banner').click()">Modificar Portada</button>
-                </div>
+
+                    <!-- Usuario -->
+                    <div class="ep-field">
+                        <label>Nombre de usuario</label>
+                        <input type="text" name="username" class="ep-input ep-track" value="{{ current_user.username }}" required minlength="3" maxlength="50">
+                        <span class="ep-field-hint">agoraart.com/{{ current_user.username }}</span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="ep-field">
+                        <label>Correo electrónico</label>
+                        <input type="email" name="email" id="emailInput" class="ep-input ep-track" value="{{ current_user.email }}" required autocomplete="email">
+                        <span class="ep-field-error" id="emailHint"><i class="fas fa-exclamation-circle"></i> Correo no válido</span>
+                    </div>
+
+                    <!-- Ubicación -->
+                    <div class="ep-field">
+                        <label>Visibilidad de ubicación</label>
+                        <select class="ep-input ep-track" id="toggleLocation">
+                            <option value="false">🔒 Oculta</option>
+                            <option value="true">🌍 Pública</option>
+                        </select>
+                        <span class="ep-field-hint" id="locationText">Solo tú puedes ver tu ubicación real.</span>
+                    </div>
+
+                    <!-- Intereses (ocupa 2 columnas) -->
+                    <div class="ep-field ep-field-full">
+                        <label>Categorías de interés</label>
+                        <textarea name="biografia" id="biographyHidden" style="display:none;">{{ current_user.biografia or '' }}</textarea>
+                        <div class="ep-tags-box" id="tagsDisplay" onclick="document.getElementById('tagInput').focus()">
+                            <input type="text" id="tagInput" class="ep-tag-input ep-track" placeholder="Añadir: Óleo, Digital, Abstracto… (Enter o coma)">
+                        </div>
+                        <span class="ep-field-hint">Presiona <kbd>Enter</kbd> o <kbd>,</kbd> para añadir una categoría. <kbd>Backspace</kbd> para eliminar.</span>
+                    </div>
+
+                </div><!-- /ep-fields-grid -->
+
+            </div><!-- /ep-panel-body -->
+
+            <!-- Footer con botones -->
+            <div class="ep-panel-footer">
+                <button type="reset" form="editForm" class="ep-btn-reset">Restablecer</button>
+                <button type="submit" form="editForm" class="ep-btn-save" id="saveBtn">Guardar cambios</button>
             </div>
 
-            <!-- Inputs -->
-            <div class="pin-input-group">
-                <label>Nombre</label>
-                <input type="text" name="nombre" class="pin-input pin-track" value="{{ current_user.nombre }}" required maxlength="100">
-            </div>
-
-            <div class="pin-input-group">
-                <label>Nombre de usuario</label>
-                <input type="text" name="username" class="pin-input pin-track" value="{{ current_user.username }}" required minlength="3" maxlength="50">
-                <span class="pin-hint">www.agoraart.com/{{ current_user.username }}<br><strong>Diferenciación de Nombres:</strong> Mantener "Nombre" y "Nombre de usuario" por separado es ideal para generar URLs personalizadas.</span>
-            </div>
-
-            <div class="pin-input-group">
-                <label>Info</label>
-                <textarea name="biografia" class="pin-input pin-textarea pin-track" maxlength="500" placeholder="Cuenta tu historia">{{ current_user.biografia or '' }}</textarea>
-            </div>
-
-            <div class="pin-input-group">
-                <label>Correo Electrónico</label>
-                <input type="email" name="email" class="pin-input pin-track" value="{{ current_user.email }}" required>
-            </div>
-
-            <div class="pin-input-group">
-                <label>Mostrar mi ubicación</label>
-                <select class="pin-input pin-track" id="toggleLocation">
-                    <option value="false">Oculta</option>
-                    <option value="true">Pública (Basada en tu navegador)</option>
-                </select>
-                <span class="pin-hint" id="locationText">Elige si quieres que otros sepan de dónde eres.<br><strong>Privacidad de ubicación:</strong> Es un acierto total incluir la opción de "Oculta" para proteger la privacidad del usuario.</span>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Footer Pegajoso -->
-    <div class="settings-footer">
-        <div class="footer-content">
-            <button type="reset" class="btn-reset">Restablecer</button>
-            <button type="submit" class="btn-save" id="saveBtn">Guardar</button>
-        </div>
-    </div>
+        </div><!-- /ep-panel -->
+    </div><!-- /ep-shell -->
 </form>
 {% endblock %}
 
@@ -370,123 +433,114 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
-    // CARGAR TEMA GLOBAL
-    const themes = {
-        burgundy: { burgundy: '#a52a42', dark: '#6b1326', bg: '#ffffff', text: '#111111', textMuted: '#767676', hover: '#e9e9e9', border: '#cdcdcd' },
-        navy: { burgundy: '#2a4b8c', dark: '#1a3366', bg: '#ffffff', text: '#111111', textMuted: '#767676', hover: '#e9e9e9', border: '#cdcdcd' },
-        forest: { burgundy: '#3a6b42', dark: '#234a29', bg: '#ffffff', text: '#111111', textMuted: '#767676', hover: '#e9e9e9', border: '#cdcdcd' }
-    };
-    
-    const savedTheme = localStorage.getItem('agora_pin_theme');
-    if (savedTheme && themes[savedTheme]) {
-        const t = themes[savedTheme];
-        document.documentElement.style.setProperty('--agora-burgundy', t.burgundy);
-        document.documentElement.style.setProperty('--agora-dark-primary', t.dark);
-        document.documentElement.style.setProperty('--pin-bg', t.bg);
-        document.documentElement.style.setProperty('--pin-text', t.text);
-        document.documentElement.style.setProperty('--pin-muted', t.textMuted);
-        document.documentElement.style.setProperty('--pin-hover', t.hover);
-        document.documentElement.style.setProperty('--pin-border', t.border);
-        
-        // Ajustar fondo del footer si está en modo nocturno
-        const footer = document.querySelector('.settings-footer');
-        if(footer) { footer.style.backgroundColor = t.bg; }
-    }
-    
-    // Activar botón de guardar al detectar cambios
-    const saveBtn = document.getElementById('saveBtn');
-    const inputs = document.querySelectorAll('.pin-track');
-    
-    inputs.forEach(input => {
-        input.addEventListener('input', () => {
-            saveBtn.classList.add('active');
+    const saveBtn   = document.getElementById('saveBtn');
+    const markDirty = () => saveBtn.classList.add('active');
+
+    // Detectar cambios en todos los inputs
+    document.querySelectorAll('.ep-track').forEach(el => {
+        el.addEventListener('input', markDirty);
+    });
+
+    // ── SISTEMA DE TAGS ──
+    const tagsDisplay = document.getElementById('tagsDisplay');
+    const tagInput    = document.getElementById('tagInput');
+    const bioHidden   = document.getElementById('biographyHidden');
+    let tags = bioHidden.value.split(',').map(t => t.trim()).filter(Boolean);
+
+    function renderTags() {
+        tagsDisplay.querySelectorAll('.ep-tag').forEach(el => el.remove());
+        tags.forEach((tag, i) => {
+            const chip = document.createElement('span');
+            chip.className = 'ep-tag';
+            chip.innerHTML = `${tag}<button type="button" class="ep-tag-rm" data-i="${i}">&times;</button>`;
+            tagsDisplay.insertBefore(chip, tagInput);
         });
-    });
-
-    // Preview de Imágenes
-    const avatarInput = document.getElementById('foto_perfil');
-    const bannerInput = document.getElementById('foto_banner');
-    const hint = document.getElementById('file-names-hint');
-    
-    avatarInput.addEventListener('change', function(e) {
-        if(e.target.files[0]) {
-            saveBtn.classList.add('active');
-            hint.textContent = "Foto seleccionada: " + e.target.files[0].name;
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                document.getElementById('avatarPreview').src = ev.target.result;
-                document.getElementById('avatarPreview').style.display = 'block';
-                const letter = document.getElementById('avatarLetter');
-                if(letter) letter.style.display = 'none';
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    });
-
-    bannerInput.addEventListener('change', function(e) {
-        if(e.target.files[0]) {
-            saveBtn.classList.add('active');
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                document.getElementById('bannerPreview').src = ev.target.result;
-                document.getElementById('bannerPreview').style.display = 'block';
-                const placeholder = document.getElementById('bannerPlaceholder');
-                if(placeholder) placeholder.style.display = 'none';
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    });
-
-    // Localización
-    const toggleLocation = document.getElementById('toggleLocation');
-    const locationText = document.getElementById('locationText');
-    const savedLocationState = localStorage.getItem('agora_show_location');
-    
-    if (savedLocationState === 'true') {
-        toggleLocation.value = 'true';
-        const cachedCity = localStorage.getItem('agora_user_city');
-        if(cachedCity) {
-            locationText.innerHTML = `Ubicación actual: <strong>${cachedCity}</strong><br><strong>Privacidad de ubicación:</strong> Es un acierto total incluir la opción de "Oculta" para proteger la privacidad del usuario.`;
-        }
+        bioHidden.value = tags.join(', ');
     }
 
-    toggleLocation.addEventListener('change', function() {
-        saveBtn.classList.add('active');
-        if (this.value === 'true') {
-            locationText.innerHTML = `Buscando ubicación...<br><strong>Privacidad de ubicación:</strong> Es un acierto total incluir la opción de "Oculta" para proteger la privacidad del usuario.`;
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
-                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const city = data.address.city || data.address.town || data.address.village || '';
-                                const state = data.address.state || '';
-                                const country = data.address.country || '';
-                                
-                                let parts = [];
-                                if(city) parts.push(city);
-                                if(state && state !== city) parts.push(state);
-                                if(country) parts.push(country);
-                                
-                                const fullLocation = parts.join(', ') || 'Ubicación Desconocida';
-                                
-                                locationText.innerHTML = `Ubicación actual: <strong>${fullLocation}</strong><br><strong>Privacidad de ubicación:</strong> Es un acierto total incluir la opción de "Oculta" para proteger la privacidad del usuario.`;
-                                localStorage.setItem('agora_user_city', fullLocation);
-                                localStorage.setItem('agora_show_location', 'true');
-                            });
-                    },
-                    (error) => {
-                        locationText.textContent = "Permiso de ubicación denegado.";
-                        this.value = 'false';
-                        localStorage.setItem('agora_show_location', 'false');
-                    }
-                );
-            }
+    tagInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            const val = this.value.trim().replace(/,$/, '');
+            if (val && !tags.includes(val)) { tags.push(val); renderTags(); markDirty(); }
+            this.value = '';
+        } else if (e.key === 'Backspace' && this.value === '' && tags.length) {
+            tags.pop(); renderTags();
+        }
+    });
+
+    tagsDisplay.addEventListener('click', e => {
+        if (e.target.classList.contains('ep-tag-rm')) {
+            tags.splice(parseInt(e.target.dataset.i), 1);
+            renderTags(); markDirty();
+        }
+    });
+
+    renderTags();
+
+    // ── VALIDACIÓN EMAIL ──
+    const emailInput = document.getElementById('emailInput');
+    const emailHint  = document.getElementById('emailHint');
+    const emailRx    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    emailInput.addEventListener('input', function() {
+        const bad = this.value && !emailRx.test(this.value.trim());
+        this.style.borderColor = bad ? '#e53e3e' : '';
+        this.style.boxShadow   = bad ? '0 0 0 3px rgba(229,62,62,0.12)' : '';
+        emailHint.style.display = bad ? 'block' : 'none';
+        bad ? saveBtn.classList.remove('active') : markDirty();
+    });
+
+    document.getElementById('editForm').addEventListener('submit', function(e) {
+        if (!emailRx.test(emailInput.value.trim())) {
+            e.preventDefault();
+            emailInput.focus();
+            emailInput.style.borderColor = '#e53e3e';
+            emailHint.style.display = 'block';
+        }
+    });
+
+    // ── PREVIEW DE AVATAR ──
+    const avatarInput = document.getElementById('foto_perfil');
+    avatarInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        markDirty();
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const img    = document.getElementById('avatarPreview');
+            const letter = document.getElementById('avatarLetter');
+            img.src = ev.target.result;
+            img.style.display = 'block';
+            if (letter) letter.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ── LOCALIZACIÓN ──
+    const locToggle = document.getElementById('toggleLocation');
+    const locText   = document.getElementById('locationText');
+    if (localStorage.getItem('agora_show_location') === 'true') {
+        locToggle.value = 'true';
+        const city = localStorage.getItem('agora_user_city');
+        if (city) locText.textContent = `Ubicación: ${city}`;
+    }
+    locToggle.addEventListener('change', function() {
+        markDirty();
+        if (this.value === 'true' && navigator.geolocation) {
+            locText.textContent = 'Detectando ubicación...';
+            navigator.geolocation.getCurrentPosition(pos => {
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`)
+                    .then(r => r.json())
+                    .then(d => {
+                        const loc = [d.address.city || d.address.town, d.address.country].filter(Boolean).join(', ');
+                        locText.textContent = `Ubicación: ${loc}`;
+                        localStorage.setItem('agora_user_city', loc);
+                        localStorage.setItem('agora_show_location', 'true');
+                    });
+            }, () => { locText.textContent = 'Permiso denegado.'; this.value = 'false'; });
         } else {
-            locationText.textContent = "Elige si quieres que otros sepan de dónde eres.";
+            locText.textContent = 'Solo tú puedes ver tu ubicación real.';
             localStorage.setItem('agora_show_location', 'false');
             localStorage.removeItem('agora_user_city');
         }

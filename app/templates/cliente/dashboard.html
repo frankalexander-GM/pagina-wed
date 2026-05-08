@@ -87,7 +87,7 @@
     }
 
     .profile-stats {
-        text-align: left;
+        text-align: center;
         margin-bottom: 12px;
         font-size: 16px;
     }
@@ -98,7 +98,7 @@
     }
 
     .profile-bio {
-        text-align: left;
+        text-align: center;
         margin-bottom: 24px;
         color: var(--agora-dark);
         font-size: 16px;
@@ -255,12 +255,19 @@
         gap: 6px;
     }
 
-    /* Navigation Tabs */
     .pin-tabs {
         display: flex;
         justify-content: center;
         gap: 32px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
+        padding-top: 0;
+    }
+
+    .profile-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-start;
+        margin-bottom: 16px;
     }
 
     .pin-tab {
@@ -288,20 +295,20 @@
         border-radius: 3px;
     }
 
-    /* Floating Action Button */
+    /* Floating Action Button - Ayuda */
     .fab-add {
         position: fixed;
         bottom: 30px;
         right: 30px;
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
         background-color: var(--agora-burgundy);
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
+        font-size: 22px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         transition: all 0.3s ease;
         z-index: 100;
@@ -309,9 +316,33 @@
     }
     
     .fab-add:hover {
-        transform: scale(1.1) rotate(90deg);
+        transform: scale(1.1);
         background-color: var(--agora-dark-primary);
         color: white;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Tags de categorías */
+    .categoria-tags {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        margin: 0 auto 24px;
+        max-width: 600px;
+    }
+    .categoria-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        background-color: rgba(128, 0, 32, 0.08);
+        color: var(--agora-burgundy);
+        border: 1px solid rgba(128, 0, 32, 0.2);
+        white-space: nowrap;
     }
 
     /* Theme Selector Dropdown */
@@ -346,20 +377,13 @@
 {% endblock %}
 
 {% block content %}
-<!-- Portada -->
-<div class="cover-photo-container">
-    {% if current_user.foto_banner %}
-        <img src="{{ current_user.foto_banner }}" alt="Portada">
-    {% else %}
-        <div style="width:100%; height:100%; background: linear-gradient(135deg, var(--agora-burgundy), var(--agora-dark-primary)); opacity: 0.8;"></div>
-    {% endif %}
-</div>
+
 
 <!-- HEADER ESTILO PINTEREST EXACTO -->
 <div class="profile-header-container" style="text-align: center;">
     
-    <!-- Avatar (Burbuja Arriba) -->
-    <div class="profile-avatar-container" style="margin: -60px auto 16px; position: relative; z-index: 10;">
+    <!-- Avatar -->
+    <div class="profile-avatar-container" style="margin: 40px auto 16px; position: relative; z-index: 10;">
         <div class="profile-avatar">
             {% if current_user.foto_perfil %}
                 <img src="{{ current_user.foto_perfil }}" alt="{{ current_user.nombre or 'Usuario' }}">
@@ -373,24 +397,27 @@
     <h1 class="profile-name" style="margin-bottom: 4px;">{{ current_user.nombre }}</h1>
     <p class="profile-username" style="margin: 0 0 12px 0; color: var(--agora-text-muted);">{{ current_user.username }}</p>
 
-    <!-- Stats (Exactamente como Pinterest) -->
+    <!-- Stats -->
     <div class="profile-stats" style="margin-bottom: 12px; font-size: 15px;">
-        <span style="color: var(--agora-dark);"><strong>{{ stats.favoritos_count }}</strong> seguidores</span>
-        <span style="font-weight: bold; margin: 0 4px; color: var(--agora-dark);">·</span>
-        <span style="color: var(--agora-dark);"><strong>Siguiendo a {{ stats.siguiendo_count }}</strong></span>
+        <span style="color: var(--agora-dark);"><strong>Siguiendo a {{ stats.siguiendo_count }}</strong> artistas</span>
     </div>
 
-    <!-- Bio & Location -->
-    <div class="profile-bio" style="max-width: 600px; margin: 0 auto 24px;">
-        {% if current_user.biografia %}
-            {{ current_user.biografia }}
-        {% else %}
-            Añade una breve biografía para personalizar tu perfil <i class="fas fa-pen" style="font-size: 12px; margin-left: 4px; color: var(--agora-text-muted);"></i>
-        {% endif %}
-        <div id="profile-location" style="display: none; margin-top: 8px; color: var(--agora-text-muted);">
-            <i class="fas fa-map-marker-alt" style="color: var(--agora-burgundy);"></i> <span style="color: var(--agora-text-muted);"></span>
+    <!-- Categorías de interés como tags -->
+    {% if current_user.biografia %}
+        {% set cats = current_user.biografia.split(',') %}
+        <div class="categoria-tags">
+            {% for cat in cats %}
+                {% if cat.strip() %}
+                <span class="categoria-tag"><i class="fas fa-tag"></i> {{ cat.strip() }}</span>
+                {% endif %}
+            {% endfor %}
         </div>
-    </div>
+    {% else %}
+        <div style="margin: 0 auto 24px; text-align: center;">
+            <span style="color: var(--agora-text-muted); font-style: italic; font-size: 14px;">Sin categorías de interés definidas</span>
+            <a href="{{ url_for('cliente.editar_perfil') }}" style="color: var(--agora-burgundy); font-size: 12px; margin-left: 6px;"><i class="fas fa-pen"></i> Añadir</a>
+        </div>
+    {% endif %}
 
     <!-- Acciones (Botones) -->
     <div class="profile-actions" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 40px;">
@@ -412,23 +439,6 @@
         <a href="{{ url_for('cliente.editar_perfil') }}" class="btn-pin btn-pin-secondary">
             <i class="fas fa-pen me-2"></i> Editar perfil
         </a>
-
-        <!-- Botón de Temas -->
-        <div class="dropdown">
-            <button class="btn-pin btn-pin-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-palette me-2"></i> Temas
-            </button>
-            <ul class="dropdown-menu shadow border-0 p-3" style="border-radius: 12px; min-width: 200px;">
-                <li><h6 class="dropdown-header px-0 pb-2 text-center" style="font-weight: 600; color: var(--agora-dark);">Modo Nocturno y Temas</h6></li>
-                <li>
-                    <div class="theme-selector m-0">
-                        <button class="theme-btn" data-theme="burgundy" style="background: #a52a42; border: 3px solid #a52a42;" title="Rojo Borgoña"></button>
-                        <button class="theme-btn" data-theme="navy" style="background: #2a4b8c; border: 3px solid #2a4b8c;" title="Azul Profundo"></button>
-                        <button class="theme-btn" data-theme="forest" style="background: #3a6b42; border: 3px solid #3a6b42;" title="Verde Oscuro"></button>
-                    </div>
-                </li>
-            </ul>
-        </div>
     </div>
 </div>
 
@@ -508,9 +518,9 @@
     </div>
 </div>
 
-<!-- Floating Action Button for New Lienzo -->
-<a href="{{ url_for('cliente.nuevo_lienzo') }}" class="fab-add" title="Crear nuevo lienzo">
-    <i class="fas fa-plus"></i>
+<!-- Floating Action Button - Ayuda/Soporte -->
+<a href="mailto:soporte@agoraart.com" class="fab-add" title="Ayuda y Soporte">
+    <i class="fas fa-question"></i>
 </a>
 
 <script>

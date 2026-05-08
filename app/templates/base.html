@@ -452,8 +452,15 @@
             </div>
             <div>
                 <h5>Comunidad</h5>
+                {% if not current_user.is_authenticated %}
                 <a href="{{ url_for('auth.register') }}">Crear cuenta</a>
+                <a href="{{ url_for('auth.register') }}?tipo=artista">Crear cuenta de artista</a>
+                {% endif %}
+                {% if current_user.is_authenticated and not current_user.is_artista() %}
+                <a href="{{ url_for('cliente.convertirse_en_artista') }}">Convertirse en Artista</a>
+                {% endif %}
                 {% if current_user.is_authenticated and current_user.is_artista() %}
+                <a href="{{ url_for('artista.volver_a_cliente') }}">Volver a perfil de cliente</a>
                 <a href="{{ url_for('artista.dashboard') }}">Mi Estudio</a>
                 {% endif %}
             </div>
